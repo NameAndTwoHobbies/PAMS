@@ -1,0 +1,65 @@
+import sys
+import random
+
+import mysql.connector
+from mysql.connector import errorcode
+
+from dbSecrets import *
+from PySide6.QtWidgets import *
+from PySide6.QtGui import *
+from PySide6.QtCore import * 
+from PySide6.QtSql import *
+
+isUsingDev = True
+
+host = ""
+user = ""
+password = ""
+dbName = ""
+
+def GetConnection():
+    if isUsingDev:
+        host = devHost
+        user = devUser
+        password = devPassword
+        dbName = devName
+    else: 
+        host = prodHost
+        user = prodUser
+        password = prodPassword
+        dbName = prodName
+
+    try:
+        conn = mysql.connector.connect(host = host, user = user, password =password)
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print('User name or password is not working')
+        elif err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("Database does not exist")
+        else:
+            print(err)
+    else:
+        if conn.is_connected():
+            print('MySQL Connection is established')
+            return conn
+
+
+def TestTenant():
+
+    query = "SELECT * FROM tenants"
+
+    conn = GetConnection()
+
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("Entered Database")   
+    dbcursor.execute(query)
+    records = dbcursor.fetchall()
+    conn.commit()
+
+    conn.close()
+    dbcursor.close()
+
+    for i in records:
+        print(i[1])
+
