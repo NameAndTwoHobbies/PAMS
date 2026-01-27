@@ -56,6 +56,13 @@ class Ui_MainWindow(object):
         self.stackedView.addWidget(self.CustDash)
 
         #endregion
+
+        #region Page 5 Sign Up Customer
+        self.CustSignUp = SignUpPage()
+        self.stackedView.addWidget(self.CustSignUp)
+        #end region
+
+
         #region MenuBar
         
         MainWindow.setCentralWidget(self.View)
@@ -91,6 +98,8 @@ class Ui_MainWindow(object):
         self.AdminLogin.retranslateUi()
 
         self.CustDash.retranslateUi()
+
+        self.CustSignUp.retranslateUi()
 
     # retranslateUi
 

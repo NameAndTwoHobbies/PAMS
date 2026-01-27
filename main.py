@@ -5,6 +5,8 @@ from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from uiMainWindow import Ui_MainWindow
 from db import *
+from ErrorBoxes import *
+
 
 class mainScreen(QMainWindow , Ui_MainWindow):
     def __init__(self):
@@ -32,7 +34,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustLogin.loginBtn.clicked.connect(lambda : self.switchCustomerView())
         self.AdminLogin.loginBtn.clicked.connect(lambda : self.switchAdminView())
 
-        self.CustLogin.signUpBtn.clicked.connect(lambda : self.buttonTestTenant())
+        self.CustLogin.signUpBtn.clicked.connect(lambda : self.switchCustomerSignUp())
+        self.CustSignUp.submitBtn.clicked.connect(lambda : self.SignUpUser(self.CustSignUp.emailInput.toPlainText()))
 
 
 
@@ -52,6 +55,26 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchAdminView(self):
         #Change when page is implemented to customer dashboard
         self.switchWelcomePage()
+    
+    def switchCustomerSignUp(self):
+        self.stackedView.setCurrentIndex(4)
+
+    def switchCustomerSignUpDetailed(self, email :str):
+        self.stackedView.setCurrentIndex(5)
+
+    def SignUpUser(self, email : str):
+        print(email)
+        error = CheckEmailIsValid(email)
+        if error is not None:
+            #Must be set to self to allow for this box to be made
+            self.errorBox = ErrorBox(error)
+            self.errorBox.show()
+        else: 
+            ## TODO Add a Detailed signup page with the email from this function already being entered
+            #self.switchCustomerSignUpDetailed(email)
+            pass
+
+
 
     def buttonTestTenant(self):
         TestTenant()

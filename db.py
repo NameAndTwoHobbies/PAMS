@@ -9,6 +9,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from PySide6.QtSql import *
+from ErrorBoxes import ErrorMessage
 
 isUsingDev = True
 
@@ -62,4 +63,29 @@ def TestTenant():
 
     for i in records:
         print(i[1])
+
+
+def CheckEmailIsValid(email : str):
+    query = "SELECT * FROM tenants WHERE email = %s"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("Entered Database")
+    dbcursor.execute(query, (email,))
+    user = dbcursor.fetchone()
+    
+    if user is not None:
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        title = "Tenant Already Exists"
+        description = "This email has already been used to sign up a user. Please try a different email."
+        error = ErrorMessage(title, description)
+        return (error)
+    else:
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        return None
 

@@ -3,23 +3,31 @@ import random
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import * 
+from ErrorBoxes import ErrorBox
 
 #region Fonts
 
-font1 = QFont()
-font1.setFamilies([u"Arial"])
-font1.setPointSize(18)
-
-font2 = QFont()
-font2.setFamilies([u"Arial"])
-font2.setPointSize(18)
+text = QFont()
+text.setFamilies([u"Arial"])
+text.setPointSize(18)
 
 
 
-font3 = QFont()
-font3.setFamilies([u"Arial"])
-font3.setPointSize(40)
-font3.setBold(True)
+
+title = QFont()
+title.setFamilies([u"Arial"])
+title.setPointSize(40)
+title.setBold(True)
+
+heading = QFont()
+heading.setFamilies([u"Calibri"])
+heading.setPointSize(22)
+heading.setBold(True)
+
+heading2 = QFont()
+heading2.setFamilies([u"Calibri"])
+heading2.setPointSize(18)
+
 
 #endregion
 
@@ -39,7 +47,7 @@ class WelcomePage(QWidget):
 
         self.title = QLabel()
         self.title.setObjectName(u"title")
-        self.title.setFont(font3)
+        self.title.setFont(title)
 
        
 
@@ -79,7 +87,7 @@ class CustomerLoginPage(QWidget):
             self.loginGroup.setGeometry(QRect(9, 10, 811, 561))
             
 
-            self.loginGroup.setFont(font1)
+            self.loginGroup.setFont(text)
             self.loginGroup.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
             self.loginGroup.setFlat(True)
             
@@ -97,7 +105,7 @@ class CustomerLoginPage(QWidget):
             self.passwordInput.setObjectName(u"passwordInput")
             self.passwordInput.setGeometry(QRect(180, 300, 461, 41))
 
-            self.passwordInput.setFont(font2)
+            self.passwordInput.setFont(text)
 
             self.customerPassword = QLabel(self.loginGroup)
             self.customerPassword.setObjectName(u"password")
@@ -109,7 +117,7 @@ class CustomerLoginPage(QWidget):
             self.title.setObjectName(u"title")
             self.title.setGeometry(QRect(240, 90, 297, 53))
             
-            self.title.setFont(font3)
+            self.title.setFont(title)
 
             #Buttons
             self.loginBtn = QPushButton(self.loginGroup)
@@ -148,6 +156,53 @@ class CustomerLoginPage(QWidget):
 
 #endregion
 
+#region Sign Up Page
+
+class SignUpPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 581)
+        self.title = QLabel(self)
+        self.title.setObjectName(u"title")
+        self.title.setGeometry(QRect(160, 40, 503, 36))
+        self.title.setFont(heading)
+        self.title.setScaledContents(False)
+        self.signUpForm = QWidget(self)
+        self.signUpForm.setObjectName(u"signUpForm")
+        self.signUpForm.setGeometry(QRect(240, 150, 311, 261))
+        self.submitBtn = QPushButton(self.signUpForm)
+        self.submitBtn.setObjectName(u"submitBtn")
+        self.submitBtn.setGeometry(QRect(100, 150, 110, 24))
+        self.formTitle = QLabel(self.signUpForm)
+        self.formTitle.setObjectName(u"formTitle")
+        self.formTitle.setGeometry(QRect(60, 70, 181, 30))
+        self.formTitle.setFont(text)
+        self.emailInput = QTextEdit(self.signUpForm)
+        self.emailInput.setObjectName(u"emailInput")
+        self.emailInput.setGeometry(QRect(20, 120, 281, 21))
+        self.emailInput.setMouseTracking(True)
+        self.emailInput.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.emailInput.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.prompt = QLabel(self.signUpForm)
+        self.prompt.setObjectName(u"prompt")
+        self.prompt.setGeometry(QRect(50, 100, 205, 16))
+    # setupUi
+
+    def retranslateUi(self):
+        self.title.setText(QCoreApplication.translate("signUpPage", u"<html><head/><body><p>Paragon Apartment Management System</p></body></html>", None))
+        self.submitBtn.setText(QCoreApplication.translate("signUpPage", u"Sign up with email", None))
+        self.formTitle.setText(QCoreApplication.translate("signUpPage", u"Create an Account", None))
+        self.emailInput.setPlaceholderText(QCoreApplication.translate("signUpPage", u"email@domain.com", None))
+        self.prompt.setText(QCoreApplication.translate("signUpPage", u"Enter your email to sign up for this app", None))
+    # retranslateUi
+    
+        
+
+
+
+
+#endregion
+
 
 #region Admin Login
 
@@ -163,7 +218,7 @@ class AdminLoginPage(QWidget):
         self.adminGroup.setGeometry(QRect(10, 10, 811, 561))
 
         
-        self.adminGroup.setFont(font1)
+        self.adminGroup.setFont(text)
         self.adminGroup.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.adminGroup.setFlat(True)
 
@@ -183,7 +238,7 @@ class AdminLoginPage(QWidget):
         self.passwordInput.setObjectName(u"adminPasswordInput")
         self.passwordInput.setGeometry(QRect(180, 300, 461, 41))
         
-        self.passwordInput.setFont(font1)
+        self.passwordInput.setFont(text)
 
         self.passwordLabel = QLabel(self.adminGroup)
         self.passwordLabel.setObjectName(u"adminPasswordLabel")
@@ -202,7 +257,7 @@ class AdminLoginPage(QWidget):
         self.title.setGeometry(QRect(290, 90, 234, 53))
 
 
-        self.title.setFont(font3)
+        self.title.setFont(title)
 
         
     def retranslateUi(self):
