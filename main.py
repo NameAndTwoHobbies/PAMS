@@ -6,7 +6,7 @@ from PySide6.QtCore import *
 from uiMainWindow import Ui_MainWindow
 from db import *
 from ErrorBoxes import *
-
+from MyWidgets import Table
 
 class mainScreen(QMainWindow , Ui_MainWindow):
     def __init__(self):
@@ -15,8 +15,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setWindowTitle("PAMS")
 
 
-        #Default Values
-        self.stackedView.setCurrentIndex(0)
+        self.switchTestingPage()
+
 
 
         #Menu Bar
@@ -37,8 +37,14 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustLogin.signUpBtn.clicked.connect(lambda : self.switchCustomerSignUp())
         self.CustSignUp.submitBtn.clicked.connect(lambda : self.SignUpUser(self.CustSignUp.emailInput.toPlainText()))
 
+        #Testing Page
+        self.TestingPage.testBtn1.clicked.connect(lambda : self.getTenantsTable())
+        self.TestingPage.testBtn2.clicked.connect(lambda : self.getLocationsTable())
+        #self.TestingPage.testBtn3.clicked.connect(lambda : )
+        #self.TestingPage.testBtn4.clicked.connect(lambda : )
 
 
+    #region Page Switching Functions
     def switchWelcomePage(self):
         self.stackedView.setCurrentIndex(0)
     
@@ -59,8 +65,14 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchCustomerSignUp(self):
         self.stackedView.setCurrentIndex(4)
 
-    def switchCustomerSignUpDetailed(self, email :str):
+
+    def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
+    
+    def switchCustomerSignUpDetailed(self, email :str):
+        self.stackedView.setCurrentIndex(6)
+    
+    #endregion
 
     def SignUpUser(self, email : str):
         print(email)
@@ -74,10 +86,17 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             #self.switchCustomerSignUpDetailed(email)
             pass
 
+    def getTenantsTable(self):
+        records = GetTenants()
+        headers = GetHeaders("tenants")
+        self.table = Table(records,headers)
+        self.table.show()
 
-
-    def buttonTestTenant(self):
-        TestTenant()
+    def getLocationsTable(self):
+        records = GetLocations()
+        headers = GetHeaders("locations")
+        self.table = Table(records,headers)
+        self.table.show()
 
 
 #region App

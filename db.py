@@ -45,7 +45,7 @@ def GetConnection():
             return conn
 
 
-def TestTenant():
+def GetTenants():
 
     query = "SELECT * FROM tenants"
 
@@ -60,10 +60,38 @@ def TestTenant():
 
     conn.close()
     dbcursor.close()
+    return records
 
-    for i in records:
-        print(i[1])
+def GetLocations():
 
+    query = "SELECT * FROM locations"
+
+    conn = GetConnection()
+
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("Entered Database")   
+    dbcursor.execute(query)
+    records = dbcursor.fetchall()
+    conn.commit()
+
+    conn.close()
+    dbcursor.close()
+    return records
+
+# Gets all the headers from a table in the database
+def GetHeaders(table : str):
+    query = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = %s;"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("Entered Database")
+    dbcursor.execute(query, (table,))
+    headers = dbcursor.fetchall()
+    dbcursor.close()
+    conn.close()
+    return headers
 
 def CheckEmailIsValid(email : str):
     query = "SELECT * FROM tenants WHERE email = %s"

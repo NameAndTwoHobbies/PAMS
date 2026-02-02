@@ -440,3 +440,71 @@ class Dashboard(QWidget):
 
 #endregion
 
+#region Database Widgets
+
+
+class Table(QTableWidget):
+    def __init__(self, records, headers):
+        super().__init__()
+        print(len(headers))
+        print(len(records))
+        lenHeader = len(headers)
+        lenRecords = len(records)
+        self.setColumnCount(lenHeader)
+        self.setRowCount(lenRecords)
+        self.verticalHeader().setVisible(False)
+        for header in range(0,lenHeader):
+            self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
+        
+        for x in range(0, lenRecords):
+            for y in range(0,len(records[x])):
+                self.setItem(x,y,QTableWidgetItem(str(records[x][y])))
+    
+
+
+
+        
+
+#endregion 
+
+#region Testing Page
+# This page has 4 buttons on it that are asssigned to functions that are being developed currently
+# This page makes testing much quicker while not interferring with the project
+class TestPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 581)
+        self.gridLayout = QGridLayout(self)
+        self.gridLayout.setObjectName(u"gridLayout")
+        self.testBtn1 = QPushButton(self)
+        self.testBtn1.setObjectName(u"testBtn1")
+
+        self.gridLayout.addWidget(self.testBtn1, 0, 0, 1, 1)
+
+        self.testBtn2 = QPushButton(self)
+        self.testBtn2.setObjectName(u"testBtn2")
+
+        self.gridLayout.addWidget(self.testBtn2, 0, 1, 1, 1)
+
+        self.testBtn3 = QPushButton(self)
+        self.testBtn3.setObjectName(u"testBtn3")
+
+        self.gridLayout.addWidget(self.testBtn3, 1, 0, 1, 1)
+
+        self.testBtn4 = QPushButton(self)
+        self.testBtn4.setObjectName(u"testBtn4")
+
+        self.gridLayout.addWidget(self.testBtn4, 1, 1, 1, 1)
+
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("testPage", u"Form", None))
+        self.testBtn1.setText(QCoreApplication.translate("testPage", u"Test 1", None))
+        self.testBtn2.setText(QCoreApplication.translate("testPage", u"Test 2", None))
+        self.testBtn3.setText(QCoreApplication.translate("testPage", u"Test 3", None))
+        self.testBtn4.setText(QCoreApplication.translate("testPage", u"Test 4", None))
+    # retranslateUi
+
+
+
+#endregion
