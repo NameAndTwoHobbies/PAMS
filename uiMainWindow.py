@@ -67,19 +67,14 @@ class Ui_MainWindow(object):
         self.stackedView.addWidget(self.TestingPage)
         #end region
 
-        #region MenuBar
+        
+        #region Page 7 Detailed Sign Up Customer
+        self.DetailedSignUp = DetailedSignUpPage()
+        self.stackedView.addWidget(self.DetailedSignUp)
+        #end region
+
         
         MainWindow.setCentralWidget(self.View)
-        self.menubar = QMenuBar(MainWindow)
-        self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 843, 33))
-        self.menuWelcome = QMenu(self.menubar)
-        self.menuWelcome.setObjectName(u"menuWelcome")
-        MainWindow.setMenuBar(self.menubar)
-
-        #endregion
-
-        self.menubar.addAction(self.menuWelcome.menuAction())
 
         self.retranslateUi(MainWindow)
 
@@ -91,8 +86,6 @@ class Ui_MainWindow(object):
 
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
-
-        self.menuWelcome.setTitle(QCoreApplication.translate("MainWindow", u"Welcome", None))
 
         #retranslate ui for the pages
         self.Welcome.retranslateUi()
@@ -106,6 +99,8 @@ class Ui_MainWindow(object):
         self.CustSignUp.retranslateUi()
 
         self.TestingPage.retranslateUi()
+
+        self.DetailedSignUp.retranslateUi()
 
     # retranslateUi
 

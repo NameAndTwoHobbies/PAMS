@@ -117,3 +117,4 @@ def CheckEmailIsValid(email : str):
         print("Database Closed")
         return None
 
+

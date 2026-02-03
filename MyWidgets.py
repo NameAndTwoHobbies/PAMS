@@ -508,3 +508,130 @@ class TestPage(QWidget):
 
 
 #endregion
+
+
+#region Detailed Sign Up Page
+
+class DetailedSignUpPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(817, 587)
+        self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.setGeometry(QRect(0, 10, 812, 571))
+        self.verticalLayout = QVBoxLayout(self)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.title = QLabel(self)
+        self.title.setObjectName(u"title")
+        self.title.setMinimumSize(QSize(103, 16))
+        self.title.setFont(title)
+        self.title.setScaledContents(False)
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.label = QLabel(self)
+        self.label.setObjectName(u"label")
+        self.label.setMinimumSize(QSize(164, 16))
+        self.label.setFont(heading)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.label, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.horizontalSpacer = QSpacerItem(807, 50, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.verticalLayout.addItem(self.horizontalSpacer)
+
+        self.emailPrompt = QLabel(self)
+        self.emailPrompt.setObjectName(u"emailPrompt")
+        self.emailPrompt.setMinimumSize(QSize(29, 16))
+        self.emailPrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.emailPrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.emailPrompt.setFont(text)
+
+        self.verticalLayout.addWidget(self.emailPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.emailInput = QLineEdit(self)
+        self.emailInput.setObjectName(u"emailInput")
+        self.emailInput.setMinimumSize(QSize(150, 22))
+        self.emailInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.emailInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.firstNamePrompt = QLabel(self)
+        self.firstNamePrompt.setObjectName(u"firstNamePrompt")
+        self.firstNamePrompt.setMinimumSize(QSize(57, 16))
+        self.firstNamePrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.firstNamePrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.firstNamePrompt.setFont(text)
+
+        self.verticalLayout.addWidget(self.firstNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.firstNameInput = QLineEdit(self)
+        self.firstNameInput.setObjectName(u"firstNameInput")
+        self.firstNameInput.setMinimumSize(QSize(116, 22))
+        self.firstNameInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.firstNameInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.lastNamePrompt = QLabel(self)
+        self.lastNamePrompt.setObjectName(u"lastNamePrompt")
+        self.lastNamePrompt.setMinimumSize(QSize(56, 16))
+        self.lastNamePrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.lastNamePrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.lastNamePrompt.setFont(text)
+
+        self.verticalLayout.addWidget(self.lastNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.lastNamInput = QLineEdit(self)
+        self.lastNamInput.setObjectName(u"lastNamInput")
+        self.lastNamInput.setMinimumSize(QSize(116, 22))
+        self.lastNamInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.lastNamInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.passwordPrompt = QLabel(self)
+        self.passwordPrompt.setObjectName(u"passwordPrompt")
+        self.passwordPrompt.setMinimumSize(QSize(50, 16))
+        self.passwordPrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+        self.passwordPrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.passwordPrompt.setFont(text)
+
+        self.verticalLayout.addWidget(self.passwordPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.passwordInput = QLineEdit(self)
+        self.passwordInput.setObjectName(u"passwordInput")
+        self.passwordInput.setMinimumSize(QSize(116, 22))
+        self.passwordInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        self.verticalLayout.addWidget(self.passwordInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.horizontalSpacer_2 = QSpacerItem(807, 17, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.verticalLayout.addItem(self.horizontalSpacer_2)
+
+        self.pushButton = QPushButton(self)
+        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setMinimumSize(QSize(79, 24))
+        self.pushButton.setFont(text)
+
+        self.verticalLayout.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
+
+    def retranslateUi(self):
+        self.title.setText(QCoreApplication.translate("SignUpDetailed", u"Welcome New User", None))
+        self.label.setText(QCoreApplication.translate("SignUpDetailed", u"Please fill in the following form", None))
+        self.emailPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Email", None))
+        self.emailInput.setText("")
+        self.emailInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"#ADD-EMAIL-HERE#", None))
+        self.firstNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"First Name", None))
+        self.firstNameInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"eg. Peter", None))
+        self.lastNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Last Name", None))
+        self.lastNamInput.setText("")
+        self.lastNamInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"eg. Smith", None))
+        self.passwordPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Password", None))
+        self.passwordInput.setText("")
+        self.passwordInput.setPlaceholderText("")
+        self.pushButton.setText(QCoreApplication.translate("SignUpDetailed", u"Sign Up", None))
+    # retranslateUi
+#endregion

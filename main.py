@@ -15,12 +15,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setWindowTitle("PAMS")
 
 
-        self.switchTestingPage()
-
-
-
-        #Menu Bar
-
+        #self.switchTestingPage()
 
 
 
@@ -69,22 +64,22 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
     
-    def switchCustomerSignUpDetailed(self, email :str):
+    def switchCustomerSignUpDetailed(self, email : str):
         self.stackedView.setCurrentIndex(6)
+        self.DetailedSignUp.emailInput.setText(email)
     
     #endregion
 
     def SignUpUser(self, email : str):
-        print(email)
         error = CheckEmailIsValid(email)
         if error is not None:
             #Must be set to self to allow for this box to be made
             self.errorBox = ErrorBox(error)
             self.errorBox.show()
         else: 
-            ## TODO Add a Detailed signup page with the email from this function already being entered
-            #self.switchCustomerSignUpDetailed(email)
-            pass
+            #Changes the page to the detailed sign up
+            self.switchCustomerSignUpDetailed(email)
+
 
     def getTenantsTable(self):
         records = GetTenants()
