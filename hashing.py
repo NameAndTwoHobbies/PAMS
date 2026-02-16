@@ -1,0 +1,1 @@
+def HashingAlgorithm(string : str):

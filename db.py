@@ -117,4 +117,8 @@ def CheckEmailIsValid(email : str):
         print("Database Closed")
         return None
 
+def SignUpUser():
+    pass
 
+def LoginUser(email : str, hashedPassword : str):
+    pass

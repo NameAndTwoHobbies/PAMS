@@ -13,11 +13,11 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("PAMS")
+        self.setMaximumSize(self.size())
 
+        # self.switchTestingPage()
 
-        #self.switchTestingPage()
-
-
+        self.switchWelcomePage()
 
         #Welcome Page
 
@@ -68,6 +68,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.stackedView.setCurrentIndex(6)
         self.DetailedSignUp.emailInput.setText(email)
     
+    def switchFrontDeskDashboard(self):
+        self.stackedView.setCurrentIndex(7)
+        self.FrontDeskDash.UpdateTenants(GetTenants(),GetHeaders("tenants"))
     #endregion
 
     def SignUpUser(self, email : str):
@@ -84,8 +87,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def getTenantsTable(self):
         records = GetTenants()
         headers = GetHeaders("tenants")
-        self.table = Table(records,headers)
-        self.table.show()
+        return Table(records,headers)
 
     def getLocationsTable(self):
         records = GetLocations()

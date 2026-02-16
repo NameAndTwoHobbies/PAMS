@@ -72,7 +72,11 @@ class Ui_MainWindow(object):
         self.DetailedSignUp = DetailedSignUpPage()
         self.stackedView.addWidget(self.DetailedSignUp)
         #end region
-
+        
+        #region Page 8 Front Desk Dashboard
+        self.FrontDeskDash = FrontDeskDashboard()
+        self.stackedView.addWidget(self.FrontDeskDash)
+        #endregion
         
         MainWindow.setCentralWidget(self.View)
 
@@ -101,6 +105,8 @@ class Ui_MainWindow(object):
         self.TestingPage.retranslateUi()
 
         self.DetailedSignUp.retranslateUi()
+        
+        self.FrontDeskDash.retranslateUi()
 
     # retranslateUi
 
