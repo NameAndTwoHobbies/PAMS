@@ -17,7 +17,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 
         # self.switchTestingPage()
 
-        self.switchWelcomePage()
+        self.switchFrontDeskDashboard()
 
         #Welcome Page
 
@@ -71,6 +71,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchFrontDeskDashboard(self):
         self.stackedView.setCurrentIndex(7)
         self.FrontDeskDash.UpdateTenants(GetTenants(),GetHeaders("tenants"))
+        self.FrontDeskDash.searchBar.textChanged.connect(lambda : self.FrontDeskDash.tenantTable.search(self.FrontDeskDash.searchBar.text()))
     #endregion
 
     def SignUpUser(self, email : str):

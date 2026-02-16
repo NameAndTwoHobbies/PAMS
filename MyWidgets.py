@@ -460,7 +460,12 @@ class Table(QTableWidget):
             for y in range(0,len(records[x])):
                 self.setItem(x,y,QTableWidgetItem(str(records[x][y])))
     
-
+    def search(self, string : str):
+        matches = self.findItems(string,Qt.MatchFlag.MatchContains)
+        for rows in range(0,self.rowCount()):
+            self.hideRow(rows)
+        for match in matches:
+            self.showRow(match.row())
 
 
         
@@ -683,7 +688,11 @@ class FrontDeskDashboard(QWidget):
         self.errorMessage_2.setGeometry(QRect(480, 80, 231, 141))
         self.tenantTable = QTableWidget(self.manageTenants)
         self.tenantTable.setObjectName(u"tenantTable")
-        self.tenantTable.setGeometry(QRect(20, 20, 701, 211))
+        self.tenantTable.setGeometry(QRect(10, 30, 711, 201))
+        self.tenantTable.setMaximumSize(10, 30)
+        self.searchBar = QLineEdit(self.manageTenants)
+        self.searchBar.setObjectName(u"searchBar")
+        self.searchBar.setGeometry(QRect(610, 10, 113, 22))
 
 
     # setupUi
@@ -709,13 +718,14 @@ class FrontDeskDashboard(QWidget):
         self.occupationDropdown.setPlaceholderText(QCoreApplication.translate("Form", u"Occupation", None))
         self.submitButton.setText(QCoreApplication.translate("Form", u"Submit", None))
         self.manageTenants.setTitle(QCoreApplication.translate("Form", u"Manage Tenants", None))
+        self.searchBar.setPlaceholderText(QCoreApplication.translate("Form", u"Search", None))
     # retranslateUi
 
     def UpdateTenants(self, records, headers):
         self.tenantTable = Table(records,headers)
         self.tenantTable.setParent(self.manageTenants)
         self.tenantTable.setObjectName(u"tenantTable")
-        self.tenantTable.setGeometry(QRect(20, 20, 701, 211))
+        self.tenantTable.setGeometry(QRect(10, 30, 711, 201))
         
 
 
