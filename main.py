@@ -7,6 +7,7 @@ from uiMainWindow import Ui_MainWindow
 from db import *
 from ErrorBoxes import *
 from MyWidgets import *
+from Entities import Tenant
 
 class mainScreen(QMainWindow , Ui_MainWindow):
     def __init__(self):
@@ -14,13 +15,21 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("PAMS")
         self.setMaximumSize(self.size())
-#region Testing Section
-        self.switchTestingPage()
+    #region Testing Section
+    #This section is used test functionality, quick testing and debugging. 
+        #self.switchTestingPage()
 
         #self.switchFrontDeskDashboard()
-#endregion
+        #Testing Page
+        #self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
+        #self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
+        #self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeLineChartMaintanenceRequests("London"))
+        #self.TestingPage.testBtn4.clicked.connect(lambda : )
+
+    #endregion
 
 #region Connecting Interactivity 
+# This region is responsible for connecting the buttons to the front end to the functionailty in the back end.
         #Welcome Page
 
         self.Welcome.loginCustomerBtn.clicked.connect(lambda : self.switchCustomerLoginPage())
@@ -34,17 +43,14 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustLogin.signUpBtn.clicked.connect(lambda : self.switchCustomerSignUp())
         self.CustSignUp.submitBtn.clicked.connect(lambda : self.SignUpUser(self.CustSignUp.emailInput.toPlainText()))
 
-        #Testing Page
-        self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
-        self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
-        self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeLineChartMaintanenceRequests("London"))
-        #self.TestingPage.testBtn4.clicked.connect(lambda : )
+        
 
         #Front Desk Page
         self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
 #endregion
 
 #region Page Functions
+# This section is responsible for the functions that switch the pages and that load the data into these pages.
     def switchWelcomePage(self):
         self.stackedView.setCurrentIndex(0)
     
@@ -80,31 +86,38 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 #endregion
 
 #region Interaction Functions
+# This section is responsible for the functions that implement the database interactions and interactivity with the data
+    
+    # Checks if the email is valid by checking if it already exists in the database
+    # It will produce a popup error if the email is already registered.
+    # If the email is valid it switches to the detailed sign up page and inputs the email into the email box
     def SignUpUser(self, email : str):
-        error = CheckEmailIsValid(email)
-        if error is not None:
+        if CheckEmailIsValid(email) == False:
             #Must be set to self to allow for this box to be made
             title = "Tenant Already Exists"
             description = "This email has already been used to sign up a user. Please try a different email."
             error = ErrorMessage(title, description)
-            self.errorBox = self.errorBox(error)
+            self.errorBox = ErrorBox(error)
             self.errorBox.show()
         else: 
             #Changes the page to the detailed sign up
             self.switchCustomerSignUpDetailed(email)
 
-    def RegisterTenant(self, user):
-        error = CheckEmailIsValid(user[2])
-        if error is not None:
+    # Creates a new tenant and prepares the data to be inputed into the database.
+    # If the credentials are already in use it will produce a popup error box.
+    # If the credentials are valid it will input the data into the database and refresh the page
+    def RegisterTenant(self, tenant : Tenant):
+        if CheckEmailIsValid(tenant.email) == False:
             title = "Tenant Already Exists"
             description = "This email has already been used to sign up a user. Please try a different email."
             error = ErrorMessage(title, description)
-            self.errorBox = self.errorBox(error)
+            self.errorBox = ErrorBox(error)
             self.errorBox.show()
         else: 
-            SignUpUser(user[0], user[1],user[2],user[3],user[4],user[5],user[6])
+            SignUpUser(tenant)
             self.switchFrontDeskDashboard()
 
+    # Not functioning 
     def LoginTenantBTN(self, email: str, password : str):
         user = LoginUser(email,password)
 
@@ -112,21 +125,21 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.errorBox = ErrorBox(ErrorMessage("No User Found", "The credentials do not match any known user"))
             self.errorBox.show()
 
+    # Returns a table with all tenants in the database
     def getTenantsTable(self):
         records = GetTenants()
         headers = GetHeaders("tenants")
         return Table(records,headers)
 
+    # Returns a table with all locations in the database
     def getLocationsTable(self):
         records = GetLocations()
         headers = GetHeaders("locations")
         self.table = Table(records,headers)
         self.table.show()
-    def OccupancyLevelsTesd(self):
-        print(GetUnoccupiedApartmentsForLocation("London"))
-        print(GetUnoccupiedApartmentsForLocation("Madrid"))
-        print(GetUnoccupiedApartmentsForLocation("Spain"))
     
+    
+    # Creates a pie chart showing the Occupancy levels in a location. Right now it produces a piechart on a new page.
     def MakePieChartUnoccupied(self, locationName : str):
         location = GetLocation(locationName)
         if location is None:
@@ -145,8 +158,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                     self.pie = PieChart(("Occupied","Unoccupided") , (total - unoccupied, unoccupied) , "Occupied vs Unoccupided of " + locationName)
                     self.pie.show()
         print("Done")
-
-    def MakeLineChartMaintanenceRequests(self, locationName : str):
+    # Creates a pie chart that shows the number of maintanence requests in a given location compared to the apartments that are functional.
+    def MakeMaintanenceRequestsPieChart(self, locationName : str):
         location = GetLocation(locationName)
         if location is None:
             self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
@@ -162,6 +175,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 #endregion
 
 #region App
+
 app = QApplication()
 
 #Creates a main window and places the ui created in designer onto it 

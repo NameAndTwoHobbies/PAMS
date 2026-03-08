@@ -1,6 +1,23 @@
-class Apartment():
+class IEntity:
+    def __init__(self, id : str):
+        self.id = id
+    def GetID(self):
+        return self.id
+    def GetDataBaseFormat(self):
+        pass
+    def NumberOfFields(self):
+        pass
+
+#region Apartment
+class Apartment(IEntity):
     def __init__(self, id : str, location_id : str, room_type : str, monthly_rent : str, bedrooms : str, bathrooms: str,occupancy_status : bool):
-        self.apartment_id = id
+        super().__init__(id)
+        self.location_id = location_id
+        self.room_type = room_type
+        self.monthly_rent = monthly_rent
+        self.bedrooms = bedrooms
+        self.bathrooms = bathrooms
+        self.occupancy_status = occupancy_status
         self.location_id = location_id
         self.room_type = room_type
         self.monthly_rent = monthly_rent
@@ -8,25 +25,45 @@ class Apartment():
         self.bathrooms = bathrooms
         self.occupancy_status = occupancy_status
 
+    def GetDataBaseFormat(self):
+        return (self.id,self.location_id, self.room_type, self.monthly_rent, self.bedrooms, self.bathrooms, self.occupancy_status)
+    def NumberOfFields(self):
+        return 7
+#endregion
 
-class Location():
-    def __init__(self, location_id : str, location_name : str, location_manager : str):
-        self.location_id = location_id
+#region Location
+class Location(IEntity):
+    def __init__(self, id : str, location_name : str, location_manager : str):
+        super().__init__(id)
         self.location_name = location_name
         self.location_manager = location_manager
     
+    def GetDataBaseFormat(self):
+        return (self.id,self.location_name, self.location_manager)
+    def NumberOfFields(self):
+        return 3
 
-class Complaint():
-    def __init__(self, complaint_id, tenant_id, tenant_message, created_at, resolved_at):
-        self.complaint_id = complaint_id
+#endregion
+
+#region Complaint
+class Complaint(IEntity):
+    def __init__(self, id : str, tenant_id : str, tenant_message : str, created_at : str, resolved_at : str):
+        super().__init__(id)
         self.tenant_id = tenant_id
         self.tenant_message = tenant_message
         self.creationDate = created_at
         self.resolveDate = resolved_at
 
-class Contract():
-    def __init__(self,contract_id, apartment_id, tenant_id, start_date, end_date, payment_frequency, early_leave, penalty_amount):
-        self.contract_id = contract_id
+    def GetDataBaseFormat(self):
+        return (self.id, self.tenant_id, self.tenant_message, self.creationDate, self.resolveDate)
+    def NumberOfFields(self):
+        return 5
+#endregion
+
+#region Contract
+class Contract(IEntity):
+    def __init__(self, id : str, apartment_id : str, tenant_id : str, start_date :str, end_date : str, payment_frequency : str, early_leave : bool, penalty_amount : str):
+        super().__init__(id)
         self.apartment_id = apartment_id
         self.tenant_id = tenant_id
         self.start_date = start_date
@@ -35,9 +72,16 @@ class Contract():
         self.early_leave = early_leave
         self.penalty_amount = penalty_amount
 
-class Invoices():
-    def __init__(self, invoice_id, contract_id, schedule_id, issued_date, due_date, amount, status):
-        self.invoice_id = invoice_id
+    def GetDataBaseFormat(self):
+        return (self.id, self.apartment_id, self.tenant_id, self.start_date, self.end_date, self.payment_frequency, self.early_leave, self.penalty_amount)
+    def NumberOfFields(self):
+        return 8
+#endregion
+
+#region Invoice
+class Invoice(IEntity):
+    def __init__(self, id : str, contract_id : str, schedule_id : str, issued_date : str , due_date : str,  amount : str, status : str):
+        super().__init__(id)
         self.contract_id = contract_id
         self.schedule_id = schedule_id
         self.issued_date = issued_date
@@ -45,9 +89,17 @@ class Invoices():
         self.amount = amount
         self.status = status
 
-class MaintenanceRequest():
-    def __init__(self,request_id, tenant_id, apartment_id, description, priority, status, maintenance_notes, scheduled_date, resolved_date, time_taken, cost):
-        self.request_id = request_id
+    def GetDataBaseFormat(self):
+        return (self.id, self.contract_id, self.schedule_id, self.issued_date, self.due_date, self.amount, self.status)
+    
+    def NumberOfFields(self):
+        return 7
+#endregion
+
+#region MaintenanceRequest
+class MaintenanceRequest(IEntity):
+    def __init__(self, id : str, tenant_id : str, apartment_id : str, description : str, priority : str, status : str, maintenance_notes : str, scheduled_date : str, resolved_date : str, time_taken :str, cost : str):
+        super().__init__(id)
         self.tenant_id = tenant_id
         self.apartment_id = apartment_id
         self.description = description
@@ -58,27 +110,50 @@ class MaintenanceRequest():
         self.resolved_date = resolved_date
         self.time_taken = time_taken
         self.cost = cost
+    def GetDataBaseFormat(self):
+        return (self.id, self.tenant_id, self.apartment_id, self.description, self.priority, self.status, self.maintenance_notes, self.scheduled_date, self.resolved_date, self.time_taken, self.cost)
+    def NumberOfFields(self):
+        return 11
+#endregion
 
-class MaintanenceSchedule():
-    def __init__(self,schedule_id, request_id, user_id, scheduled_start, scheduled_end):
-        self.schedule_id = schedule_id
+#region MaintanenceSchedule
+class MaintanenceSchedule(IEntity):
+    def __init__(self, id : str, request_id : str, user_id : str, scheduled_start : str, scheduled_end : str):
+        super().__init__(id)
         self.request_id = request_id
         self.user_id = user_id
         self.scheduled_start = scheduled_start
         self.scheduled_end = scheduled_end
+    def GetDataBaseFormat(self):
+        return (self.id, self.request_id, self.user_id, self.scheduled_start, self.scheduled_end)
+    def NumberOfFields(self):
+        return 5
+#endregion
 
-class Notification():
-    def __init__(self,notification_id, tenant_id, type, message, is_read, created_at):
-        self.notification_id = notification_id
+
+
+#region Notification
+class Notification(IEntity):
+    def __init__(self, id : str, tenant_id : str, type : str, message : str, is_read : bool, created_at : str):
+        super().__init__(id)
         self.tenant_id = tenant_id
         self.type = type
         self.message = message
         self.is_read = is_read
         self.created_at = created_at
 
-class Payment():
-    def __init__(self,payment_id, schedule_id, payment_date, amount_paid, payment_status, method, reference):
-        self.payment_id = payment_id
+    def GetDataBaseFormat(self):
+        return (self.id, self.tenant_id, self.type, self.message, self.is_read, self.created_at)
+    
+    def NumberOfFields(self):
+        return 6
+#endregion
+
+#region Payment
+
+class Payment(IEntity):
+    def __init__(self, id : str, schedule_id : str, payment_date : str, amount_paid : str, payment_status : str, method : str, reference : str):
+        super().__init__(id)
         self.schedule_id = schedule_id
         self.payment_date = payment_date
         self.amount_paid = amount_paid
@@ -86,9 +161,18 @@ class Payment():
         self.method = method
         self.reference = reference
 
-class Tenant():
-    def __init__(self,tenant_id, first_name, last_name, national_insurance, email, password, phone_number, occupation, references ):
-        self.tenant_id = tenant_id
+    def GetDataBaseFormat(self):
+        return (self.id, self.schedule_id, self.payment_date, self.amount_paid, self.payment_status, self.method, self.reference)
+    def NumberOfFields(self):
+        return 7
+#endregion
+
+
+
+#region Tenant
+class Tenant(IEntity):
+    def __init__(self, id : str, first_name : str, last_name : str, national_insurance : str, email : str, password : str, phone_number : str, occupation : str, references : str):
+        super().__init__(id)
         self.first_name = first_name
         self.last_name = last_name
         self.national_insurance = national_insurance
@@ -97,15 +181,27 @@ class Tenant():
         self.phone_number = phone_number
         self.occupation = occupation
         self.references = references
+    
+    def GetDataBaseFormat(self):
+        return (self.id,self.first_name, self.last_name, self.email, self.password, self.national_insurance, self.phone_number, self.occupation , self.references)
+    def NumberOfFields(self):
+        return 9
+#endregion
 
-class User():
-    def __init__(self, user_id, firstName, lastName, email, password, role, location_id):
-        self.user_id = user_id
+#region User
+class User(IEntity):
+    def __init__(self, id : str, firstName : str, lastName : str, email : str, password : str, role : str, location_id : str):
+        super().__init__(id)
         self.firstName = firstName
         self.lastName = lastName
         self.email = email
         self.password = password
         self.role = role
         self.location_id = location_id
-
+        
+    def GetDataBaseFormat(self):
+        return (self.id, self.firstName, self.lastName, self.email, self.password, self.role, self.location_id)
+    def NumberOfFields(self):
+        return 7
+#endregion
 

@@ -5,6 +5,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 from PySide6.QtCharts import *
 from ErrorBoxes import ErrorBox
+from Entities import *
 
 #region Fonts
 
@@ -37,6 +38,7 @@ heading2.setPointSize(18)
 
 #region Welcome Page
 
+# The welcome page consists of a title and buttons that lead to the tenant and staff portals respectively
 class WelcomePage(QWidget):
     def __init__(self):
         super().__init__()
@@ -75,7 +77,7 @@ class WelcomePage(QWidget):
 
 
 #region Customer Login
-
+# The customer login page contains a email and password input section and a submit button
 class CustomerLoginPage(QWidget):
         def __init__(self):
             super().__init__()
@@ -159,6 +161,7 @@ class CustomerLoginPage(QWidget):
 
 #region Sign Up Page
 
+# The Sign Up Page consists of a title and a email input. It also has a submit button
 class SignUpPage(QWidget):
     def __init__(self):
         super().__init__()
@@ -290,20 +293,13 @@ class AdminLoginPage(QWidget):
 
 #region Client Dashboard
 
-# -*- coding: utf-8 -*-
-
-################################################################################
-## Form generated from reading UI file 'dashboardXBxFzf.ui'
-##
-## Created by: Qt User Interface Compiler version 6.10.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
-################################################################################
-
-# Dashboard is a page the client dashboard widgets including the following:
-# A side bar with Account, Lease, Payments and Complaints buttons
-# A stacked widget that contains the corrosponding pages to these buttons
-# The pages inside will have database connectivity to collect the infomation
+# The client dashboard contains a side bar that controls a stackwidget that switches the sections currently being looked at.
+# The default page - what the user is greeted with after they login
+# The Account Page - Where the user will view and edit their personal infomation
+# The Lease Page - Where the user can track their lease agreement
+# The Payment Page - Where the user will make any outstanding payments
+# The complaint Page - Where the user will submit complaints
+# The buttons are automatically connected so no need to connect them at run time 
 
 class Dashboard(QWidget):
         def __init__(self):
@@ -444,11 +440,13 @@ class Dashboard(QWidget):
 #region Database Widgets
 
 
+
+# The Table class takes list of IEntity objects and a list of headers and populates a table.
+# The table also incluedes a search function that is not case sensitive hides all data that does not match.
+# TODO Make more efficient here as now using iEnity List 
 class Table(QTableWidget):  
-    def __init__(self, records, headers):
+    def __init__(self, records : list[IEntity], headers):
         super().__init__()
-        print(len(headers))
-        print(len(records))
         lenHeader = len(headers)
         lenRecords = len(records)
         self.setColumnCount(lenHeader)
@@ -457,9 +455,11 @@ class Table(QTableWidget):
         for header in range(0,lenHeader):
             self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
         
-        for x in range(0, lenRecords):
-            for y in range(0,len(records[x])):
-                self.setItem(x,y,QTableWidgetItem(str(records[x][y])))
+        # Converts the database format of the records into table
+        for x in range(len(records)):
+            record = records[x].GetDataBaseFormat()
+            for y in range(0,len(record)):
+                self.setItem(x,y,QTableWidgetItem(str(record[y])))
     
     def search(self, string : str):
         matches = self.findItems(string,Qt.MatchFlag.MatchContains)
@@ -517,6 +517,7 @@ class TestPage(QWidget):
 
 
 #region Detailed Sign Up Page
+
 
 class DetailedSignUpPage(QWidget):
     def __init__(self):
@@ -643,6 +644,10 @@ class DetailedSignUpPage(QWidget):
 #endregion
 
 #region Front Desk Dashboard
+
+# The Front Desk Dashboard contains all the widgets needed for the staff to operate their task.
+# The top section is for registering new tenants, the bottom section is for managing existing tenants.
+
 class FrontDeskDashboard(QWidget):
     def __init__(self):
         super().__init__()
@@ -726,13 +731,10 @@ class FrontDeskDashboard(QWidget):
     # retranslateUi
 
     def UpdateTenants(self, records, headers):
-        self.tenantTable = Table(records,headers)
+        self.tenantTable = Table(records, headers)
         self.tenantTable.setParent(self.manageTenants)
         self.tenantTable.setObjectName(u"tenantTable")
         self.tenantTable.setGeometry(QRect(10, 30, 711, 201))
-        self.searchBar = QLineEdit(self.manageTenants)
-        self.searchBar.setObjectName(u"searchBar")
-        self.searchBar.setGeometry(QRect(610, 10, 113, 22))
         
     def Submit(self):
         fName = self.firstNameInput.text()
@@ -742,6 +744,8 @@ class FrontDeskDashboard(QWidget):
         phoneNumber = self.phoneNumberInput.text() #TODO phonenumber checking is valid phone number
         nationalInsurance = self.nationalInsuranceInput.text()
         occupation = self.occupationDropdown.currentText()
+        references = ""
+        tenant = Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
         self.firstNameInput.clear()
         self.lastNameInput.clear()
         self.emailInput.clear()
@@ -749,7 +753,7 @@ class FrontDeskDashboard(QWidget):
         self.phoneNumberInput.clear()
         self.nationalInsuranceInput.clear()
         self.occupationDropdown.setCurrentIndex(0)
-        return fName,lName,email,password,phoneNumber,nationalInsurance,occupation
+        return tenant
 
 #endregion
 
