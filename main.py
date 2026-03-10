@@ -22,9 +22,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 
         #self.switchFrontDeskDashboard()
         #Testing Page
-        #self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
-        #self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
-        #self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeLineChartMaintanenceRequests("London"))
+        self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
+        self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
+        self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeMaintanenceRequestsPieChart("London"))
         #self.TestingPage.testBtn4.clicked.connect(lambda : )
 
     #endregion
@@ -147,16 +147,16 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
             self.error.show() #Change to ann error manager
         else:
-            apartments = GetApartmentsFromLocation(location[0])
+            apartments = GetApartmentsFromLocation(location.id)
             if apartments != None:
                 total = len(apartments)
-                unoccupied = GetUnoccupiedApartmentsForLocation(location[0])
+                unoccupied = GetUnoccupiedApartmentsForLocation(location.id)
                 if unoccupied is None:
                     self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
                     self.error.show() #Change to ann error manager
                 else:
                     unoccupied = len(unoccupied)
-                    self.pie = PieChart(("Occupied","Unoccupided") , (total - unoccupied, unoccupied) , "Occupied vs Unoccupided of " + locationName)
+                    self.pie = PieChart(("Occupied","Unoccupied") , (total - unoccupied, unoccupied) , "Occupied vs Unoccupied of " + locationName)
                     self.pie.show()
         print("Done")
     # Creates a pie chart that shows the number of maintanence requests in a given location compared to the apartments that are functional.
@@ -166,8 +166,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
             self.error.show() #Change to ann error manager
         else:
-            requests = GetMainanenceRequestsForLocation(location[0])
-            apartments = GetApartmentsFromLocation(location[0])
+            requests = GetMainanenceRequestsForLocation(location.id)
+            apartments = GetApartmentsFromLocation(location.id)
             print(len(requests))
             print(len(apartments))
             self.pie = PieChart(labels= ("Repairs In Progress", "Functional"),numData= ((len(requests)), len(apartments) - len(requests)) ,title= "Repairs in progress vs functional rooms")

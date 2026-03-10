@@ -798,5 +798,7 @@ class PieChart(QChartView):
 
 #Pie of oustandinf payments vs collected
 
-#Line graph of expenses per week/ month / year from maintancence
 #entension add a prediction method
+
+#TODO CREATE A PIE GRAPH FOR OUTSTANDING VERSES COLLECTED PAYMENTS 
+#TODO CREATE A LINE GRAPH FOR THE EPENSES PER WEEK/ MONTH / YEAR FROM MAINTANENCE

@@ -50,6 +50,7 @@ def GetLocation(locationName: str):
     
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database") 
     print("Purpose: Retrieve all locations that match the name " + locationName)
 
@@ -59,11 +60,13 @@ def GetLocation(locationName: str):
         dbcursor.close()
         conn.close()
         print("Database Closed")
+        print("------------------")
         return None
     else:
         dbcursor.close()
         conn.close()
         print("Database Closed")
+        print("------------------")
         return Location(location[0], location[1], location[2])
 
 # Returns a list of apartment objects that are in a location matching an ID. If there are no apartments it returns None
@@ -73,6 +76,7 @@ def GetApartmentsFromLocation(Id : str):
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database") 
     print("Purpose : Retrieve all apartments in a given location")
     
@@ -82,6 +86,7 @@ def GetApartmentsFromLocation(Id : str):
     dbcursor.close()
     conn.close()
     print("Database Closed")
+    print("------------------")
 
     if apartments is None:
         return None
@@ -101,6 +106,7 @@ def GetTenants():
 
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database")   
     print("Retrieve all the tenants from the database")
     dbcursor.execute(query)
@@ -110,10 +116,10 @@ def GetTenants():
     conn.close()
     dbcursor.close()
     print("Closed Database")
+    print("------------------")
     tenants = []
     for record in records:
         tenants.append(Tenant(record[0],record[1],record[2],record[3],record[4],record[5],record[6],record[7],record[8]))
-    print(tenants)
     return tenants
 
 # Returns a list of all locations in the databases as Location objects. If there are no locations it returns None
@@ -125,6 +131,7 @@ def GetLocations():
 
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database") 
     print("Purpose : Retrieve all locations from the database")  
     dbcursor.execute(query)
@@ -134,6 +141,7 @@ def GetLocations():
     conn.close()
     dbcursor.close()
     print("Closed Database")
+    print("------------------")
 
     locations = []
     for record in records:
@@ -147,6 +155,7 @@ def GetHeaders(table : str):
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database")
     print("Purpose: Return the headers from the table " + table)
     dbcursor.execute(query, (table,))
@@ -154,6 +163,7 @@ def GetHeaders(table : str):
     dbcursor.close()
     conn.close()
     print("Closed Database")
+    print("------------------")
     return headers
 
 # Checks an email to see if a tenant already exists with that email. If there is a tenant with that email it returns False, otherwise it returns True
@@ -163,6 +173,7 @@ def CheckEmailIsValid(email : str):
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database")
     print("Purpose: Check if a tenant with email" + email + " exists")
     dbcursor.execute(query, (email,))
@@ -181,6 +192,7 @@ def SignUpUser(tenant : Tenant):
 
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database")   
     print("Purpose : Inserting the a new tenant into the database")
     dbcursor.execute(query, (tenant.first_name,tenant.last_name,tenant.national_insurance,tenant.email,tenant.password,tenant.phone_number,tenant.occupation,))
@@ -190,6 +202,7 @@ def SignUpUser(tenant : Tenant):
     conn.close()
     dbcursor.close()
     print("Closed Database")
+    print("------------------")
     return None
 
 # This function checks the credentials of a user trying to log in. If the credentials are valid it returns a tenant object, otherwise it returns None
@@ -200,6 +213,7 @@ def LoginUser(email : str, hashedPassword : str):
 
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database")   
     print("Purpose: Checking the database to see if the email and password match a user")
     dbcursor.execute(query, (email, password ,))
@@ -215,6 +229,7 @@ def GetUnoccupiedApartmentsForLocation(locationID : int):
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
     dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
     print("Entered Database") 
     print("Purpose: Retrieve all empty apartments in the location")
     dbcursor.execute(query, (locationID,))
@@ -240,13 +255,13 @@ def GetMainanenceRequestsForLocation(locationID : str):
         conn = GetConnection()
         dbcursor = conn.cursor()    #Creating cursor object
         dbcursor.execute('USE {};'.format(devName)) #use database'
+        print("------------------")
         print("Entered Database")
         print("Reason: Gather Maintanence requests by Apartment Id")
         
         requests = []
         for apartment in apartments:
-            print(apartment[0])
-            dbcursor.execute(query3, (apartment[0],))
+            dbcursor.execute(query3, (apartment.id,))
             request = dbcursor.fetchone()
             if request is not None:
                 requests.append(request)
@@ -254,5 +269,6 @@ def GetMainanenceRequestsForLocation(locationID : str):
         conn.close()
         dbcursor.close()
         print("Closed Database")
+        print("------------------")
         return requests                
 
