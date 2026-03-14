@@ -272,3 +272,80 @@ def GetMainanenceRequestsForLocation(locationID : str):
         print("------------------")
         return requests                
 
+
+def GetUsersFromLocation(locationName: str):
+    location = GetLocation(locationName)
+
+    if location is not None:
+        query = "SELECT users.user_id,users.firstName,users.lastName, users.email, users.role FROM users WHERE users.location_id = %s;"
+
+        conn = GetConnection()
+        dbcursor = conn.cursor()    #Creating cursor object
+        dbcursor.execute('USE {};'.format(devName)) #use database'
+        print("------------------")
+        print("Entered Database")
+        print("Purpose: Get users from location " + locationName)
+
+        dbcursor.execute(query, (location.id,))
+
+        users = []
+        for user in dbcursor.fetchall():
+            users.append(User(user[0],user[1],user[2],user[3],"Blocked",user[4], location.id))
+        dbcursor.close()
+        conn.close()
+        print("Closed Database")
+
+        return users
+    else:
+        dbcursor.close()
+        conn.close()
+        print("Closed Database")
+        return None
+
+
+#TODO not finished and ineffcient due to databse
+def GetTenantsFromLocation(locationName : str):
+    return None
+    # location = GetLocation(locationName)
+
+    # if location is not None:
+    #     query = "SELECT apartment_id from apartments WHERE location_id = %s AND occupancy_status = 1;"
+
+    #     conn = GetConnection()
+    #     dbcursor = conn.cursor()    #Creating cursor object
+    #     dbcursor.execute('USE {};'.format(devName)) #use database'
+    #     print("------------------")
+    #     print("Entered Database") 
+    #     print("Purpose: Retrieve all tenants living in the location" + locationName)
+    #     dbcursor.execute(query, (location.id,))
+    #     apartmentIds = dbcursor.fetchall()
+
+    #     query2 = "SELECT tenant_id FROM contracts WHERE apartment_id = %s;" #TODO remove those that no longer live in there by checking for days that are in date
+    #     dbTenants = []
+    #     for id in apartmentIds:
+    #         dbcursor.execute(query, (id[0],))
+    #         dbTenants.append(dbcursor.fetchall())
+
+    #     query3 = "SELECT * FROM tenants WHERE tenant_id = %s;"
+    #     tenants = []
+    #     print(dbTenants)
+    #     for tenantID in dbTenants:
+    #         dbcursor.execute(query, (tenantID[0]))
+    #         tenant = dbcursor.fetchone()
+    #         tenants.append(Tenant(tenant[0],tenant[1],tenant[2],tenant[3],tenant[4],"Blocked", tenant[6],tenant[7],tenant[8]))
+    #     dbcursor.close()
+    #     conn.close()
+    #     print("Closed Database")
+
+    #     return tenants
+    # else:
+    #     dbcursor.close()
+    #     conn.close()
+    #     print("Closed Database")
+
+    #     return None
+
+        
+
+        
+        

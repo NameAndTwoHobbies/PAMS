@@ -82,6 +82,11 @@ class Ui_MainWindow(object):
         self.FinanceDash = FinanceDashboard()
         self.stackedView.addWidget(self.FinanceDash)
         #endregion
+
+        #region Page 10 Admin Dashboard
+        self.AdminDash = AdminDashboard()
+        self.stackedView.addWidget(self.AdminDash)
+        #endregion
         
         MainWindow.setCentralWidget(self.View)
 
