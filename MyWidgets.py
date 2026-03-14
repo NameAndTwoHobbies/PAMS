@@ -902,7 +902,7 @@ class FinanceDashboard(QWidget):
 
         self.collectionBtn = QPushButton(self.btnGroup)
         self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True) #TODO Graph has no implmentation yet so disable button for now
+        self.collectionBtn.setDisabled(True)
 
         self.horizontalLayout.addWidget(self.collectionBtn)
 
@@ -1191,7 +1191,7 @@ class AdminDashboard(QWidget):
         #Collection Rate Report Button
         self.collectionBtn = QPushButton(self.btnGroup)
         self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True) #TODO Graph has no implmentation yet so disable button for now
+        self.collectionBtn.setDisabled(True)
         self.horizontalLayout.addWidget(self.collectionBtn)
 
         #Maintenance Report Button
@@ -1213,6 +1213,7 @@ class AdminDashboard(QWidget):
         self.apartmentTable = Table([],[])
         self.apartmentTable.setObjectName(u"apartmentTable")
         self.apartmentTable.setGeometry(QRect(10, 50, 751, 371))
+        self.apartmentTable.setParent(self.apartmentManage)
 
         self.apartmentTableBar = QFrame(self.apartmentManage)
         self.apartmentTableBar.setObjectName(u"apartmentTableBar")
@@ -1414,6 +1415,11 @@ class AdminDashboard(QWidget):
         self.staffBtn.clicked.connect(lambda: self.switchToStaffTable())
         self.tenantsBtn.clicked.connect(lambda: self.switchToTenantTable())
 
+        #Report Page
+        self.occupancyBtn.clicked.connect(lambda : self.switchToOccupanyLevels())
+        self.collectionBtn.clicked.connect(lambda : self.switchToCollectionRate())
+        self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenance())
+
         #endregion
 
         self.retranslateUi()
@@ -1442,6 +1448,7 @@ class AdminDashboard(QWidget):
         self.reportBtn.setText(QCoreApplication.translate("Form", u"Report", None))
     # retranslateUi
 
+    #region Report Page Graphs
     def switchToOccupanyLevels(self):
         self.graphsStackedWidget.setCurrentIndex(0)
 
@@ -1468,6 +1475,9 @@ class AdminDashboard(QWidget):
         self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
         self.MaintenceCost.setParent(self.graphsStackedWidget)
         print("Created Maintenence Pie")
+    #endregion
+
+
 
     def switchToUserPage(self):
         self.stackedWidget.setCurrentIndex(2)
@@ -1498,24 +1508,6 @@ class AdminDashboard(QWidget):
         for location in locations:
             self.userLocationDropdown.addItem(location.location_name)
             self.apartmentLocationDropdown.addItem(location.location_name)
-
-    def CreateOccupancyLevels(self, pie :PieChart):
-        self.Occupancy.setChart(pie.chart())
-        self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
-        self.Occupancy.setParent(self.graphsStackedWidget)
-        print("Created Occupancy Pie")
-
-    def CreateCollectionRates(self, pie :PieChart):
-        self.CollectionRate.setChart(pie.chart())
-        self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
-        self.CollectionRate.setParent(self.graphsStackedWidget)
-        print("Created Collection Pie")
-
-    def CreateMaintenance(self, pie :PieChart):
-        self.MaintenceCost.setChart(pie.chart())
-        self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
-        self.MaintenceCost.setParent(self.graphsStackedWidget)
-        print("Created Maintenence Pie")
     
     def CreateUserTable(self, staffRecords, staffHeaders, tenantRecords, tenantHeaders ):
         self.staffBtn.setChecked(True)
@@ -1531,6 +1523,9 @@ class AdminDashboard(QWidget):
         self.staffTable.show()
         self.tenantTable.hide()
 
+    def CreateApartmentTable(self, apartments : list[Apartment], apartmentHeaders : list[str]):
+        self.apartmentTable.UpdateTable(apartments, apartmentHeaders)
+        self.apartmentTable.setParent(self.apartmentManage)
 
     #TODO Add tables to user and apartment. Fixed title for reports page. Import locations
     #TODO MAKE IT EASIER TOP MAKE REQUIRE TABLES AND NOT REUSE CODE

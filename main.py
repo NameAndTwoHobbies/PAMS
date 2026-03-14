@@ -18,7 +18,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setMaximumSize(self.size())
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
-
+    
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -37,7 +37,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Customer Page
 
         self.CustLogin.loginBtn.clicked.connect(lambda : self.LoginTenantBTN(self.CustLogin.emailInput.toPlainText(),self.CustLogin.passwordInput.toPlainText()))
-        self.AdminLogin.loginBtn.clicked.connect(lambda : self.switchToFinanceDashboard())
+        self.AdminLogin.loginBtn.clicked.connect(lambda : self.switchAdminView())
 
         self.CustLogin.signUpBtn.clicked.connect(lambda : self.switchCustomerSignUp())
         self.CustSignUp.submitBtn.clicked.connect(lambda : self.SignUpUser(self.CustSignUp.emailInput.toPlainText()))
@@ -51,7 +51,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Admin Dashboard
         #self.AdminDash.userLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.userTable.UpdateTable(GetTenants(),GetHeaders("tenants")))
         self.AdminDash.userRefreshBtn.clicked.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []))
-#region Page Functions
+        self.AdminDash.apartmentLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
+        self.AdminDash.apartmentRefresh.clicked.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
+        #region Page Functions
 # This section is responsible for the functions that switch the pages and that load the data into these pages.
     def switchWelcomePage(self):
         self.stackedView.setCurrentIndex(0)
@@ -70,9 +72,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentIndex(9)
         self.AdminDash.GetLocations(GetLocations())
-        #TODO make a table thart changes due to location
-        #TODO add a dropdown for the reports page for locations
-        self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], [])    
+        self.AdminDash.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.apartmentLocationDropdown.currentText())) #TODO add a dropdown for the reports page for locations
+        self.AdminDash.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.apartmentLocationDropdown.currentText())) 
+        self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []) 
+        self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     def switchCustomerSignUp(self):
         self.stackedView.setCurrentIndex(4)
 
