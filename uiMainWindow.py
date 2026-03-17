@@ -104,7 +104,7 @@ class Ui_MainWindow(object):
 
         
         #region Page 7 Detailed Sign Up Customer
-        self.DetailedSignUp = DetailedSignUpPage()
+        self.DetailedSignUp = SignUpDetailed()
         self.stackedView.addWidget(self.DetailedSignUp)
         #end region
         

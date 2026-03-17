@@ -635,6 +635,190 @@ class TestPage(QWidget):
 
 
 #region Detailed Sign Up Page
+class SignUpDetailed(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 581)
+        self.content = QFrame(self)
+        self.content.setObjectName(u"content")
+        self.content.setGeometry(QRect(0, 0, 831, 581))
+        self.content.setFrameShape(QFrame.Shape.StyledPanel)
+        self.content.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.content)
+        self.horizontalLayout.setSpacing(0)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.horizontalLayout.setContentsMargins(25, 50, 25, 50)
+        self.form = QFrame(self.content)
+        self.form.setObjectName(u"form")
+        self.form.setFrameShape(QFrame.Shape.Box)
+        self.form.setFrameShadow(QFrame.Shadow.Plain)
+        self.verticalLayout_7 = QVBoxLayout(self.form)
+        self.verticalLayout_7.setObjectName(u"verticalLayout_7")
+
+        self.title = QLabel(self.form)
+        self.title.setObjectName(u"title")
+
+        self.verticalLayout_7.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.signInFrame = QFrame(self.form)
+        self.signInFrame.setObjectName(u"signInFrame")
+        self.signInFrame.setFrameShape(QFrame.Shape.NoFrame)
+        self.signInFrame.setFrameShadow(QFrame.Shadow.Plain)
+        self.verticalLayout = QVBoxLayout(self.signInFrame)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.nameFrame = QFrame(self.signInFrame)
+        self.nameFrame.setObjectName(u"nameFrame")
+        self.nameFrame.setFrameShape(QFrame.Shape.NoFrame)
+        self.nameFrame.setFrameShadow(QFrame.Shadow.Plain)
+        self.verticalLayout_3 = QVBoxLayout(self.nameFrame)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.firstNamePrompt = QLabel(self.nameFrame)
+        self.firstNamePrompt.setObjectName(u"firstNamePrompt")
+
+        self.verticalLayout_3.addWidget(self.firstNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.firstNameInput = QLineEdit(self.nameFrame)
+        self.firstNameInput.setObjectName(u"firstNameInput")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.firstNameInput.sizePolicy().hasHeightForWidth())
+        self.firstNameInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_3.addWidget(self.firstNameInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.lastNamePrompt = QLabel(self.nameFrame)
+        self.lastNamePrompt.setObjectName(u"lastNamePrompt")
+
+        self.verticalLayout_3.addWidget(self.lastNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.lastNameInput = QLineEdit(self.nameFrame)
+        self.lastNameInput.setObjectName(u"lastNameInput")
+        sizePolicy.setHeightForWidth(self.lastNameInput.sizePolicy().hasHeightForWidth())
+        self.lastNameInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_3.addWidget(self.lastNameInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.verticalLayout.addWidget(self.nameFrame)
+
+        self.emailPrompt = QLabel(self.signInFrame)
+        self.emailPrompt.setObjectName(u"emailPrompt")
+
+        self.verticalLayout.addWidget(self.emailPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.emailInput = QLineEdit(self.signInFrame)
+        self.emailInput.setObjectName(u"emailInput")
+        sizePolicy.setHeightForWidth(self.emailInput.sizePolicy().hasHeightForWidth())
+        self.emailInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.emailInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.passwordPrompt = QLabel(self.signInFrame)
+        self.passwordPrompt.setObjectName(u"passwordPrompt")
+
+        self.verticalLayout.addWidget(self.passwordPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.passwordInput = QLineEdit(self.signInFrame)
+        self.passwordInput.setObjectName(u"passwordInput")
+        sizePolicy.setHeightForWidth(self.passwordInput.sizePolicy().hasHeightForWidth())
+        self.passwordInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.passwordInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.verticalLayout_7.addWidget(self.signInFrame)
+
+        self.signInFrame_2 = QFrame(self.form)
+        self.signInFrame_2.setObjectName(u"signInFrame_2")
+        self.signInFrame_2.setFrameShape(QFrame.Shape.NoFrame)
+        self.signInFrame_2.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_6 = QVBoxLayout(self.signInFrame_2)
+        self.verticalLayout_6.setObjectName(u"verticalLayout_6")
+        self.nationalNumPrompt = QLabel(self.signInFrame_2)
+        self.nationalNumPrompt.setObjectName(u"nationalNumPrompt")
+
+        self.verticalLayout_6.addWidget(self.nationalNumPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.nationalNumInput = QLineEdit(self.signInFrame_2)
+        self.nationalNumInput.setObjectName(u"nationalNumInput")
+        sizePolicy.setHeightForWidth(self.nationalNumInput.sizePolicy().hasHeightForWidth())
+        self.nationalNumInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_6.addWidget(self.nationalNumInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.phoneNumPrompt = QLabel(self.signInFrame_2)
+        self.phoneNumPrompt.setObjectName(u"phoneNumPrompt")
+
+        self.verticalLayout_6.addWidget(self.phoneNumPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.phoneNumInput = QLineEdit(self.signInFrame_2)
+        self.phoneNumInput.setObjectName(u"phoneNumInput")
+        sizePolicy.setHeightForWidth(self.phoneNumInput.sizePolicy().hasHeightForWidth())
+        self.phoneNumInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_6.addWidget(self.phoneNumInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.occupationPrompt = QLabel(self.signInFrame_2)
+        self.occupationPrompt.setObjectName(u"occupationPrompt")
+
+        self.verticalLayout_6.addWidget(self.occupationPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.occupationComboBox = QComboBox(self.signInFrame_2)
+        self.occupationComboBox.addItem("")
+        self.occupationComboBox.addItem("")
+        self.occupationComboBox.addItem("")
+        self.occupationComboBox.addItem("")
+        self.occupationComboBox.setObjectName(u"occupationComboBox")
+        sizePolicy.setHeightForWidth(self.occupationComboBox.sizePolicy().hasHeightForWidth())
+        self.occupationComboBox.setSizePolicy(sizePolicy)
+        self.occupationComboBox.setSizeAdjustPolicy(QComboBox.SizeAdjustPolicy.AdjustToContentsOnFirstShow)
+
+        self.verticalLayout_6.addWidget(self.occupationComboBox, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.verticalLayout_7.addWidget(self.signInFrame_2)
+
+        self.submitBtn = QPushButton(self.form)
+        self.submitBtn.setObjectName(u"submitBtn")
+        sizePolicy.setHeightForWidth(self.submitBtn.sizePolicy().hasHeightForWidth())
+        self.submitBtn.setSizePolicy(sizePolicy)
+
+        self.verticalLayout_7.addWidget(self.submitBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.horizontalLayout.addWidget(self.form)
+
+
+        self.retranslateUi()
+
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("SignUpDetailed", u"Form", None))
+        self.title.setText(QCoreApplication.translate("SignUpDetailed", u"Welcome New User", None))
+        self.firstNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"First Name", None))
+        self.lastNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Last Name", None))
+        self.emailPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Email", None))
+        self.passwordPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Password", None))
+        self.nationalNumPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"National Insurance Number", None))
+        self.phoneNumPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Phone Number", None))
+        self.occupationPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Occupation", None))
+        self.occupationComboBox.setItemText(0, QCoreApplication.translate("SignUpDetailed", u"Employed", None))
+        self.occupationComboBox.setItemText(1, QCoreApplication.translate("SignUpDetailed", u"Student", None))
+        self.occupationComboBox.setItemText(2, QCoreApplication.translate("SignUpDetailed", u"Part-Time", None))
+        self.occupationComboBox.setItemText(3, QCoreApplication.translate("SignUpDetailed", u"Unemployed", None))
+
+        self.submitBtn.setText(QCoreApplication.translate("SignUpDetailed", u"Submit", None))
+    # retranslateUi
+
+
+
+
+
+
+
+
 
 
 class DetailedSignUpPage(QWidget):
@@ -647,14 +831,14 @@ class DetailedSignUpPage(QWidget):
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.title = QLabel(self)
-        self.title.setObjectName(u"title")
-        self.title.setMinimumSize(QSize(103, 16))
-        self.title.setFont(title)
-        self.title.setScaledContents(False)
-        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.titleSignUp = QLabel(self)
+        self.titleSignUp.setObjectName(u"title")
+        self.titleSignUp.setMinimumSize(QSize(103, 16))
+        self.titleSignUp.setFont(title)
+        self.titleSignUp.setScaledContents(False)
+        self.titleSignUp.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.verticalLayout.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout.addWidget(self.titleSignUp, 0, Qt.AlignmentFlag.AlignHCenter)
 
         self.label = QLabel(self)
         self.label.setObjectName(u"label")
@@ -744,7 +928,8 @@ class DetailedSignUpPage(QWidget):
         self.verticalLayout.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
 
     def retranslateUi(self):
-        self.title.setText(QCoreApplication.translate("SignUpDetailed", u"Welcome New User", None))
+        self.setWindowTitle(QCoreApplication.translate("SignUpDetailed", u"Form", None))
+        self.titleSignUp.setText(QCoreApplication.translate("SignUpDetailed", u"Welcome New User", None))
         self.label.setText(QCoreApplication.translate("SignUpDetailed", u"Please fill in the following form", None))
         self.emailPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Email", None))
         self.emailInput.setText("")

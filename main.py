@@ -53,7 +53,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.apartmentRefresh.clicked.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
         self.AdminDash.reportLocationDropdown.currentIndexChanged.connect(lambda : [self.AdminDash.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.reportLocationDropdown.currentText())), self.AdminDash.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.reportLocationDropdown.currentText()))]) #TODO Create a function that updates both graphs at the same time
         
-        #
+        #Sign Up Customer Page
+        self.DetailedSignUp.submitBtn.clicked.connect(lambda : SignUpTenant(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
+        self.DetailedSignUp.submitBtn.clicked.connect(lambda : self.switchCustomerView(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
+
         #Customer Page
 
         self.CustDash.OverviewPage.logoutBtn.clicked.connect(lambda : self.logoutTenant())
