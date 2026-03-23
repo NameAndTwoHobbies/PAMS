@@ -6,7 +6,6 @@ initialized and visible.
 import pytest
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QTextEdit
-from PySide6.QtCore import Qt
 from MyWidgets import (
     WelcomePage,
     CustomerLoginPage,
@@ -16,9 +15,7 @@ from MyWidgets import (
     DetailedSignUpPage,
     FrontDeskDashboard,
     FinanceDashboard,
-    Table,
 )
-from Entities import IEntity
 
 
 @pytest.fixture(scope="session")

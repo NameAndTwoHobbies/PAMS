@@ -8,5 +8,3 @@ devHost = "135.181.2.74"
 devUser = "u1_vQ4UL6snS0"
 devPassword = "dz6QPN.kx4QAZHrYEl!+=uBu"
 devName = "s1_sdgp_dev"
-
-

@@ -1,13 +1,10 @@
-import sys
-import random
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 from PySide6.QtCharts import *
-from ErrorBoxes import ErrorBox
 from Entities import *
 
-#region Fonts
+# region Fonts
 
 text = QFont()
 text.setFamilies([u"Arial"])
@@ -31,12 +28,12 @@ heading2.setFamilies([u"Calibri"])
 heading2.setPointSize(18)
 
 
-#endregion
+# endregion
 
-#In order to have an efficient and scalable app pages will be seperated into individual widgets
-#This prevents accidental variable changes and makes the application easier to debug and develop
+# In order to have an efficient and scalable app pages will be seperated into individual widgets
+# This prevents accidental variable changes and makes the application easier to debug and develop
 
-#region Welcome Page
+# region Welcome Page
 
 # The welcome page consists of a title and buttons that lead to the tenant and staff portals respectively
 class WelcomePage(QWidget):
@@ -51,8 +48,6 @@ class WelcomePage(QWidget):
         self.title = QLabel()
         self.title.setObjectName(u"title")
         self.title.setFont(title)
-
-       
 
         self.loginCustomerBtn = QPushButton()
         self.loginCustomerBtn.setObjectName(u"loginCustomerBtn")
@@ -72,95 +67,93 @@ class WelcomePage(QWidget):
         self.loginCustomerBtn.setText(QCoreApplication.translate("MainWindow", u"Customer Login Portal", None))
         self.loginAdminBtn.setText(QCoreApplication.translate("MainWindow", u"Admin Login Portal", None))
 
-#endregion
+# endregion
 
 
-
-#region Customer Login
+# region Customer Login
 # The customer login page contains a email and password input section and a submit button
 class CustomerLoginPage(QWidget):
-        def __init__(self):
-            super().__init__()
+    def __init__(self):
+        super().__init__()
 
-            self.setObjectName(u"CustomerLogin")
+        self.setObjectName(u"CustomerLogin")
 
-            # Group Box
-            self.loginGroup = QGroupBox(self)
-            self.loginGroup.setObjectName(u"loginGroup")
-            self.loginGroup.setGeometry(QRect(9, 10, 811, 561))
-            
+        # Group Box
+        self.loginGroup = QGroupBox(self)
+        self.loginGroup.setObjectName(u"loginGroup")
+        self.loginGroup.setGeometry(QRect(9, 10, 811, 561))
 
-            self.loginGroup.setFont(text)
-            self.loginGroup.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-            self.loginGroup.setFlat(True)
-            
-            # Email
-            self.emailLabel = QLabel(self.loginGroup)
-            self.emailLabel.setObjectName(u"emailLabel")
-            self.emailLabel.setGeometry(QRect(380, 170, 54, 30))
+        self.loginGroup.setFont(text)
+        self.loginGroup.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.loginGroup.setFlat(True)
 
-            self.emailInput = QTextEdit(self.loginGroup)
-            self.emailInput.setObjectName(u"emailInput")
-            self.emailInput.setGeometry(QRect(180, 200, 461, 41))
+        # Email
+        self.emailLabel = QLabel(self.loginGroup)
+        self.emailLabel.setObjectName(u"emailLabel")
+        self.emailLabel.setGeometry(QRect(380, 170, 54, 30))
 
-            #Password 
-            self.passwordInput = QTextEdit(self.loginGroup)
-            self.passwordInput.setObjectName(u"passwordInput")
-            self.passwordInput.setGeometry(QRect(180, 300, 461, 41))
+        self.emailInput = QTextEdit(self.loginGroup)
+        self.emailInput.setObjectName(u"emailInput")
+        self.emailInput.setGeometry(QRect(180, 200, 461, 41))
 
-            self.passwordInput.setFont(text)
+        # Password
+        self.passwordInput = QTextEdit(self.loginGroup)
+        self.passwordInput.setObjectName(u"passwordInput")
+        self.passwordInput.setGeometry(QRect(180, 300, 461, 41))
 
-            self.customerPassword = QLabel(self.loginGroup)
-            self.customerPassword.setObjectName(u"password")
-            self.customerPassword.setGeometry(QRect(360, 270, 93, 30))
+        self.passwordInput.setFont(text)
+
+        self.customerPassword = QLabel(self.loginGroup)
+        self.customerPassword.setObjectName(u"password")
+        self.customerPassword.setGeometry(QRect(360, 270, 93, 30))
 
 
-            #title
-            self.title = QLabel(self.loginGroup)
-            self.title.setObjectName(u"title")
-            self.title.setGeometry(QRect(240, 90, 297, 53))
-            
-            self.title.setFont(title)
+        # title
+        self.title = QLabel(self.loginGroup)
+        self.title.setObjectName(u"title")
+        self.title.setGeometry(QRect(240, 90, 297, 53))
 
-            #Buttons
-            self.loginBtn = QPushButton(self.loginGroup)
-            self.loginBtn.setObjectName(u"loginBtn")
-            self.loginBtn.setGeometry(QRect(340, 400, 129, 40))
+        self.title.setFont(title)
 
-            self.signUpBtn = QPushButton(self.loginGroup)
-            self.signUpBtn.setObjectName(u"signUpBtn")
-            self.signUpBtn.setGeometry(QRect(340, 350, 129, 40))
+        # Buttons
+        self.loginBtn = QPushButton(self.loginGroup)
+        self.loginBtn.setObjectName(u"loginBtn")
+        self.loginBtn.setGeometry(QRect(340, 400, 129, 40))
+
+        self.signUpBtn = QPushButton(self.loginGroup)
+        self.signUpBtn.setObjectName(u"signUpBtn")
+        self.signUpBtn.setGeometry(QRect(340, 350, 129, 40))
 
         def retranslateUi(self):
             self.loginGroup.setTitle("")
             self.emailLabel.setText(QCoreApplication.translate("MainWindow", u"Email", None))
             self.emailInput.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-    "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-    "p, li { white-space: pre-wrap; }\n"
-    "hr { height: 1px; border-width: 0; }\n"
-    "li.unchecked::marker { content: \"\\2610\"; }\n"
-    "li.checked::marker { content: \"\\2612\"; }\n"
-    "</style></head><body style=\" font-family:'Calibri'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
-    "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+                                                                                "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+                                                                                "p, li { white-space: pre-wrap; }\n"
+                                                                                "hr { height: 1px; border-width: 0; }\n"
+                                                                                "li.unchecked::marker { content: \"\\2610\"; }\n"
+                                                                                "li.checked::marker { content: \"\\2612\"; }\n"
+                                                                                "</style></head><body style=\" font-family:'Calibri'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
+                                                                                "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
             self.emailInput.setPlaceholderText(QCoreApplication.translate("MainWindow", u"e.g. paragon@gmail.com ", None))
             self.passwordInput.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-    "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-    "p, li { white-space: pre-wrap; }\n"
-    "hr { height: 1px; border-width: 0; }\n"
-    "li.unchecked::marker { content: \"\\2610\"; }\n"
-    "li.checked::marker { content: \"\\2612\"; }\n"
-    "</style></head><body style=\" font-family:'Bookshelf Symbol 7'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
-    "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+                                                                                    "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+                                                                                    "p, li { white-space: pre-wrap; }\n"
+                                                                                    "hr { height: 1px; border-width: 0; }\n"
+                                                                                    "li.unchecked::marker { content: \"\\2610\"; }\n"
+                                                                                    "li.checked::marker { content: \"\\2612\"; }\n"
+                                                                                    "</style></head><body style=\" font-family:'Bookshelf Symbol 7'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
+                                                                                    "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
             self.passwordInput.setPlaceholderText("")
             self.customerPassword.setText(QCoreApplication.translate("MainWindow", u"Password", None))
             self.loginBtn.setText(QCoreApplication.translate("MainWindow", u"Login", None))
             self.signUpBtn.setText(QCoreApplication.translate("MainWindow", u"Sign Up", None))
             self.title.setText(QCoreApplication.translate("MainWindow", u"Customer Login", None))
 
-#endregion
+# endregion
 
-#region Sign Up Page
 
+# region Sign Up Page
 # The Sign Up Page consists of a title and a email input. It also has a submit button
 class SignUpPage(QWidget):
     def __init__(self):
@@ -199,21 +192,15 @@ class SignUpPage(QWidget):
         self.emailInput.setPlaceholderText(QCoreApplication.translate("signUpPage", u"email@domain.com", None))
         self.prompt.setText(QCoreApplication.translate("signUpPage", u"Enter your email to sign up for this app", None))
     # retranslateUi
-    
-        
+# endregion
 
 
-
-
-#endregion
-
-
-#region Admin Login
+# region Admin Login
 
 class AdminLoginPage(QWidget):
     def __init__(self):
         super().__init__()
-        
+
         self.setObjectName(u"AdminLogin")
 
         # Group Box
@@ -221,13 +208,11 @@ class AdminLoginPage(QWidget):
         self.adminGroup.setObjectName(u"adminGroup")
         self.adminGroup.setGeometry(QRect(10, 10, 811, 561))
 
-        
         self.adminGroup.setFont(text)
         self.adminGroup.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.adminGroup.setFlat(True)
 
-        #Email 
-
+        # Email
         self.emailLabel = QLabel(self.adminGroup)
         self.emailLabel.setObjectName(u"adminEmailLabel")
         self.emailLabel.setGeometry(QRect(380, 170, 54, 30))
@@ -236,25 +221,25 @@ class AdminLoginPage(QWidget):
         self.emailInput.setObjectName(u"adminEmailInput")
         self.emailInput.setGeometry(QRect(180, 200, 461, 41))
 
-        #Password
+        # Password
 
         self.passwordInput = QTextEdit(self.adminGroup)
         self.passwordInput.setObjectName(u"adminPasswordInput")
         self.passwordInput.setGeometry(QRect(180, 300, 461, 41))
-        
+
         self.passwordInput.setFont(text)
 
         self.passwordLabel = QLabel(self.adminGroup)
         self.passwordLabel.setObjectName(u"adminPasswordLabel")
         self.passwordLabel.setGeometry(QRect(360, 270, 93, 30))
 
-        #Login Button
+        # Login Button
 
         self.loginBtn = QPushButton(self.adminGroup)
         self.loginBtn.setObjectName(u"adminLoginBtn")
         self.loginBtn.setGeometry(QRect(340, 370, 129, 40))
 
-        #Title
+        # Title
 
         self.title = QLabel(self.adminGroup)
         self.title.setObjectName(u"adminLoginLabel")
@@ -263,35 +248,34 @@ class AdminLoginPage(QWidget):
 
         self.title.setFont(title)
 
-        
     def retranslateUi(self):
         self.adminGroup.setTitle("")
         self.emailLabel.setText(QCoreApplication.translate("MainWindow", u"Email", None))
         self.emailInput.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Calibri'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+                                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+                                                                        "p, li { white-space: pre-wrap; }\n"
+                                                                        "hr { height: 1px; border-width: 0; }\n"
+                                                                        "li.unchecked::marker { content: \"\\2610\"; }\n"
+                                                                        "li.checked::marker { content: \"\\2612\"; }\n"
+                                                                        "</style></head><body style=\" font-family:'Calibri'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
+                                                                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.emailInput.setPlaceholderText(QCoreApplication.translate("MainWindow", u"e.g. paragon@gmail.com ", None))
         self.passwordInput.setHtml(QCoreApplication.translate("MainWindow", u"<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Bookshelf Symbol 7'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
+                                                                        "<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+                                                                        "p, li { white-space: pre-wrap; }\n"
+                                                                        "hr { height: 1px; border-width: 0; }\n"
+                                                                        "li.unchecked::marker { content: \"\\2610\"; }\n"
+                                                                        "li.checked::marker { content: \"\\2612\"; }\n"
+                                                                        "</style></head><body style=\" font-family:'Bookshelf Symbol 7'; font-size:18pt; font-weight:400; font-style:normal;\">\n"
+                                                                        "<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", None))
         self.passwordInput.setPlaceholderText("")
         self.passwordLabel.setText(QCoreApplication.translate("MainWindow", u"Password", None))
         self.loginBtn.setText(QCoreApplication.translate("MainWindow", u"Login", None))
         self.title.setText(QCoreApplication.translate("MainWindow", u"Admin Login", None))
-#endregion 
+# endregion
 
 
-#region Client Dashboard
+# region Client Dashboard
 
 # The client dashboard contains a side bar that controls a stackwidget that switches the sections currently being looked at.
 # The default page - what the user is greeted with after they login
@@ -299,112 +283,110 @@ class AdminLoginPage(QWidget):
 # The Lease Page - Where the user can track their lease agreement
 # The Payment Page - Where the user will make any outstanding payments
 # The complaint Page - Where the user will submit complaints
-# The buttons are automatically connected so no need to connect them at run time 
+# The buttons are automatically connected so no need to connect them at run time
 
 class Dashboard(QWidget):
-        def __init__(self):
-            super().__init__()
-            self.resize(805, 581)
+    def __init__(self):
+        super().__init__()
+        self.resize(805, 581)
 
 
-            #StackWidget / Dashboard Content
-            self.stackedWidget = QStackedWidget(self)
-            self.stackedWidget.setObjectName(u"stackedWidget")
-            self.stackedWidget.setGeometry(QRect(110, 70, 681, 501))
-            self.stackedWidget.setStyleSheet("background-color: green;")
+        # StackWidget / Dashboard Content
+        self.stackedWidget = QStackedWidget(self)
+        self.stackedWidget.setObjectName(u"stackedWidget")
+        self.stackedWidget.setGeometry(QRect(110, 70, 681, 501))
+        self.stackedWidget.setStyleSheet("background-color: green;")
 
-            #Default Page
-            self.defaultPage = QWidget()
-            self.defaultPage.setObjectName(u"defaultPage")
-            self.defaultTitle = QLabel(self.defaultPage)
-            self.defaultTitle.setObjectName(u"defaultTitle")
-            self.defaultTitle.setGeometry(QRect(270, 220, 44, 16))
-            self.stackedWidget.addWidget(self.defaultPage)
-            
+        # Default Page
+        self.defaultPage = QWidget()
+        self.defaultPage.setObjectName(u"defaultPage")
+        self.defaultTitle = QLabel(self.defaultPage)
+        self.defaultTitle.setObjectName(u"defaultTitle")
+        self.defaultTitle.setGeometry(QRect(270, 220, 44, 16))
+        self.stackedWidget.addWidget(self.defaultPage)
 
+        # Account Page
+        self.accountPage = QWidget()
+        self.accountPage.setObjectName(u"accountPage")
+        self.label_2 = QLabel(self.accountPage)
+        self.label_2.setObjectName(u"label_2")
+        self.label_2.setGeometry(QRect(270, 220, 44, 16))
+        self.stackedWidget.addWidget(self.accountPage)
 
-            #Account Page
-            self.accountPage = QWidget()
-            self.accountPage.setObjectName(u"accountPage")
-            self.label_2 = QLabel(self.accountPage)
-            self.label_2.setObjectName(u"label_2")
-            self.label_2.setGeometry(QRect(270, 220, 44, 16))
-            self.stackedWidget.addWidget(self.accountPage)
+        # Lease Page
+        self.leasePage = QWidget()
+        self.leasePage.setObjectName(u"leasePage")
+        self.label_3 = QLabel(self.leasePage)
+        self.label_3.setObjectName(u"label_3")
+        self.label_3.setGeometry(QRect(250, 250, 30, 16))
+        self.stackedWidget.addWidget(self.leasePage)
 
-            #Lease Page
-            self.leasePage = QWidget()
-            self.leasePage.setObjectName(u"leasePage")
-            self.label_3 = QLabel(self.leasePage)
-            self.label_3.setObjectName(u"label_3")
-            self.label_3.setGeometry(QRect(250, 250, 30, 16))
-            self.stackedWidget.addWidget(self.leasePage)
+        # Payment Page
+        self.paymentPage = QWidget()
+        self.paymentPage.setObjectName(u"paymentPage")
+        self.label_4 = QLabel(self.paymentPage)
+        self.label_4.setObjectName(u"label_4")
+        self.label_4.setGeometry(QRect(280, 240, 52, 16))
+        self.stackedWidget.addWidget(self.paymentPage)
 
-            #Payment Page
-            self.paymentPage = QWidget()
-            self.paymentPage.setObjectName(u"paymentPage")
-            self.label_4 = QLabel(self.paymentPage)
-            self.label_4.setObjectName(u"label_4")
-            self.label_4.setGeometry(QRect(280, 240, 52, 16))
-            self.stackedWidget.addWidget(self.paymentPage)
-
-            #Complaints Page
-            self.complaintsPage = QWidget()
-            self.complaintsPage.setObjectName(u"complaintsPage")
-            self.label = QLabel(self.complaintsPage)
-            self.label.setObjectName(u"label")
-            self.label.setGeometry(QRect(270, 190, 58, 16))
-            self.stackedWidget.addWidget(self.complaintsPage)
+        # Complaints Page
+        self.complaintsPage = QWidget()
+        self.complaintsPage.setObjectName(u"complaintsPage")
+        self.label = QLabel(self.complaintsPage)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(270, 190, 58, 16))
+        self.stackedWidget.addWidget(self.complaintsPage)
 
 
-            #Sidebar
+        # Sidebar
 
-            self.sideBar = QWidget(self)
-            self.sideBar.setObjectName(u"sideBar")
-            self.sideBar.setGeometry(QRect(10, 10, 91, 561))
-            self.sideBar.setStyleSheet("background-color: green;")
+        self.sideBar = QWidget(self)
+        self.sideBar.setObjectName(u"sideBar")
+        self.sideBar.setGeometry(QRect(10, 10, 91, 561))
+        self.sideBar.setStyleSheet("background-color: green;")
 
-            self.gridLayout = QGridLayout(self.sideBar)
-            self.gridLayout.setObjectName(u"gridLayout")
-
-
-            #Account Button
-            self.accountBtn = QPushButton(self.sideBar)
-            self.accountBtn.setObjectName(u"accountBtn")
-            self.accountBtn.setCheckable(True)
-            self.accountBtn.setAutoExclusive(True)
-            self.accountBtn.clicked.connect(self.switchAccountPage)
-
-            #Lease Button
-            self.leaseBtn = QPushButton(self.sideBar)
-            self.leaseBtn.setObjectName(u"leaseBtn")
-            self.leaseBtn.setCheckable(True)
-            self.leaseBtn.setAutoExclusive(True)
-            self.leaseBtn.clicked.connect(self.switchLeasePage)
+        self.gridLayout = QGridLayout(self.sideBar)
+        self.gridLayout.setObjectName(u"gridLayout")
 
 
-            #Payment Button
-            self.paymentsBtn = QPushButton(self.sideBar)
-            self.paymentsBtn.setObjectName(u"paymentsBtn")
-            self.paymentsBtn.setCheckable(True)
-            self.paymentsBtn.setAutoExclusive(True)
-            self.paymentsBtn.clicked.connect(self.switchPaymentsPage)
+        # Account Button
+        self.accountBtn = QPushButton(self.sideBar)
+        self.accountBtn.setObjectName(u"accountBtn")
+        self.accountBtn.setCheckable(True)
+        self.accountBtn.setAutoExclusive(True)
+        self.accountBtn.clicked.connect(self.switchAccountPage)
+
+        # Lease Button
+        self.leaseBtn = QPushButton(self.sideBar)
+        self.leaseBtn.setObjectName(u"leaseBtn")
+        self.leaseBtn.setCheckable(True)
+        self.leaseBtn.setAutoExclusive(True)
+        self.leaseBtn.clicked.connect(self.switchLeasePage)
 
 
-            #Complaints Button
-            self.complaintsBtn = QPushButton(self.sideBar)
-            self.complaintsBtn.setObjectName(u"complaintsBtn")
-            self.complaintsBtn.setCheckable(True)
-            self.complaintsBtn.setAutoExclusive(True)
-            self.complaintsBtn.clicked.connect(self.switchComplaintsPage)
+        # Payment Button
+        self.paymentsBtn = QPushButton(self.sideBar)
+        self.paymentsBtn.setObjectName(u"paymentsBtn")
+        self.paymentsBtn.setCheckable(True)
+        self.paymentsBtn.setAutoExclusive(True)
+        self.paymentsBtn.clicked.connect(self.switchPaymentsPage)
 
 
-            #Adding to Layout
-            self.gridLayout.addWidget(self.accountBtn, 0, 0, 1, 1)
-            self.gridLayout.addWidget(self.leaseBtn, 1, 0, 1, 1)
-            self.gridLayout.addWidget(self.paymentsBtn, 2, 0, 1, 1)
-            self.gridLayout.addWidget(self.complaintsBtn, 3, 0, 1, 1)
+        # Complaints Button
+        self.complaintsBtn = QPushButton(self.sideBar)
+        self.complaintsBtn.setObjectName(u"complaintsBtn")
+        self.complaintsBtn.setCheckable(True)
+        self.complaintsBtn.setAutoExclusive(True)
+        self.complaintsBtn.clicked.connect(self.switchComplaintsPage)
 
-            self.stackedWidget.setCurrentIndex(0)
+
+        # Adding to Layout
+        self.gridLayout.addWidget(self.accountBtn, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.leaseBtn, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.paymentsBtn, 2, 0, 1, 1)
+        self.gridLayout.addWidget(self.complaintsBtn, 3, 0, 1, 1)
+
+        self.stackedWidget.setCurrentIndex(0)
 
 
         def retranslateUi(self):
@@ -427,42 +409,35 @@ class Dashboard(QWidget):
 
         def switchPaymentsPage(self):
             self.stackedWidget.setCurrentIndex(3)
-        
+
         def switchComplaintsPage(self):
             self.stackedWidget.setCurrentIndex(4)
-    
+# endregion
 
 
-
-
-#endregion
-
-#region Database Widgets
-
-
-
+# region Database Widgets
 # The Table class takes list of IEntity objects and a list of headers and populates a table.
 # The table also incluedes a search function that is not case sensitive hides all data that does not match.
-class Table(QTableWidget):  
-    def __init__(self, records : list[IEntity], headers):
+class Table(QTableWidget):
+    def __init__(self, records: list[IEntity], headers):
         super().__init__()
         lenHeader = len(headers)
         lenRecords = len(records)
         self.setColumnCount(lenHeader)
         self.setRowCount(lenRecords)
         self.verticalHeader().setVisible(False)
-        for header in range(0,lenHeader):
-            self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
-        
+        for header in range(0, lenHeader):
+            self.setHorizontalHeaderItem(header, QTableWidgetItem(str(headers[header][0])))
+
         # Converts the database format of the records into table
         for x in range(len(records)):
             record = records[x].GetDataBaseFormat()
-            for y in range(0,len(record)):
-                self.setItem(x,y,QTableWidgetItem(str(record[y])))
-    
-    def search(self, string : str):
-        matches = self.findItems(string,Qt.MatchFlag.MatchContains)
-        for rows in range(0,self.rowCount()):
+            for y in range(0, len(record)):
+                self.setItem(x, y, QTableWidgetItem(str(record[y])))
+
+    def search(self, string: str):
+        matches = self.findItems(string, Qt.MatchFlag.MatchContains)
+        for rows in range(0, self.rowCount()):
             self.hideRow(rows)
         for match in matches:
             self.showRow(match.row())
@@ -475,21 +450,18 @@ class Table(QTableWidget):
         self.setColumnCount(lenHeader)
         self.setRowCount(lenRecords)
         self.verticalHeader().setVisible(False)
-        for header in range(0,lenHeader):
-            self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
-        
+        for header in range(0, lenHeader):
+            self.setHorizontalHeaderItem(header, QTableWidgetItem(str(headers[header][0])))
+
         # Converts the database format of the records into table
         for x in range(len(records)):
             record = records[x].GetDataBaseFormat()
-            for y in range(0,len(record)):
-                self.setItem(x,y,QTableWidgetItem(str(record[y])))
-        
+            for y in range(0, len(record)):
+                self.setItem(x, y, QTableWidgetItem(str(record[y])))
+# endregion
 
-        
 
-#endregion 
-
-#region Testing Page
+# region Testing Page
 # This page has 4 buttons on it that are asssigned to functions that are being developed currently
 # This page makes testing much quicker while not interferring with the project
 class TestPage(QWidget):
@@ -526,15 +498,10 @@ class TestPage(QWidget):
         self.testBtn3.setText(QCoreApplication.translate("testPage", u"Test 3", None))
         self.testBtn4.setText(QCoreApplication.translate("testPage", u"Test 4", None))
     # retranslateUi
+# endregion
 
 
-
-#endregion
-
-
-#region Detailed Sign Up Page
-
-
+# region Detailed Sign Up Page
 class DetailedSignUpPage(QWidget):
     def __init__(self):
         super().__init__()
@@ -657,12 +624,13 @@ class DetailedSignUpPage(QWidget):
         self.passwordInput.setPlaceholderText("")
         self.pushButton.setText(QCoreApplication.translate("SignUpDetailed", u"Sign Up", None))
     # retranslateUi
-#endregion
+# endregion
 
-#region Front Desk Dashboard
+# region Front Desk Dashboard
 
 # The Front Desk Dashboard contains all the widgets needed for the staff to operate their task.
 # The top section is for registering new tenants, the bottom section is for managing existing tenants.
+
 
 class FrontDeskDashboard(QWidget):
     def __init__(self):
@@ -677,7 +645,7 @@ class FrontDeskDashboard(QWidget):
         self.errorMessage_2 = QWidget(self.manageTenants)
         self.errorMessage_2.setObjectName(u"errorMessage_2")
         self.errorMessage_2.setGeometry(QRect(480, 80, 231, 141))
-        self.tenantTable = Table([],[])
+        self.tenantTable = Table([], [])
         self.tenantTable.setParent(self.manageTenants)
         self.tenantTable.setObjectName(u"tenantTable")
         self.tenantTable.setGeometry(QRect(10, 30, 711, 201))
@@ -747,18 +715,16 @@ class FrontDeskDashboard(QWidget):
         self.passwordInput.setPlaceholderText(QCoreApplication.translate("Form", u"Password", None))
     # retranslateUi
 
-
-        
     def Submit(self):
         fName = self.firstNameInput.text()
         lName = self.lastNameInput.text()
         email = self.emailInput.text()
         password = self.passwordInput.text()
-        phoneNumber = self.phoneNumberInput.text() #TODO phonenumber checking is valid phone number
+        phoneNumber = self.phoneNumberInput.text()  # TODO phonenumber checking is valid phone number
         nationalInsurance = self.nationalInsuranceInput.text()
         occupation = self.occupationDropdown.currentText()
         references = ""
-        tenant = Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
+        tenant = Tenant(-1, fName, lName, email, password, phoneNumber, nationalInsurance, occupation, references)
         self.firstNameInput.clear()
         self.lastNameInput.clear()
         self.emailInput.clear()
@@ -768,52 +734,50 @@ class FrontDeskDashboard(QWidget):
         self.occupationDropdown.setCurrentIndex(0)
         return tenant
 
-#endregion
+# endregion
 
 
-
-#region Graph Generation
-
+# region Graph Generation
 class BarChart(QBarSeries):
     def __init__(self):
         super().__init__()
 
-#endregion
+# endregion
 
-#Labels contains the names of the different type of data and numData contains the number of entrys for each label
+
+# Labels contains the names of the different type of data and numData contains the number of entrys for each label
 class PieChart(QChartView):
-    def __init__(self, labels : tuple , numData : tuple , title : str):
+    def __init__(self, labels: tuple, numData: tuple, title: str):
         super().__init__()
         chart = QChart()
         self.pieChart = QPieSeries()
         for i in range(0, len(labels)):
-            self.pieChart.append(labels[i],numData[i])
+            self.pieChart.append(labels[i], numData[i])
         chart.addSeries(self.pieChart)
         chart.setTitle(title)
 
         self.setChart(chart)
-        
 
-#Pie for occupancy levels vs unoccupied in aprtment and then in city
+# Pie for occupancy levels vs unoccupied in aprtment and then in city
 
-#Pie of oustandinf payments vs collected
+# Pie of oustandinf payments vs collected
 
-#entension add a prediction method
+# entension add a prediction method
 
-#TODO CREATE A PIE GRAPH FOR OUTSTANDING VERSES COLLECTED PAYMENTS 
-#TODO CREATE A LINE GRAPH FOR THE EPENSES PER WEEK/ MONTH / YEAR FROM MAINTANENCE
+# TODO CREATE A PIE GRAPH FOR OUTSTANDING VERSES COLLECTED PAYMENTS
+# TODO CREATE A LINE GRAPH FOR THE EPENSES PER WEEK/ MONTH / YEAR FROM MAINTANENCE
 
-#region Finance Dashboard
+# region Finance Dashboard
 
 
-#endregion
+# endregion
 
 class FinanceDashboard(QWidget):
     def __init__(self):
         super().__init__()
         self.resize(831, 581)
 
-        #region Title
+        # region Title
         self.titleFrame = QFrame(self)
         self.titleFrame.setObjectName(u"titleFrame")
         self.titleFrame.setGeometry(QRect(0, 10, 831, 91))
@@ -826,17 +790,17 @@ class FinanceDashboard(QWidget):
         self.label.setCursor(QCursor(Qt.CursorShape.ArrowCursor))
         self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.horizontalLayout_2.addWidget(self.label)
-        #endregion
+        # endregion
 
 
-        #Region Main Content
+        # region Main Content
         self.stackedWidget = QStackedWidget(self)
         self.stackedWidget.setObjectName(u"stackedWidget")
         self.stackedWidget.setGeometry(QRect(10, 110, 811, 461))
-        #endregion
+        # endregion
 
 
-        #region Tabs
+        # region Tabs
         self.tabs = QFrame(self)
         self.tabs.setObjectName(u"tabs")
         self.tabs.setGeometry(QRect(0, 100, 831, 41))
@@ -859,10 +823,10 @@ class FinanceDashboard(QWidget):
         self.reportBtn = QPushButton(self.tabs)
         self.reportBtn.setObjectName(u"reportBtn")
         self.horizontalLayout_8.addWidget(self.reportBtn)
-        #endregion
+        # endregion
 
-        #region Pages
-        #region Report Page
+        # region Pages
+        # region Report Page
         self.ReportPage = QWidget()
         self.ReportPage.setObjectName(u"ReportPage")
         self.Graphs = QFrame(self.ReportPage)
@@ -873,13 +837,13 @@ class FinanceDashboard(QWidget):
         self.graphsStackedWidget = QStackedWidget(self.Graphs)
         self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
         self.graphsStackedWidget.setGeometry(QRect(10, 60, 391, 291))
-        self.Occupancy = PieChart((),(), "Occupancy Levels")
+        self.Occupancy = PieChart((), (), "Occupancy Levels")
         self.Occupancy.setObjectName(u"Occupancy")
         self.graphsStackedWidget.addWidget(self.Occupancy)
-        self.MaintenceCost = PieChart((),(), "Maintenance Costs")
+        self.MaintenceCost = PieChart((), (), "Maintenance Costs")
         self.MaintenceCost.setObjectName(u"MaintenceCost")
         self.graphsStackedWidget.addWidget(self.MaintenceCost)
-        self.CollectionRate = PieChart((),(), "Collection Rates")
+        self.CollectionRate = PieChart((), (), "Collection Rates")
         self.CollectionRate.setObjectName(u"CollectionRate")
         self.graphsStackedWidget.addWidget(self.CollectionRate)
         self.btnGroup = QFrame(self.Graphs)
@@ -896,7 +860,7 @@ class FinanceDashboard(QWidget):
 
         self.collectionBtn = QPushButton(self.btnGroup)
         self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True) #TODO Graph has no implmentation yet so disable button for now
+        self.collectionBtn.setDisabled(True)  # TODO Graph has no implmentation yet so disable button for now
 
         self.horizontalLayout.addWidget(self.collectionBtn)
 
@@ -904,16 +868,15 @@ class FinanceDashboard(QWidget):
         self.maintenanceBtn.setObjectName(u"maintenanceBtn")
 
         self.horizontalLayout.addWidget(self.maintenanceBtn)
-        
+
         self.stackedWidget.addWidget(self.ReportPage)
-        #endregion
-        
-        #region Invoice Page
+        # endregion
+
+        # region Invoice Page
         self.InvoicePage = QWidget()
         self.InvoicePage.setObjectName(u"InvoicePage")
-        
 
-        #Title
+        # Title
         self.invoiceFrame = QFrame(self.InvoicePage)
         self.invoiceFrame.setObjectName(u"invoiceFrame")
         self.invoiceFrame.setGeometry(QRect(10, 20, 791, 431))
@@ -939,20 +902,18 @@ class FinanceDashboard(QWidget):
         self.createInvoice.setFrameShape(QFrame.Shape.StyledPanel)
         self.createInvoice.setFrameShadow(QFrame.Shadow.Raised)
         self.stackedWidget.addWidget(self.InvoicePage)
-        #endregion
-        
-        #region Payment Page
+        # endregion
+
+        # region Payment Page
         self.PaymentPage = QWidget()
         self.PaymentPage.setObjectName(u"PaymentPage")
-        
-        
-        
+
         self.managePayments = QGroupBox(self.PaymentPage)
         self.managePayments.setObjectName(u"managePayments")
         self.managePayments.setGeometry(QRect(20, 30, 771, 431))
 
-        #Table
-        self.paymentTable = Table([],[])
+        # Table
+        self.paymentTable = Table([], [])
         self.paymentTable.setParent(self.managePayments)
         self.paymentTable.setObjectName(u"tenantTable")
         self.paymentTable.setGeometry(QRect(10, 50, 751, 371))
@@ -979,7 +940,7 @@ class FinanceDashboard(QWidget):
         self.horizontalLayout_4.addWidget(self.tableTitle)
 
 
-        #Tool Bar
+        # Tool Bar
         self.toolBar = QFrame(self.tableBar)
         self.toolBar.setObjectName(u"toolBar")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
@@ -1023,16 +984,16 @@ class FinanceDashboard(QWidget):
         self.horizontalLayout_4.addWidget(self.toolBar)
 
         self.stackedWidget.addWidget(self.PaymentPage)
-        #endregion
-        #endregion
-        
-        #Connections
-        self.occupancyBtn.clicked.connect(lambda : self.switchToOccupanyLevels())
-        self.collectionBtn.clicked.connect(lambda : self.switchToCollectionRate())
-        self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenance())
-        self.invoicesBtn.clicked.connect(lambda : self.switchToInvoices())
-        self.paymentsBtn.clicked.connect(lambda : self.switchToPayments())
-        self.reportBtn.clicked.connect(lambda : self.switchToReport())
+        # endregion
+        # endregion
+
+        # Connections
+        self.occupancyBtn.clicked.connect(lambda: self.switchToOccupanyLevels())
+        self.collectionBtn.clicked.connect(lambda: self.switchToCollectionRate())
+        self.maintenanceBtn.clicked.connect(lambda: self.switchToMaintenance())
+        self.invoicesBtn.clicked.connect(lambda: self.switchToInvoices())
+        self.paymentsBtn.clicked.connect(lambda: self.switchToPayments())
+        self.reportBtn.clicked.connect(lambda: self.switchToReport())
 
         self.stackedWidget.setCurrentIndex(2)
         self.retranslateUi()
@@ -1053,6 +1014,7 @@ class FinanceDashboard(QWidget):
         self.paymentsBtn.setText(QCoreApplication.translate("Form", u"Payments", None))
         self.invoicesBtn.setText(QCoreApplication.translate("Form", u"Invoices", None))
         self.reportBtn.setText(QCoreApplication.translate("Form", u"Report", None))
+    
     # retranslateUi
     def switchToOccupanyLevels(self):
         self.graphsStackedWidget.setCurrentIndex(0)
@@ -1063,19 +1025,19 @@ class FinanceDashboard(QWidget):
     def switchToMaintenance(self):
         self.graphsStackedWidget.setCurrentIndex(1)
 
-    def CreateOccupancyLevels(self, pie :PieChart):
+    def CreateOccupancyLevels(self, pie: PieChart):
         self.Occupancy.setChart(pie.chart())
         self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
         self.Occupancy.setParent(self.graphsStackedWidget)
         print("Created Occupancy Pie")
 
-    def CreateCollectionRates(self, pie :PieChart):
+    def CreateCollectionRates(self, pie: PieChart):
         self.CollectionRate.setChart(pie.chart())
         self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
         self.CollectionRate.setParent(self.graphsStackedWidget)
         print("Created Collection Pie")
 
-    def CreateMaintenance(self, pie :PieChart):
+    def CreateMaintenance(self, pie: PieChart):
         self.MaintenceCost.setChart(pie.chart())
         self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
         self.MaintenceCost.setParent(self.graphsStackedWidget)
@@ -1084,12 +1046,14 @@ class FinanceDashboard(QWidget):
 
     def switchToInvoices(self):
         self.stackedWidget.setCurrentIndex(1)
+    
     def switchToPayments(self):
         self.stackedWidget.setCurrentIndex(2)
+    
     def switchToReport(self):
         self.stackedWidget.setCurrentIndex(0)
 
-#endregion
+# endregion
 
 # class FinanceDashboard(QWidget):
 #     def __init__(self):
@@ -1113,8 +1077,7 @@ class FinanceDashboard(QWidget):
 #         self.Occupancy.setObjectName(u"Occupancy")
 #         self.Occupancy.setParent(self.stackedWidget)
 #         self.stackedWidget.addWidget(self.Occupancy)
-        
-        
+
 #         #Collection Rate Chart
 #         self.CollectionRate = PieChart((),(),"")
 #         self.CollectionRate.setObjectName(u"CollectionRate")
@@ -1127,10 +1090,6 @@ class FinanceDashboard(QWidget):
 #         self.MaintenceCost.setObjectName(u"MaintenceCost")
 #         self.MaintenceCost.setParent(self.stackedWidget)
 #         self.stackedWidget.addWidget(self.MaintenceCost)
-
-
-       
-
 
 #         #Button group
 #         self.btnGroup = QFrame(self.Graphs)
@@ -1200,11 +1159,6 @@ class FinanceDashboard(QWidget):
 #         self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
 #         self.MaintenceCost.setParent(self.stackedWidget)
 #         print("Created Maintenence Pie")
-    
-
-
-
-
 
     # Graph Page
 
@@ -1217,7 +1171,7 @@ class FinanceDashboard(QWidget):
     #     self.graphsStackedWidget = QStackedWidget(self.GraphPage)
     #     self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
     #     self.graphsStackedWidget.setGeometry(QRect(180, 50, 411, 361))
-        
+
     #     Occupancy Chart
     #     self.Occupancy = PieChart((),(),"")
     #     self.Occupancy.setObjectName(u"Occupancy")
@@ -1264,5 +1218,3 @@ class FinanceDashboard(QWidget):
     #     self.maintenanceBtn = QPushButton(self.btnGroup)
     #     self.maintenanceBtn.setObjectName(u"maintenanceBtn")
     #     self.horizontalLayout.addWidget(self.maintenanceBtn)
-
-       
