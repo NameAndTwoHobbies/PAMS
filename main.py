@@ -8,6 +8,7 @@ from db import *
 from ErrorBoxes import *
 from MyWidgets import *
 from Entities import Tenant
+from Table import Table
 
 class mainScreen(QMainWindow , Ui_MainWindow):
     def __init__(self):
@@ -17,7 +18,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setMaximumSize(self.size())
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
-        #self.switchToFinanceDashboard()
+        self.LoginTenantBTN("peter@gmail.com", "")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -81,6 +82,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchCustomerView(self, tenant : Tenant):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentIndex(3)
+        self.CustDash.paymentsPage.paymentHistory.UpdateTable(GetTenantPaymentHistory(tenant.GetID()), GetHeaders("payments"))
         self.CustDash.setUser(tenant)
 
     

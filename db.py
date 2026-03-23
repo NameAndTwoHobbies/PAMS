@@ -404,5 +404,25 @@ def GetTenantsFromLocation(locationName : str):
 
         
 
-        
+#Retrieving the tenants payment history 
+def GetTenantPaymentHistory(tenantID : str):
+    query = "SELECT * FROM payments WHERE tenant_id = %s"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Get Payment History of tenant " + str(tenantID))
+
+    dbcursor.execute(query, (tenantID,))
+
+    dbPayments = dbcursor.fetchall()
+
+    payments = []
+    for dbPayment in dbPayments:
+        payment = Payment(dbPayment[0],dbPayment[1],dbPayment[2],dbPayment[3],dbPayment[4],dbPayment[5],dbPayment[6],dbPayment[7],dbPayment[8])
+        payments.append(payment)
+    
+    return payments
         

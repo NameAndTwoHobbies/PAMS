@@ -152,9 +152,11 @@ class Notification(IEntity):
 #region Payment
 
 class Payment(IEntity):
-    def __init__(self, id : str, schedule_id : str, payment_date : str, amount_paid : str, payment_status : str, method : str, reference : str):
+    def __init__(self, id : str, schedule_id : str, tenant_id : str, location_id :str , payment_date : str, amount_paid : str, payment_status : str, method : str, reference : str):
         super().__init__(id)
         self.schedule_id = schedule_id
+        self.tenant_id = tenant_id
+        self.location_id = location_id
         self.payment_date = payment_date
         self.amount_paid = amount_paid
         self.payment_status = payment_status
@@ -162,7 +164,7 @@ class Payment(IEntity):
         self.reference = reference
 
     def GetDataBaseFormat(self):
-        return (self.id, self.schedule_id, self.payment_date, self.amount_paid, self.payment_status, self.method, self.reference)
+        return (self.id, self.schedule_id,self.tenant_id,self.location_id, self.payment_date, self.amount_paid, self.payment_status, self.method, self.reference)
     def NumberOfFields(self):
         return 7
 #endregion

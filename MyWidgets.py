@@ -6,6 +6,7 @@ from PySide6.QtCore import *
 from PySide6.QtCharts import *
 from ErrorBoxes import ErrorBox
 from Entities import *
+from Table import Table
 from tenantPage import *
 
 #region Fonts
@@ -311,133 +312,133 @@ class AdminLoginPage(QWidget):
 # The complaint Page - Where the user will submit complaints
 # The buttons are automatically connected so no need to connect them at run time 
 
-class Dashboard(userPage):
-        def __init__(self):
-            super().__init__()
-            self.resize(805, 581)
-            #StackWidget / Dashboard Content
-            self.stackedWidget = QStackedWidget(self)
-            self.stackedWidget.setObjectName(u"stackedWidget")
-            self.stackedWidget.setGeometry(QRect(110, 70, 681, 501))
-            self.stackedWidget.setStyleSheet("background-color: green;")
+# class Dashboard(userPage):
+#         def __init__(self):
+#             super().__init__()
+#             self.resize(805, 581)
+#             #StackWidget / Dashboard Content
+#             self.stackedWidget = QStackedWidget(self)
+#             self.stackedWidget.setObjectName(u"stackedWidget")
+#             self.stackedWidget.setGeometry(QRect(110, 70, 681, 501))
+#             self.stackedWidget.setStyleSheet("background-color: green;")
 
-            #Default Page
-            self.defaultPage = QWidget()
-            self.defaultPage.setObjectName(u"defaultPage")
-            self.defaultTitle = QLabel(self.defaultPage)
-            self.defaultTitle.setObjectName(u"defaultTitle")
-            self.defaultTitle.setGeometry(QRect(270, 220, 44, 16))
-            self.stackedWidget.addWidget(self.defaultPage)
+#             #Default Page
+#             self.defaultPage = QWidget()
+#             self.defaultPage.setObjectName(u"defaultPage")
+#             self.defaultTitle = QLabel(self.defaultPage)
+#             self.defaultTitle.setObjectName(u"defaultTitle")
+#             self.defaultTitle.setGeometry(QRect(270, 220, 44, 16))
+#             self.stackedWidget.addWidget(self.defaultPage)
             
 
 
-            #Account Page
-            self.accountPage = QWidget()
-            self.accountPage.setObjectName(u"accountPage")
-            self.label_2 = QLabel(self.accountPage)
-            self.label_2.setObjectName(u"label_2")
-            self.label_2.setGeometry(QRect(270, 220, 44, 16))
-            self.stackedWidget.addWidget(self.accountPage)
+#             #Account Page
+#             self.accountPage = QWidget()
+#             self.accountPage.setObjectName(u"accountPage")
+#             self.label_2 = QLabel(self.accountPage)
+#             self.label_2.setObjectName(u"label_2")
+#             self.label_2.setGeometry(QRect(270, 220, 44, 16))
+#             self.stackedWidget.addWidget(self.accountPage)
 
-            #Lease Page
-            self.leasePage = QWidget()
-            self.leasePage.setObjectName(u"leasePage")
-            self.label_3 = QLabel(self.leasePage)
-            self.label_3.setObjectName(u"label_3")
-            self.label_3.setGeometry(QRect(250, 250, 30, 16))
-            self.stackedWidget.addWidget(self.leasePage)
+#             #Lease Page
+#             self.leasePage = QWidget()
+#             self.leasePage.setObjectName(u"leasePage")
+#             self.label_3 = QLabel(self.leasePage)
+#             self.label_3.setObjectName(u"label_3")
+#             self.label_3.setGeometry(QRect(250, 250, 30, 16))
+#             self.stackedWidget.addWidget(self.leasePage)
 
-            #Payment Page
-            self.paymentPage = QWidget()
-            self.paymentPage.setObjectName(u"paymentPage")
-            self.label_4 = QLabel(self.paymentPage)
-            self.label_4.setObjectName(u"label_4")
-            self.label_4.setGeometry(QRect(280, 240, 52, 16))
-            self.stackedWidget.addWidget(self.paymentPage)
+#             #Payment Page
+#             self.paymentPage = QWidget()
+#             self.paymentPage.setObjectName(u"paymentPage")
+#             self.label_4 = QLabel(self.paymentPage)
+#             self.label_4.setObjectName(u"label_4")
+#             self.label_4.setGeometry(QRect(280, 240, 52, 16))
+#             self.stackedWidget.addWidget(self.paymentPage)
 
-            #Complaints Page
-            self.complaintsPage = QWidget()
-            self.complaintsPage.setObjectName(u"complaintsPage")
-            self.label = QLabel(self.complaintsPage)
-            self.label.setObjectName(u"label")
-            self.label.setGeometry(QRect(270, 190, 58, 16))
-            self.stackedWidget.addWidget(self.complaintsPage)
-
-
-            #Sidebar
-
-            self.sideBar = QWidget(self)
-            self.sideBar.setObjectName(u"sideBar")
-            self.sideBar.setGeometry(QRect(10, 10, 91, 561))
-            self.sideBar.setStyleSheet("background-color: green;")
-
-            self.gridLayout = QGridLayout(self.sideBar)
-            self.gridLayout.setObjectName(u"gridLayout")
+#             #Complaints Page
+#             self.complaintsPage = QWidget()
+#             self.complaintsPage.setObjectName(u"complaintsPage")
+#             self.label = QLabel(self.complaintsPage)
+#             self.label.setObjectName(u"label")
+#             self.label.setGeometry(QRect(270, 190, 58, 16))
+#             self.stackedWidget.addWidget(self.complaintsPage)
 
 
-            #Account Button
-            self.accountBtn = QPushButton(self.sideBar)
-            self.accountBtn.setObjectName(u"accountBtn")
-            self.accountBtn.setCheckable(True)
-            self.accountBtn.setAutoExclusive(True)
-            self.accountBtn.clicked.connect(self.switchAccountPage)
+#             #Sidebar
 
-            #Lease Button
-            self.leaseBtn = QPushButton(self.sideBar)
-            self.leaseBtn.setObjectName(u"leaseBtn")
-            self.leaseBtn.setCheckable(True)
-            self.leaseBtn.setAutoExclusive(True)
-            self.leaseBtn.clicked.connect(self.switchLeasePage)
+#             self.sideBar = QWidget(self)
+#             self.sideBar.setObjectName(u"sideBar")
+#             self.sideBar.setGeometry(QRect(10, 10, 91, 561))
+#             self.sideBar.setStyleSheet("background-color: green;")
+
+#             self.gridLayout = QGridLayout(self.sideBar)
+#             self.gridLayout.setObjectName(u"gridLayout")
 
 
-            #Payment Button
-            self.paymentsBtn = QPushButton(self.sideBar)
-            self.paymentsBtn.setObjectName(u"paymentsBtn")
-            self.paymentsBtn.setCheckable(True)
-            self.paymentsBtn.setAutoExclusive(True)
-            self.paymentsBtn.clicked.connect(self.switchPaymentsPage)
+#             #Account Button
+#             self.accountBtn = QPushButton(self.sideBar)
+#             self.accountBtn.setObjectName(u"accountBtn")
+#             self.accountBtn.setCheckable(True)
+#             self.accountBtn.setAutoExclusive(True)
+#             self.accountBtn.clicked.connect(self.switchAccountPage)
+
+#             #Lease Button
+#             self.leaseBtn = QPushButton(self.sideBar)
+#             self.leaseBtn.setObjectName(u"leaseBtn")
+#             self.leaseBtn.setCheckable(True)
+#             self.leaseBtn.setAutoExclusive(True)
+#             self.leaseBtn.clicked.connect(self.switchLeasePage)
 
 
-            #Complaints Button
-            self.complaintsBtn = QPushButton(self.sideBar)
-            self.complaintsBtn.setObjectName(u"complaintsBtn")
-            self.complaintsBtn.setCheckable(True)
-            self.complaintsBtn.setAutoExclusive(True)
-            self.complaintsBtn.clicked.connect(self.switchComplaintsPage)
+#             #Payment Button
+#             self.paymentsBtn = QPushButton(self.sideBar)
+#             self.paymentsBtn.setObjectName(u"paymentsBtn")
+#             self.paymentsBtn.setCheckable(True)
+#             self.paymentsBtn.setAutoExclusive(True)
+#             self.paymentsBtn.clicked.connect(self.switchPaymentsPage)
 
 
-            #Adding to Layout
-            self.gridLayout.addWidget(self.accountBtn, 0, 0, 1, 1)
-            self.gridLayout.addWidget(self.leaseBtn, 1, 0, 1, 1)
-            self.gridLayout.addWidget(self.paymentsBtn, 2, 0, 1, 1)
-            self.gridLayout.addWidget(self.complaintsBtn, 3, 0, 1, 1)
+#             #Complaints Button
+#             self.complaintsBtn = QPushButton(self.sideBar)
+#             self.complaintsBtn.setObjectName(u"complaintsBtn")
+#             self.complaintsBtn.setCheckable(True)
+#             self.complaintsBtn.setAutoExclusive(True)
+#             self.complaintsBtn.clicked.connect(self.switchComplaintsPage)
 
-            self.stackedWidget.setCurrentIndex(0)
+
+#             #Adding to Layout
+#             self.gridLayout.addWidget(self.accountBtn, 0, 0, 1, 1)
+#             self.gridLayout.addWidget(self.leaseBtn, 1, 0, 1, 1)
+#             self.gridLayout.addWidget(self.paymentsBtn, 2, 0, 1, 1)
+#             self.gridLayout.addWidget(self.complaintsBtn, 3, 0, 1, 1)
+
+#             self.stackedWidget.setCurrentIndex(0)
 
 
-        def retranslateUi(self):
-            self.leaseBtn.setText(QCoreApplication.translate("dashboard", u"Lease", None))
-            self.paymentsBtn.setText(QCoreApplication.translate("dashboard", u"Payments", None))
-            self.accountBtn.setText(QCoreApplication.translate("dashboard", u"Account", None))
-            self.complaintsBtn.setText(QCoreApplication.translate("dashboard", u"Complaints", None))
-            self.defaultTitle.setText(QCoreApplication.translate("dashboard", u"Default", None))
-            self.label_2.setText(QCoreApplication.translate("dashboard", u"Account", None))
-            self.label_3.setText(QCoreApplication.translate("dashboard", u"Lease", None))
-            self.label_4.setText(QCoreApplication.translate("dashboard", u"payments", None))
-            self.label.setText(QCoreApplication.translate("dashboard", u"complaints", None))
-        # retranslateUi
+#         def retranslateUi(self):
+#             self.leaseBtn.setText(QCoreApplication.translate("dashboard", u"Lease", None))
+#             self.paymentsBtn.setText(QCoreApplication.translate("dashboard", u"Payments", None))
+#             self.accountBtn.setText(QCoreApplication.translate("dashboard", u"Account", None))
+#             self.complaintsBtn.setText(QCoreApplication.translate("dashboard", u"Complaints", None))
+#             self.defaultTitle.setText(QCoreApplication.translate("dashboard", u"Default", None))
+#             self.label_2.setText(QCoreApplication.translate("dashboard", u"Account", None))
+#             self.label_3.setText(QCoreApplication.translate("dashboard", u"Lease", None))
+#             self.label_4.setText(QCoreApplication.translate("dashboard", u"payments", None))
+#             self.label.setText(QCoreApplication.translate("dashboard", u"complaints", None))
+#         # retranslateUi
 
-        def switchAccountPage(self):
-            self.stackedWidget.setCurrentIndex(1)
+#         def switchAccountPage(self):
+#             self.stackedWidget.setCurrentIndex(1)
 
-        def switchLeasePage(self):
-            self.stackedWidget.setCurrentIndex(2)
+#         def switchLeasePage(self):
+#             self.stackedWidget.setCurrentIndex(2)
 
-        def switchPaymentsPage(self):
-            self.stackedWidget.setCurrentIndex(3)
+#         def switchPaymentsPage(self):
+#             self.stackedWidget.setCurrentIndex(3)
         
-        def switchComplaintsPage(self):
-            self.stackedWidget.setCurrentIndex(4)
+#         def switchComplaintsPage(self):
+#             self.stackedWidget.setCurrentIndex(4)
     
 
 
@@ -451,7 +452,8 @@ class TenantDashboard(QWidget):
         #Title Section
         self.verticalLayout_2 = QVBoxLayout(self)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.titleSection = QFrame()
+        self.verticalLayout_2.setContentsMargins(0,0,0,0)
+        self.titleSection = QFrame(self)
         self.titleSection.setObjectName(u"titleSection")
         self.titleSection.setFrameShape(QFrame.Shape.StyledPanel)
         self.titleSection.setFrameShadow(QFrame.Shadow.Raised)
@@ -463,7 +465,7 @@ class TenantDashboard(QWidget):
         self.verticalLayout_2.addWidget(self.titleSection)
 
         #Tabs
-        self.tabSection = QFrame()
+        self.tabSection = QFrame(self)
         self.tabSection.setObjectName(u"tabSection")
         self.tabSection.setFrameShape(QFrame.Shape.StyledPanel)
         self.tabSection.setFrameShadow(QFrame.Shadow.Raised)
@@ -473,6 +475,10 @@ class TenantDashboard(QWidget):
         self.overviewBtn = QPushButton(self.tabSection)
         self.overviewBtn.setObjectName(u"overviewBtn")
         self.horizontalLayout.addWidget(self.overviewBtn)
+
+        self.accountBtn = QPushButton(self.tabSection)
+        self.accountBtn.setObjectName(u"accountBtn")
+        self.horizontalLayout.addWidget(self.accountBtn)
 
         self.paymentsBtn = QPushButton(self.tabSection)
         self.paymentsBtn.setObjectName(u"paymentsBtn")
@@ -488,25 +494,33 @@ class TenantDashboard(QWidget):
 
 
         #Main Content
-        self.mainSection = QStackedWidget()
+        self.mainSection = QStackedWidget(self)
         self.mainSection.setObjectName(u"mainSection")
         self.mainSection.setFrameShape(QFrame.Shape.StyledPanel)
         self.mainSection.setFrameShadow(QFrame.Shadow.Raised)
+        self.mainSection.resize(811,621)
 
         #Overview Page
         self.OverviewPage = TenantOverviewPage()
         self.mainSection.addWidget(self.OverviewPage)
                 
         self.paymentsPage = TenantPaymentsPage()
+        self.paymentsPage.setObjectName(u"paymentsPage")
         self.mainSection.addWidget(self.paymentsPage)
     
 
         self.verticalLayout_2.addWidget(self.mainSection)
 
+        #Account Page
+
+        self.AccountPage = TenantAccountPage()
+        self.mainSection.addWidget(self.AccountPage)
+
         #Connections
 
         self.overviewBtn.clicked.connect(lambda: self.switchToOverviewPage())
         self.paymentsBtn.clicked.connect(lambda: self.switchToPaymentsPage())
+        self.accountBtn.clicked.connect(lambda : self.switchToAccountPage())
 
         self.mainSection.setCurrentIndex(0)
         self.retranslateUi()
@@ -519,6 +533,7 @@ class TenantDashboard(QWidget):
         self.overviewBtn.setText(QCoreApplication.translate("Form", u"Overview", None))
         self.paymentsBtn.setText(QCoreApplication.translate("Form", u"Payments", None))
         self.maintanenceBtn.setText(QCoreApplication.translate("Form", u"Maintanence", None))
+        self.accountBtn.setText(QCoreApplication.translate("Form", u"Account", None))
         self.OverviewPage.retranslateUi()
         self.paymentsPage.retranslateUi()
        
@@ -529,67 +544,16 @@ class TenantDashboard(QWidget):
         self.OverviewPage.UpdateTenantInfomation(self.tenant.first_name,"Not yet implmented", "£NOT YET IMPLMENTED", "not yet implemented" , "Not yet implmentedf" ,"not yet implemented")
     def clearUser(self, tenat: Tenant):
         self.tenant = Tenant("","","", "", "", "", "", "","")
-        self.OverviewPage.UpdateTenantInfomation
     def switchToPaymentsPage(self):
         self.mainSection.setCurrentIndex(1)
     def switchToOverviewPage(self):
         self.mainSection.setCurrentIndex(0)
+    def switchToAccountPage(self):
+        self.mainSection.setCurrentIndex(2)
         
 
 #endregion
 
-#region Database Widgets
-
-
-
-# The Table class takes list of IEntity objects and a list of headers and populates a table.
-# The table also incluedes a search function that is not case sensitive hides all data that does not match.
-class Table(QTableWidget):  
-    def __init__(self, records : list[IEntity], headers):
-        super().__init__()
-        lenHeader = len(headers)
-        lenRecords = len(records)
-        self.setColumnCount(lenHeader)
-        self.setRowCount(lenRecords)
-        self.verticalHeader().setVisible(False)
-        for header in range(0,lenHeader):
-            self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
-        
-        # Converts the database format of the records into table
-        for x in range(len(records)):
-            record = records[x].GetDataBaseFormat()
-            for y in range(0,len(record)):
-                self.setItem(x,y,QTableWidgetItem(str(record[y])))
-    
-    def search(self, string : str):
-        if string is not "":
-            matches = self.findItems(string,Qt.MatchFlag.MatchContains)
-            for rows in range(0,self.rowCount()):
-                self.hideRow(rows)
-            for match in matches:
-                self.showRow(match.row())
-
-
-    def UpdateTable(self, records, headers):
-        self.clear()
-        lenHeader = len(headers)
-        lenRecords = len(records)
-        self.setColumnCount(lenHeader)
-        self.setRowCount(lenRecords)
-        self.verticalHeader().setVisible(False)
-        for header in range(0,lenHeader):
-            self.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header][0])))
-        
-        # Converts the database format of the records into table
-        for x in range(len(records)):
-            record = records[x].GetDataBaseFormat()
-            for y in range(0,len(record)):
-                self.setItem(x,y,QTableWidgetItem(str(record[y])))
-        
-
-        
-
-#endregion 
 
 #region Testing Page
 # This page has 4 buttons on it that are asssigned to functions that are being developed currently
