@@ -1,2 +1,2 @@
-def HashingAlgorithm(string : str):
-  pass
+def HashingAlgorithm(string: str):
+    pass

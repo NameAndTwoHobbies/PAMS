@@ -1,26 +1,17 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainMJOjaG.ui'
-##
-## Created by: Qt User Interface Compiler version 6.10.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# Form generated from reading UI file 'mainMJOjaG.ui'
+#
+# Created by: Qt User Interface Compiler version 6.10.1
+#
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QFrame, QGroupBox, QLabel,
-    QMainWindow, QMenu, QMenuBar, QPushButton,
-    QSizePolicy, QStackedWidget, QTextEdit, QVBoxLayout,
-    QWidget)
+from PySide6.QtCore import QCoreApplication, QMetaObject, QRect
+from PySide6.QtWidgets import QFrame, QStackedWidget, QWidget
 from MyWidgets import *
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -36,59 +27,56 @@ class Ui_MainWindow(object):
         self.stackedView.setFrameShadow(QFrame.Shadow.Plain)
         self.stackedView.setLineWidth(0)
 
-        #region Page 1 Welcome
+        # region Page 1 Welcome
         self.Welcome = WelcomePage()
         self.stackedView.addWidget(self.Welcome)
-        #endregion
+        # endregion
 
-        #region Page 2 Customer Login
+        # region Page 2 Customer Login
         self.CustLogin = CustomerLoginPage()
         self.stackedView.addWidget(self.CustLogin)
-        #endregion
+        # endregion
 
-        #region Page 3 Admin
+        # region Page 3 Admin
         self.AdminLogin = AdminLoginPage()
         self.stackedView.addWidget(self.AdminLogin)
-        #endregion
+        # endregion
 
-        #region Page 4 Customer Dashboard
+        # region Page 4 Customer Dashboard
         self.CustDash = Dashboard()
         self.stackedView.addWidget(self.CustDash)
+        # endregion
 
-        #endregion
-
-        #region Page 5 Sign Up Customer
+        # region Page 5 Sign Up Customer
         self.CustSignUp = SignUpPage()
         self.stackedView.addWidget(self.CustSignUp)
-        #end region
-       
-        #region Page 6 Testing Page
+        # endregion
+
+        # region Page 6 Testing Page
         self.TestingPage = TestPage()
         self.stackedView.addWidget(self.TestingPage)
-        #end region
+        # endregion
 
-        
-        #region Page 7 Detailed Sign Up Customer
+        # region Page 7 Detailed Sign Up Customer
         self.DetailedSignUp = DetailedSignUpPage()
         self.stackedView.addWidget(self.DetailedSignUp)
-        #end region
-        
-        #region Page 8 Front Desk Dashboard
+        # endregion
+
+        # region Page 8 Front Desk Dashboard
         self.FrontDeskDash = FrontDeskDashboard()
         self.stackedView.addWidget(self.FrontDeskDash)
-        #endregion
-        
-        #region Page 9 Finance Dashboard
+        # endregion
+
+        # region Page 9 Finance Dashboard
         self.FinanceDash = FinanceDashboard()
         self.stackedView.addWidget(self.FinanceDash)
-        #endregion
-        
+        # endregion
+
         MainWindow.setCentralWidget(self.View)
 
         self.retranslateUi(MainWindow)
 
         self.stackedView.setCurrentIndex(0)
-
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
@@ -96,7 +84,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
 
-        #retranslate ui for the pages
+        # retranslate ui for the pages
         self.Welcome.retranslateUi()
 
         self.CustLogin.retranslateUi()
@@ -110,8 +98,7 @@ class Ui_MainWindow(object):
         self.TestingPage.retranslateUi()
 
         self.DetailedSignUp.retranslateUi()
-        
+
         self.FrontDeskDash.retranslateUi()
 
     # retranslateUi
-

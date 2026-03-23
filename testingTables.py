@@ -1,8 +1,6 @@
-import sys
-import random
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
-from PySide6.QtCore import * 
+from PySide6.QtCore import *
 from uiMainWindow import Ui_MainWindow
 from db import *
 from ErrorBoxes import *
@@ -12,23 +10,18 @@ from MyWidgets import Table
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'FrontDeskDashcjvnfN.ui'
-##
-## Created by: Qt User Interface Compiler version 6.10.1
-##
-## WARNING! All changes made in this file will be lost when recompiling UI file!
+# Form generated from reading UI file 'FrontDeskDashcjvnfN.ui'
+#
+# Created by: Qt User Interface Compiler version 6.10.1
+#
+# WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
-    QFont, QFontDatabase, QGradient, QIcon,
-    QImage, QKeySequence, QLinearGradient, QPainter,
-    QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QComboBox, QGroupBox, QHeaderView,
-    QLabel, QLineEdit, QPushButton, QSizePolicy,
-    QTableWidget, QTableWidgetItem, QWidget)
+from PySide6.QtCore import QCoreApplication, QRect
+from PySide6.QtWidgets import (QApplication, QComboBox, QGroupBox,
+                            QLabel, QLineEdit, QPushButton,
+                            QTableWidget, QTableWidgetItem, QWidget)
+
 
 class Ui_Form(QWidget):
     def __init__(self):
@@ -107,55 +100,53 @@ class Ui_Form(QWidget):
 
 
 
-class mainScreen(QMainWindow , Ui_MainWindow):
+class mainScreen(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("PAMS")
         self.setMaximumSize(self.size())
 
-        #Testing Page
-        self.TestingPage.testBtn1.clicked.connect(lambda : self.getTenantsTable())
-        self.TestingPage.testBtn2.clicked.connect(lambda : self.getLocationsTable())
-        #self.TestingPage.testBtn3.clicked.connect(lambda : )
-        #self.TestingPage.testBtn4.clicked.connect(lambda : )
+        # Testing Page
+        self.TestingPage.testBtn1.clicked.connect(lambda: self.getTenantsTable())
+        self.TestingPage.testBtn2.clicked.connect(lambda: self.getLocationsTable())
+        # self.TestingPage.testBtn3.clicked.connect(lambda : )
+        # self.TestingPage.testBtn4.clicked.connect(lambda : )
 
 
 
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
-    
-    #endregion
-
+    # endregion
 
     def getTenantsTable(self):
         records = GetTenants()
         headers = GetHeaders("tenants")
-        table = Table(records,headers)
-        return table 
+        table = Table(records, headers)
+        return table
 
     def getLocationsTable(self):
         records = GetLocations()
         headers = GetHeaders("locations")
-        self.table = Table(records,headers)
+        self.table = Table(records, headers)
         self.table.show()
 
 
-#region App
+# region App
 app = QApplication()
 
-#Creates a main window and places the ui created in designer onto it 
+# Creates a main window and places the ui created in designer onto it
 mainWindow = mainScreen()
 
 records = GetTenants()
 headers = GetHeaders("tenants")
 test = Ui_Form()
 test.tenantTable.setColumnCount(len(headers))
-test.tenantTable.setHorizontalHeaderLabels(headers) 
+test.tenantTable.setHorizontalHeaderLabels(headers)
 test.tenantTable.setRowCount(len(records))
-for rowIndex, rowData in enumerate(records): 
+for rowIndex, rowData in enumerate(records):
     for colIndex, value in enumerate(rowData):
-        item = QTableWidgetItem(str(value)) 
+        item = QTableWidgetItem(str(value))
         test.tenantTable.setItem(rowIndex, colIndex, item)
 
 
@@ -165,6 +156,4 @@ mainWindow.show()
 
 app.exec()
 
-#endregion
-
-
+# endregion
