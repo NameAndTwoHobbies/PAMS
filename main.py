@@ -18,7 +18,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setMaximumSize(self.size())
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
-        self.LoginTenantBTN("peter@gmail.com", "")
+        self.loginStaffMember("manager@gmail.com", "")
+        #self.loginStaffMember("finance@gmail.com" , "")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -52,7 +53,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.userRefreshBtn.clicked.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []))
         self.AdminDash.apartmentLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
         self.AdminDash.apartmentRefresh.clicked.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
-        self.AdminDash.reportLocationDropdown.currentIndexChanged.connect(lambda : [self.AdminDash.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.reportLocationDropdown.currentText())), self.AdminDash.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.reportLocationDropdown.currentText()))]) #TODO Create a function that updates both graphs at the same time
+        self.AdminDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : [self.AdminDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText())), self.AdminDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))]) #TODO Create a function that updates both graphs at the same time
         
         #Sign Up Customer Page
         self.DetailedSignUp.submitBtn.clicked.connect(lambda : SignUpTenant(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
@@ -61,6 +62,15 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Customer Page
 
         self.CustDash.OverviewPage.logoutBtn.clicked.connect(lambda : self.logoutTenant())
+
+        #Manager Page
+        self.ManagerDash.LocationPage.locationCreateBtn.clicked.connect(lambda : self.CreateLocation(self.ManagerDash.LocationPage.SubmitLocation()))
+        self.ManagerDash.LocationPage.managerCreationBtn.clicked.connect(lambda : self.CreateLocationManager(self.ManagerDash.LocationPage.SubmitLocationManager(), self.ManagerDash.LocationPage.managerLocationComboBox.currentText()))
+        
+        self.ManagerDash.ApartmentPage.apartmentCreateBtn.clicked.connect(lambda  : self.CreateApartments(self.ManagerDash.ApartmentPage.Submit() , self.ManagerDash.ApartmentPage.locationComboBox.currentText()))
+        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
+        #self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateCollectionRates(self.(manager.location_id)))
+        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
 #region Page Functions
 # This section is responsible for the functions that switch the pages and that load the data into these pages.
     def switchWelcomePage(self):
@@ -93,8 +103,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setWindowTitle(admin.firstName)
         self.AdminDash.GetLocations(GetLocations())
 
-        self.AdminDash.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.apartmentLocationDropdown.currentText())) #TODO add a dropdown for the reports page for locations
-        self.AdminDash.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.apartmentLocationDropdown.currentText())) 
+        self.AdminDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
+        self.AdminDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText())) 
         self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []) 
         self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     
@@ -111,9 +121,12 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.FinanceDash.setUser(finance)
         self.setWindowTitle(finance.firstName)
         self.FinanceDash.paymentTable.UpdateTable((),())
-        self.FinanceDash.CreateOccupancyLevels(self.MakePieChartUnoccupied("London")) # Add specifc location for the user
-        self.FinanceDash.CreateMaintenance(self.MakeMaintanenceRequestsPieChart("London")) # Add specifc location for the user
-
+        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), PieChart((),(),""),self.MakeMaintanenceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
+    def switchToManagerDashboard(self, manager : User):
+        self.ManagerDash.setUser(manager)
+        self.ManagerDash.GetLocations(GetLocations())
+        self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()), PieChart((),(), ""), self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()))
+        self.stackedView.setCurrentIndex(10)
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
 
@@ -174,7 +187,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                     self.switchFrontDeskDashboard(staff)
                 case "Manager":
                     #Implement manager
-                    self.switchWelcomePage()
+                    self.switchToManagerDashboard(staff)
                 case "Finance":
                     self.switchToFinanceDashboard(staff)
                 case "Maintenance":
@@ -238,6 +251,35 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             return pie
         print("Done")
 
+    def CreateLocation(self, newLocation : Location):
+        location = GetLocation(newLocation.location_name)
+
+        if location is not None:
+            self.errorBox = ErrorBox(ErrorMessage("Location Already Exists", "A location already exists under this name"))
+            self.errorBox.show()
+        else:
+            AddLocation(newLocation)
+            self.ManagerDash.GetLocations(GetLocations())
+
+    def CreateLocationManager(self, newManager : User, locationName : str):
+        location = GetLocation(locationName) # Can only be the locations in the database as the combo box stores locations directly pulled from the database
+        newManager.location_id = location.id
+        added = AddStaff(newManager)
+        if added != True:
+            self.errorBox = ErrorBox(ErrorMessage("User Already Exists", "A User already exists under these credentials"))
+            self.errorBox.show()
+
+    def CreateApartments(self, apartments : list[Apartment] , locationName : str):
+        location = GetLocation(locationName) # Can only be the locations in the database as the combo box stores locations directly pulled from the database
+
+
+        if apartments == []:
+            self.errorBox = ErrorBox(ErrorMessage("No Apartments To Add", "No Apartments have been created"))
+            self.errorBox.show()
+        else: 
+            for apartment in apartments:
+                apartment.location_id = location.id
+                AddApartment(apartment)
 
 #endregion
 
@@ -258,3 +300,5 @@ app.exec()
 
 
 #TODO Have a look over and see if you can swap around how the mainwindow works its a tad inconsisitent
+
+#TODO MAKE CHECKS FOR ANY EMPTY ENTRIES

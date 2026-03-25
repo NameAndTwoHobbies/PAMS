@@ -122,6 +122,11 @@ class Ui_MainWindow(object):
         self.AdminDash = AdminDashboard()
         self.stackedView.addWidget(self.AdminDash)
         #endregion
+
+        #region Page 11 Manager Dashboard
+        self.ManagerDash = ManagerDashboard()
+        self.stackedView.addWidget(self.ManagerDash)
+        #endregion
         
         MainWindow.setCentralWidget(self.View)
 

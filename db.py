@@ -42,9 +42,120 @@ def GetConnection():
             print('MySQL Connection is established')
             return conn
 
+#This function assumes that you have already checked that the location does not already exist
+def AddLocation(location : Location):
+    query = "INSERT INTO locations (location_name) VALUES (%s);"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database") 
+    print("Purpose: Adding new location " + location.location_name)
+
+    dbcursor.execute(query, (location.location_name,))
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Database Closed")
+    print("------------------")
+
+def AddStaff(user : User):
+    query = "SELECT * FROM users WHERE email = %s AND password = %s"
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database") 
+    print("Purpose: Checking if a user exists")
+
+    dbcursor.execute(query , (user.email, user.password,))
+
+    users =  dbcursor.fetchone()
+
+    if users is not None:
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        print("------------------")
+        return False
+    else:
+        query = "INSERT INTO users (firstName, lastName, email, password, role, location_id) VALUES (%s,%s,%s,%s,%s,%s)"
+        print(user.GetDataBaseFormat())
+        print(user.GetDataBaseFormat()[1:])
+        dbcursor.execute(query, (user.GetDataBaseFormat()[1:])) # removes the id from the user tuple as to prevent sql errors
+        conn.commit()
+
+        if user.role == "Manager":
+            query = "SELECT user_id FROM users WHERE email = %s AND password = %s"
+            conn = GetConnection()
+            dbcursor = conn.cursor()    #Creating cursor object
+            dbcursor.execute('USE {};'.format(devName)) #use database'
+            print("------------------")
+            print("Entered Database") 
+            print("Purpose: Checking if a user exists")
+
+            dbcursor.execute(query , (user.email, user.password,))
+
+            dbUser =  dbcursor.fetchone()
+
+
+            query = "UPDATE locations SET location_manager = %s WHERE location_id = %s;"
+            dbcursor.execute(query, (dbUser[0],int(user.location_id),)) # removes the id from the user tuple as to prevent sql errors
+            conn.commit()
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        print("------------------")
+        return True
+
+def AddApartment(apartment : Apartment):
+    query = "INSERT INTO apartments (location_id,room_type, monthly_rent, bedrooms,bathrooms) VALUES (%s,%s,%s,%s,%s)"
+    
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database") 
+    print("Purpose: Adding Apartment to Location " + str(apartment.location_id))
+
+    dbcursor.execute(query, (int(apartment.location_id), apartment.room_type, float(apartment.monthly_rent), apartment.bedrooms, apartment.bathrooms ,))
+
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Database Closed")
+    print("------------------")
+
 #region Database to Objects
 
 #region Location functions
+
+def GetLocationFromID(locationID : str):
+    query = "SELECT * FROM locations WHERE locations.location_id = %s;"
+
+    conn = GetConnection()    
+    
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database") 
+    print("Purpose: Retrieve all locations that match the ID " + str(locationID))
+
+    dbcursor.execute(query, (locationID,))
+    location = dbcursor.fetchone()
+    if(location is None):
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        print("------------------")
+        return None
+    else:
+        dbcursor.close()
+        conn.close()
+        print("Database Closed")
+        print("------------------")
+        return Location(location[0], location[1], location[2])
 # Searches the database for a location with the matching name and returns a location object if found, otherwise returns None
 def GetLocation(locationName: str):
     query = "SELECT * FROM locations WHERE locations.location_name = %s;"

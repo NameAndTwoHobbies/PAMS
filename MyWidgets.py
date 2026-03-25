@@ -40,6 +40,11 @@ class userPage(QWidget):
         self.user = user
     def logoutUser(self):
         self.setUser(None)
+    def loadUserData(self):
+        pass
+        # Each page that invokes the loadable interface takes a list of elements to load to the specific page
+        #the idea is that at the time of logging in the user all the infomation directly loaded into the page through this function
+
 #endregion
 
 #In order to have an efficient and scalable app pages will be seperated into individual widgets
@@ -304,6 +309,7 @@ class AdminLoginPage(QWidget):
 
 #region Client Dashboard
 
+#Previous iteration of the client dashbaord
 # The client dashboard contains a side bar that controls a stackwidget that switches the sections currently being looked at.
 # The default page - what the user is greeted with after they login
 # The Account Page - Where the user will view and edit their personal infomation
@@ -776,138 +782,6 @@ class SignUpDetailed(QWidget):
         self.submitBtn.setText(QCoreApplication.translate("SignUpDetailed", u"Submit", None))
     # retranslateUi
 
-
-
-
-
-
-
-
-
-
-class DetailedSignUpPage(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.resize(817, 587)
-        self.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
-        self.setGeometry(QRect(0, 10, 812, 571))
-        self.verticalLayout = QVBoxLayout(self)
-        self.verticalLayout.setSpacing(0)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.titleSignUp = QLabel(self)
-        self.titleSignUp.setObjectName(u"title")
-        self.titleSignUp.setMinimumSize(QSize(103, 16))
-        self.titleSignUp.setFont(title)
-        self.titleSignUp.setScaledContents(False)
-        self.titleSignUp.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.titleSignUp, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.label = QLabel(self)
-        self.label.setObjectName(u"label")
-        self.label.setMinimumSize(QSize(164, 16))
-        self.label.setFont(heading)
-        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.label, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.horizontalSpacer = QSpacerItem(807, 50, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.verticalLayout.addItem(self.horizontalSpacer)
-
-        self.emailPrompt = QLabel(self)
-        self.emailPrompt.setObjectName(u"emailPrompt")
-        self.emailPrompt.setMinimumSize(QSize(29, 16))
-        self.emailPrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.emailPrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.emailPrompt.setFont(text)
-
-        self.verticalLayout.addWidget(self.emailPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.emailInput = QLineEdit(self)
-        self.emailInput.setObjectName(u"emailInput")
-        self.emailInput.setMinimumSize(QSize(150, 22))
-        self.emailInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.emailInput, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.firstNamePrompt = QLabel(self)
-        self.firstNamePrompt.setObjectName(u"firstNamePrompt")
-        self.firstNamePrompt.setMinimumSize(QSize(57, 16))
-        self.firstNamePrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.firstNamePrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.firstNamePrompt.setFont(text)
-
-        self.verticalLayout.addWidget(self.firstNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.firstNameInput = QLineEdit(self)
-        self.firstNameInput.setObjectName(u"firstNameInput")
-        self.firstNameInput.setMinimumSize(QSize(116, 22))
-        self.firstNameInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.firstNameInput, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.lastNamePrompt = QLabel(self)
-        self.lastNamePrompt.setObjectName(u"lastNamePrompt")
-        self.lastNamePrompt.setMinimumSize(QSize(56, 16))
-        self.lastNamePrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.lastNamePrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.lastNamePrompt.setFont(text)
-
-        self.verticalLayout.addWidget(self.lastNamePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.lastNamInput = QLineEdit(self)
-        self.lastNamInput.setObjectName(u"lastNamInput")
-        self.lastNamInput.setMinimumSize(QSize(116, 22))
-        self.lastNamInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.lastNamInput, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.passwordPrompt = QLabel(self)
-        self.passwordPrompt.setObjectName(u"passwordPrompt")
-        self.passwordPrompt.setMinimumSize(QSize(50, 16))
-        self.passwordPrompt.setFocusPolicy(Qt.FocusPolicy.NoFocus)
-        self.passwordPrompt.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.passwordPrompt.setFont(text)
-
-        self.verticalLayout.addWidget(self.passwordPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.passwordInput = QLineEdit(self)
-        self.passwordInput.setObjectName(u"passwordInput")
-        self.passwordInput.setMinimumSize(QSize(116, 22))
-        self.passwordInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.verticalLayout.addWidget(self.passwordInput, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.horizontalSpacer_2 = QSpacerItem(807, 17, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
-
-        self.verticalLayout.addItem(self.horizontalSpacer_2)
-
-        self.pushButton = QPushButton(self)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setMinimumSize(QSize(79, 24))
-        self.pushButton.setFont(text)
-
-        self.verticalLayout.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
-
-    def retranslateUi(self):
-        self.setWindowTitle(QCoreApplication.translate("SignUpDetailed", u"Form", None))
-        self.titleSignUp.setText(QCoreApplication.translate("SignUpDetailed", u"Welcome New User", None))
-        self.label.setText(QCoreApplication.translate("SignUpDetailed", u"Please fill in the following form", None))
-        self.emailPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Email", None))
-        self.emailInput.setText("")
-        self.emailInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"#ADD-EMAIL-HERE#", None))
-        self.firstNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"First Name", None))
-        self.firstNameInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"eg. Peter", None))
-        self.lastNamePrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Last Name", None))
-        self.lastNamInput.setText("")
-        self.lastNamInput.setPlaceholderText(QCoreApplication.translate("SignUpDetailed", u"eg. Smith", None))
-        self.passwordPrompt.setText(QCoreApplication.translate("SignUpDetailed", u"Password", None))
-        self.passwordInput.setText("")
-        self.passwordInput.setPlaceholderText("")
-        self.pushButton.setText(QCoreApplication.translate("SignUpDetailed", u"Sign Up", None))
-    # retranslateUi
 #endregion
 
 #region Front Desk Dashboard
@@ -1123,47 +997,9 @@ class FinanceDashboard(userPage):
 
         #region Pages
         #region Report Page
-        self.ReportPage = QWidget()
+        self.ReportPage = ReportPage()
         self.ReportPage.setObjectName(u"ReportPage")
-        self.Graphs = QFrame(self.ReportPage)
-        self.Graphs.setObjectName(u"Graphs")
-        self.Graphs.setGeometry(QRect(180, 50, 411, 361))
-        self.Graphs.setFrameShape(QFrame.Shape.StyledPanel)
-        self.Graphs.setFrameShadow(QFrame.Shadow.Raised)
-        self.graphsStackedWidget = QStackedWidget(self.Graphs)
-        self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
-        self.graphsStackedWidget.setGeometry(QRect(10, 60, 391, 291))
-        self.Occupancy = PieChart((),(), "Occupancy Levels")
-        self.Occupancy.setObjectName(u"Occupancy")
-        self.graphsStackedWidget.addWidget(self.Occupancy)
-        self.MaintenceCost = PieChart((),(), "Maintenance Costs")
-        self.MaintenceCost.setObjectName(u"MaintenceCost")
-        self.graphsStackedWidget.addWidget(self.MaintenceCost)
-        self.CollectionRate = PieChart((),(), "Collection Rates")
-        self.CollectionRate.setObjectName(u"CollectionRate")
-        self.graphsStackedWidget.addWidget(self.CollectionRate)
-        self.btnGroup = QFrame(self.Graphs)
-        self.btnGroup.setObjectName(u"btnGroup")
-        self.btnGroup.setGeometry(QRect(10, 10, 391, 44))
-        self.btnGroup.setFrameShape(QFrame.Shape.StyledPanel)
-        self.btnGroup.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.btnGroup)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.occupancyBtn = QPushButton(self.btnGroup)
-        self.occupancyBtn.setObjectName(u"occupancyBtn")
-
-        self.horizontalLayout.addWidget(self.occupancyBtn)
-
-        self.collectionBtn = QPushButton(self.btnGroup)
-        self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True)
-
-        self.horizontalLayout.addWidget(self.collectionBtn)
-
-        self.maintenanceBtn = QPushButton(self.btnGroup)
-        self.maintenanceBtn.setObjectName(u"maintenanceBtn")
-
-        self.horizontalLayout.addWidget(self.maintenanceBtn)
+        
         
         self.stackedWidget.addWidget(self.ReportPage)
         #endregion
@@ -1287,9 +1123,6 @@ class FinanceDashboard(userPage):
         #endregion
         
         #Connections
-        self.occupancyBtn.clicked.connect(lambda : self.switchToOccupanyLevels())
-        self.collectionBtn.clicked.connect(lambda : self.switchToCollectionRate())
-        self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenance())
         self.invoicesBtn.clicked.connect(lambda : self.switchToInvoices())
         self.paymentsBtn.clicked.connect(lambda : self.switchToPayments())
         self.reportBtn.clicked.connect(lambda : self.switchToReport())
@@ -1301,9 +1134,6 @@ class FinanceDashboard(userPage):
     def retranslateUi(self):
         self.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"Finance Dashboard", None))
-        self.occupancyBtn.setText(QCoreApplication.translate("Form", u"Occupancy Levels", None))
-        self.collectionBtn.setText(QCoreApplication.translate("Form", u"Collection Rate", None))
-        self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
         self.invoiceTitle.setText(QCoreApplication.translate("Form", u"Issue Invoices", None))
         self.managePayments.setTitle("")
         self.title.setText(QCoreApplication.translate("Form", u"Payments", None))
@@ -1314,33 +1144,7 @@ class FinanceDashboard(userPage):
         self.invoicesBtn.setText(QCoreApplication.translate("Form", u"Invoices", None))
         self.reportBtn.setText(QCoreApplication.translate("Form", u"Report", None))
     # retranslateUi
-    def switchToOccupanyLevels(self):
-        self.graphsStackedWidget.setCurrentIndex(0)
-
-    def switchToCollectionRate(self):
-        self.graphsStackedWidget.setCurrentIndex(2)
-
-    def switchToMaintenance(self):
-        self.graphsStackedWidget.setCurrentIndex(1)
-
-    def CreateOccupancyLevels(self, pie :PieChart):
-        self.Occupancy.setChart(pie.chart())
-        self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
-        self.Occupancy.setParent(self.graphsStackedWidget)
-        print("Created Occupancy Pie")
-
-    def CreateCollectionRates(self, pie :PieChart):
-        self.CollectionRate.setChart(pie.chart())
-        self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
-        self.CollectionRate.setParent(self.graphsStackedWidget)
-        print("Created Collection Pie")
-
-    def CreateMaintenance(self, pie :PieChart):
-        self.MaintenceCost.setChart(pie.chart())
-        self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
-        self.MaintenceCost.setParent(self.graphsStackedWidget)
-        print("Created Maintenence Pie")
-
+    
 
     def switchToInvoices(self):
         self.stackedWidget.setCurrentIndex(1)
@@ -1407,81 +1211,10 @@ class AdminDashboard(userPage):
 
 
         #region Report Page
-        self.ReportPage = QWidget()
+        self.ReportPage = ReportPageWithAllLocations()
         self.ReportPage.setObjectName(u"ReportPage")
-
-        self.Graphs = QFrame(self.ReportPage)
-        self.Graphs.setObjectName(u"Graphs")
-        self.Graphs.setGeometry(QRect(180, 50, 411, 361))
-        self.Graphs.setFrameShape(QFrame.Shape.StyledPanel)
-        self.Graphs.setFrameShadow(QFrame.Shadow.Raised)
-        self.graphsStackedWidget = QStackedWidget(self.Graphs)
-        self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
-        self.graphsStackedWidget.setGeometry(QRect(10, 60, 391, 291))
-        self.verticalLayout = QVBoxLayout(self.Graphs)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.Occupancy = PieChart((),(), "Occupancy Levels")
-        self.Occupancy.setObjectName(u"Occupancy")
-        self.graphsStackedWidget.addWidget(self.Occupancy)
-        self.MaintenceCost = PieChart((),(), "Maintenance Costs")
-        self.MaintenceCost.setObjectName(u"MaintenceCost")
-        self.graphsStackedWidget.addWidget(self.MaintenceCost)
-        self.CollectionRate = PieChart((),(), "Collection Rates")
-        self.CollectionRate.setObjectName(u"CollectionRate")
-        self.graphsStackedWidget.addWidget(self.CollectionRate)
-
-
-        #region Graph Buttons
-        self.btnGroup = QFrame(self.Graphs)
-        self.btnGroup.setObjectName(u"btnGroup")
-        self.btnGroup.setGeometry(QRect(10, 10, 391, 44))
-        self.btnGroup.setFrameShape(QFrame.Shape.StyledPanel)
-        self.btnGroup.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.btnGroup)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.verticalLayout.addWidget(self.btnGroup)
-
-        self.dropdownMenu = QFrame(self.Graphs)
-        self.dropdownMenu.setObjectName(u"dropdownMenu")
-        self.dropdownMenu.setFrameShape(QFrame.Shape.StyledPanel)
-        self.dropdownMenu.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout_11 = QHBoxLayout(self.dropdownMenu)
-        self.horizontalLayout_11.setObjectName(u"horizontalLayout_11")
-        self.horizontalSpacer = QSpacerItem(300, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer)
-
-        self.reportLocationDropdown = QComboBox(self.dropdownMenu)
-        self.reportLocationDropdown.setObjectName(u"reportLocationDropdown")
-
-        self.horizontalLayout_11.addWidget(self.reportLocationDropdown)
-
-        self.horizontalSpacer_2 = QSpacerItem(300, 20, QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Minimum)
-
-        self.horizontalLayout_11.addItem(self.horizontalSpacer_2)
-
-
-        self.verticalLayout.addWidget(self.dropdownMenu)
-        self.verticalLayout.addWidget(self.graphsStackedWidget)
-
-        #Occupancy Report Button
-        self.occupancyBtn = QPushButton(self.btnGroup)
-        self.occupancyBtn.setObjectName(u"occupancyBtn")
-        self.horizontalLayout.addWidget(self.occupancyBtn)
-
-        #Collection Rate Report Button
-        self.collectionBtn = QPushButton(self.btnGroup)
-        self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True)
-        self.horizontalLayout.addWidget(self.collectionBtn)
-
-        #Maintenance Report Button
-        self.maintenanceBtn = QPushButton(self.btnGroup)
-        self.maintenanceBtn.setObjectName(u"maintenanceBtn")
-        self.horizontalLayout.addWidget(self.maintenanceBtn)
         #endregion
-        self.stackedWidget.addWidget(self.ReportPage)
-        #endregion
+        
 
         #region Apartments Page
         self.Apartments = QWidget()
@@ -1696,11 +1429,6 @@ class AdminDashboard(userPage):
         self.staffBtn.clicked.connect(lambda: self.switchToStaffTable())
         self.tenantsBtn.clicked.connect(lambda: self.switchToTenantTable())
 
-        #Report Page
-        self.occupancyBtn.clicked.connect(lambda : self.switchToOccupanyLevels())
-        self.collectionBtn.clicked.connect(lambda : self.switchToCollectionRate())
-        self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenance())
-
         #endregion
 
         self.retranslateUi()
@@ -1711,9 +1439,9 @@ class AdminDashboard(userPage):
     def retranslateUi(self):
         self.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
         self.label.setText(QCoreApplication.translate("Form", u"Administration Dashboard", None))
-        self.occupancyBtn.setText(QCoreApplication.translate("Form", u"Occupancy Levels", None))
-        self.collectionBtn.setText(QCoreApplication.translate("Form", u"Collection Rate", None))
-        self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
+        #self.occupancyBtn.setText(QCoreApplication.translate("Form", u"Occupancy Levels", None))
+        #self.collectionBtn.setText(QCoreApplication.translate("Form", u"Collection Rate", None))
+        #self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
         self.apartmentManage.setTitle("")
         self.title_2.setText(QCoreApplication.translate("Form", u"Apartments", None))
         self.apartmentRefresh.setText(QCoreApplication.translate("Form", u"P", None))
@@ -1728,37 +1456,6 @@ class AdminDashboard(userPage):
         self.apartmentBtn.setText(QCoreApplication.translate("Form", u"Apartments", None))
         self.reportBtn.setText(QCoreApplication.translate("Form", u"Report", None))
     # retranslateUi
-
-    #region Report Page Graphs
-    def switchToOccupanyLevels(self):
-        self.graphsStackedWidget.setCurrentIndex(0)
-
-    def switchToCollectionRate(self):
-        self.graphsStackedWidget.setCurrentIndex(2)
-
-    def switchToMaintenance(self):
-        self.graphsStackedWidget.setCurrentIndex(1)
-
-    def CreateOccupancyLevels(self, pie :PieChart):
-        self.Occupancy.setChart(pie.chart())
-        self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
-        self.Occupancy.setParent(self.graphsStackedWidget)
-        print("Created Occupancy Pie")
-
-    def CreateCollectionRates(self, pie :PieChart):
-        self.CollectionRate.setChart(pie.chart())
-        self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
-        self.CollectionRate.setParent(self.graphsStackedWidget)
-        print("Created Collection Pie")
-
-    def CreateMaintenance(self, pie :PieChart):
-        self.MaintenceCost.setChart(pie.chart())
-        self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
-        self.MaintenceCost.setParent(self.graphsStackedWidget)
-        print("Created Maintenence Pie")
-    #endregion
-
-
 
     def switchToUserPage(self):
         self.stackedWidget.setCurrentIndex(2)
@@ -1784,12 +1481,11 @@ class AdminDashboard(userPage):
     #Dropdown menu
     def GetLocations(self, locations : list[Location]):
         self.userLocationDropdown.clear()
-        self.apartmentLocationDropdown.clear()
+        self.ReportPage.GetLocations(locations)
 
         for location in locations:
             self.userLocationDropdown.addItem(location.location_name)
             self.apartmentLocationDropdown.addItem(location.location_name)
-            self.reportLocationDropdown.addItem(location.location_name)
     
     def CreateUserTable(self, staffRecords, staffHeaders, tenantRecords, tenantHeaders ):
         self.staffBtn.setChecked(True)
@@ -1816,4 +1512,603 @@ class AdminDashboard(userPage):
 #endregion
 
 
-#region  
+#region Manager Page
+
+class ManagerDashboard(userPage):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 581)
+        self.titleFrame = QFrame(self)
+        self.titleFrame.setObjectName(u"titleFrame")
+        self.titleFrame.setGeometry(QRect(0, 0, 831, 61))
+        self.titleFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.titleFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.titleFrame)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.title = QLabel(self.titleFrame)
+        self.title.setObjectName(u"title")
+
+        self.horizontalLayout.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.contentFrame = QFrame(self)
+        self.contentFrame.setObjectName(u"contentFrame")
+        self.contentFrame.setGeometry(QRect(0, 60, 831, 521))
+        self.contentFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.contentFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.toolBarFrame = QFrame(self.contentFrame)
+        self.toolBarFrame.setObjectName(u"toolBarFrame")
+        self.toolBarFrame.setGeometry(QRect(0, 0, 831, 48))
+        self.toolBarFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.toolBarFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_2 = QHBoxLayout(self.toolBarFrame)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.locationBtn = QPushButton(self.toolBarFrame)
+        self.locationBtn.setObjectName(u"locationBtn")
+
+        self.horizontalLayout_2.addWidget(self.locationBtn)
+
+        self.apartmentBtn = QPushButton(self.toolBarFrame)
+        self.apartmentBtn.setObjectName(u"apartmentBtn")
+
+        self.horizontalLayout_2.addWidget(self.apartmentBtn)
+
+        self.reportsBtn = QPushButton(self.toolBarFrame)
+        self.reportsBtn.setObjectName(u"reportsBtn")
+
+        self.horizontalLayout_2.addWidget(self.reportsBtn)
+
+        self.horizontalSpacer = QSpacerItem(545, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout_2.addItem(self.horizontalSpacer)
+
+        self.mainStackedWidget = QStackedWidget(self.contentFrame)
+        self.mainStackedWidget.setObjectName(u"mainStackedWidget")
+        self.mainStackedWidget.setGeometry(QRect(10, 50, 811, 461))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.mainStackedWidget.sizePolicy().hasHeightForWidth())
+        self.mainStackedWidget.setSizePolicy(sizePolicy)
+
+
+
+        self.LocationPage = ManagerLocationPage()
+        self.LocationPage.setObjectName(u"LocationPage")
+        self.mainStackedWidget.addWidget(self.LocationPage)
+
+        self.ApartmentPage = ManagerApartmentPage()
+        self.ApartmentPage.setObjectName(u"ApartmentPage")
+        self.mainStackedWidget.addWidget(self.ApartmentPage)
+
+
+        self.ReportPage = ReportPageWithAllLocations()
+        self.ReportPage.setObjectName(u"ReportPage")
+        self.mainStackedWidget.addWidget(self.ReportPage)
+
+
+        self.locationBtn.clicked.connect(lambda : self.switchToLocationPage())
+        
+        self.apartmentBtn.clicked.connect(lambda : self.switchToApartmentPage())
+        
+        self.reportsBtn.clicked.connect(lambda : self.switchToReportsPage())
+
+        self.retranslateUi()
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("Manager", u"Form", None))
+        self.title.setText(QCoreApplication.translate("Manager", u"Manager Dashboard", None))
+        self.locationBtn.setText(QCoreApplication.translate("Manager", u"Locations", None))
+        self.apartmentBtn.setText(QCoreApplication.translate("Manager", u"Apartments", None))
+        self.reportsBtn.setText(QCoreApplication.translate("Manager", u"Reports", None))
+    # retranslateUi
+    def switchToLocationPage(self):
+        self.mainStackedWidget.setCurrentIndex(0)
+
+    def switchToApartmentPage(self):
+        self.mainStackedWidget.setCurrentIndex(1)
+
+    def switchToReportsPage(self):
+        self.mainStackedWidget.setCurrentIndex(2)
+
+    def GetLocations(self, locations : list[Location]):
+        self.LocationPage.GetLocations(locations)
+        self.ApartmentPage.GetLocations(locations)
+        self.ReportPage.GetLocations(locations)
+
+
+#region Manager Report
+
+
+#endregion
+
+#region Manager Apartment
+class ManagerApartmentPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(811, 463)
+        self.ApartmentMainFrame = QFrame(self)
+        self.ApartmentMainFrame.setObjectName(u"ApartmentMainFrame")
+        self.ApartmentMainFrame.setGeometry(QRect(0, 0, 811, 451))
+        self.ApartmentMainFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.ApartmentMainFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.apartmentCreateFrame = QFrame(self.ApartmentMainFrame)
+        self.apartmentCreateFrame.setObjectName(u"apartmentCreateFrame")
+        self.apartmentCreateFrame.setGeometry(QRect(280, 2, 303, 441))
+        self.apartmentCreateFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.apartmentCreateFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout = QVBoxLayout(self.apartmentCreateFrame)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.label = QLabel(self.apartmentCreateFrame)
+        self.label.setObjectName(u"label")
+
+        self.verticalLayout.addWidget(self.label, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer_2)
+
+        self.locationPrompt = QLabel(self.apartmentCreateFrame)
+        self.locationPrompt.setObjectName(u"locationPrompt")
+
+        self.verticalLayout.addWidget(self.locationPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.locationComboBox = QComboBox(self.apartmentCreateFrame)
+        self.locationComboBox.setObjectName(u"locationComboBox")
+
+        self.verticalLayout.addWidget(self.locationComboBox, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.roomTypePrompt = QLabel(self.apartmentCreateFrame)
+        self.roomTypePrompt.setObjectName(u"roomTypePrompt")
+
+        self.verticalLayout.addWidget(self.roomTypePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.roomTypeComboBox = QComboBox(self.apartmentCreateFrame)
+        self.roomTypeComboBox.addItem("")
+        self.roomTypeComboBox.addItem("")
+        self.roomTypeComboBox.addItem("")
+        self.roomTypeComboBox.addItem("")
+        self.roomTypeComboBox.setObjectName(u"roomTypeComboBox")
+
+        self.verticalLayout.addWidget(self.roomTypeComboBox, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.monthlyRentPrompt = QLabel(self.apartmentCreateFrame)
+        self.monthlyRentPrompt.setObjectName(u"monthlyRentPrompt")
+
+        self.verticalLayout.addWidget(self.monthlyRentPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.monthlyRentInput = QDoubleSpinBox(self.apartmentCreateFrame)
+        self.monthlyRentInput.setObjectName(u"monthlyRentInput")
+        self.monthlyRentInput.setMaximum(9999999999.989999771118164)
+        self.monthlyRentInput.setSingleStep(50.000000000000000)
+
+        self.verticalLayout.addWidget(self.monthlyRentInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.numBedroomsPrompt = QLabel(self.apartmentCreateFrame)
+        self.numBedroomsPrompt.setObjectName(u"numBedroomsPrompt")
+
+        self.verticalLayout.addWidget(self.numBedroomsPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.numBedroomsInput = QSpinBox(self.apartmentCreateFrame)
+        self.numBedroomsInput.setObjectName(u"numBedroomsInput")
+        self.numBedroomsInput.setMinimum(1)
+        self.numBedroomsInput.setMaximum(3)
+
+        self.verticalLayout.addWidget(self.numBedroomsInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.numBathroomsPrompt = QLabel(self.apartmentCreateFrame)
+        self.numBathroomsPrompt.setObjectName(u"numBathroomsPrompt")
+
+        self.verticalLayout.addWidget(self.numBathroomsPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.numBathroomsInput = QSpinBox(self.apartmentCreateFrame)
+        self.numBathroomsInput.setObjectName(u"numBathroomsInput")
+        self.numBathroomsInput.setMinimum(1)
+        self.numBathroomsInput.setMaximum(3)
+
+        self.verticalLayout.addWidget(self.numBathroomsInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.verticalSpacer = QSpacerItem(20, 15, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+
+        self.verticalLayout.addItem(self.verticalSpacer)
+
+        self.numApartmentsPrompt = QLabel(self.apartmentCreateFrame)
+        self.numApartmentsPrompt.setObjectName(u"numApartmentsPrompt")
+
+        self.verticalLayout.addWidget(self.numApartmentsPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.numApartmentsInput = QSpinBox(self.apartmentCreateFrame)
+        self.numApartmentsInput.setObjectName(u"numApartmentsInput")
+        self.numApartmentsInput.setMinimum(1)
+
+        self.verticalLayout.addWidget(self.numApartmentsInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.apartmentCreateBtn = QPushButton(self.apartmentCreateFrame)
+        self.apartmentCreateBtn.setObjectName(u"apartmentCreateBtn")
+
+        self.verticalLayout.addWidget(self.apartmentCreateBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.retranslateUi()
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("ApartmentPage", u"Form", None))
+        self.label.setText(QCoreApplication.translate("ApartmentPage", u"Create Apartments", None))
+        self.locationPrompt.setText(QCoreApplication.translate("ApartmentPage", u"Location", None))
+        self.roomTypePrompt.setText(QCoreApplication.translate("ApartmentPage", u"Room Type", None))
+        self.roomTypeComboBox.setItemText(0, QCoreApplication.translate("ApartmentPage", u"Single", None))
+        self.roomTypeComboBox.setItemText(1, QCoreApplication.translate("ApartmentPage", u"Double", None))
+        self.roomTypeComboBox.setItemText(2, QCoreApplication.translate("ApartmentPage", u"Studio", None))
+        self.roomTypeComboBox.setItemText(3, QCoreApplication.translate("ApartmentPage", u"Penthouse", None))
+
+        self.monthlyRentPrompt.setText(QCoreApplication.translate("ApartmentPage", u"Monthly Rent", None))
+        self.monthlyRentInput.setPrefix(QCoreApplication.translate("ApartmentPage", u"\u00a3", None))
+        self.numBedroomsPrompt.setText(QCoreApplication.translate("ApartmentPage", u"Number of Bedrooms", None))
+        self.numBathroomsPrompt.setText(QCoreApplication.translate("ApartmentPage", u"Number Of Bathrooms", None))
+        self.numApartmentsPrompt.setText(QCoreApplication.translate("ApartmentPage", u"How many of these apartments would you like to add", None))
+        self.numApartmentsInput.setSuffix("")
+        self.apartmentCreateBtn.setText(QCoreApplication.translate("ApartmentPage", u"Create", None))
+    # retranslateUi
+    def GetLocations(self,locations : list[Location]):
+        self.locationComboBox.clear()
+        for location in locations:
+            self.locationComboBox.addItem(location.location_name)
+    def Submit(self):
+        apartments = []
+        #Creates a list of apartments to add depending on the number of apartments requested 
+        for i in range(0,int(self.numApartmentsInput.text())):
+            apartments.append(Apartment("", "",self.roomTypeComboBox.currentText(),str(self.monthlyRentInput.value()),self.numBedroomsInput.text(),self.numBathroomsInput.text() , False))
+        self.monthlyRentInput.setValue(0.000000)
+        self.numBedroomsInput.setValue(1)
+        self.numBathroomsInput.setValue(1)
+        self.numApartmentsInput.setValue(1)
+        return apartments
+    
+#endregion
+
+#region Manager Location 
+
+class ManagerLocationPage(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.resize(811, 461)
+        self.locationMainFrame = QFrame(self)
+        self.locationMainFrame.setObjectName(u"locationMainFrame")
+        self.locationMainFrame.setGeometry(QRect(0, 0, 811, 451))
+        self.locationMainFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.locationMainFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.locationCreationFrame = QFrame(self.locationMainFrame)
+        self.locationCreationFrame.setObjectName(u"locationCreationFrame")
+        self.locationCreationFrame.setGeometry(QRect(120, 130, 181, 141))
+        self.locationCreationFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.locationCreationFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout = QVBoxLayout(self.locationCreationFrame)
+        self.verticalLayout.setSpacing(0)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.locationCreateTitle = QLabel(self.locationCreationFrame)
+        self.locationCreateTitle.setObjectName(u"locationCreateTitle")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.locationCreateTitle.sizePolicy().hasHeightForWidth())
+        self.locationCreateTitle.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.locationCreateTitle)
+
+        self.locationPrompt = QLabel(self.locationCreationFrame)
+        self.locationPrompt.setObjectName(u"locationPrompt")
+        sizePolicy.setHeightForWidth(self.locationPrompt.sizePolicy().hasHeightForWidth())
+        self.locationPrompt.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.locationPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.locationNameInput = QLineEdit(self.locationCreationFrame)
+        self.locationNameInput.setObjectName(u"locationNameInput")
+        sizePolicy.setHeightForWidth(self.locationNameInput.sizePolicy().hasHeightForWidth())
+        self.locationNameInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.locationNameInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.locationCreateBtn = QPushButton(self.locationCreationFrame)
+        self.locationCreateBtn.setObjectName(u"locationCreateBtn")
+        sizePolicy.setHeightForWidth(self.locationCreateBtn.sizePolicy().hasHeightForWidth())
+        self.locationCreateBtn.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.locationCreateBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.locationManagerCreationFrame = QFrame(self.locationMainFrame)
+        self.locationManagerCreationFrame.setObjectName(u"locationManagerCreationFrame")
+        self.locationManagerCreationFrame.setGeometry(QRect(490, 70, 156, 340))
+        self.locationManagerCreationFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.locationManagerCreationFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_2 = QVBoxLayout(self.locationManagerCreationFrame)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.managerCreationTitle = QLabel(self.locationManagerCreationFrame)
+        self.managerCreationTitle.setObjectName(u"managerCreationTitle")
+
+        self.verticalLayout_2.addWidget(self.managerCreationTitle)
+
+        self.managerFirstPrompt = QLabel(self.locationManagerCreationFrame)
+        self.managerFirstPrompt.setObjectName(u"managerFirstPrompt")
+
+        self.verticalLayout_2.addWidget(self.managerFirstPrompt)
+
+        self.managerFirstInput = QLineEdit(self.locationManagerCreationFrame)
+        self.managerFirstInput.setObjectName(u"managerFirstInput")
+
+        self.verticalLayout_2.addWidget(self.managerFirstInput)
+
+        self.managerLastPrompt = QLabel(self.locationManagerCreationFrame)
+        self.managerLastPrompt.setObjectName(u"managerLastPrompt")
+
+        self.verticalLayout_2.addWidget(self.managerLastPrompt)
+
+        self.managerLastInput = QLineEdit(self.locationManagerCreationFrame)
+        self.managerLastInput.setObjectName(u"managerLastInput")
+
+        self.verticalLayout_2.addWidget(self.managerLastInput)
+
+        self.managerEmailPrompt = QLabel(self.locationManagerCreationFrame)
+        self.managerEmailPrompt.setObjectName(u"managerEmailPrompt")
+
+        self.verticalLayout_2.addWidget(self.managerEmailPrompt)
+
+        self.managerEmailInput = QLineEdit(self.locationManagerCreationFrame)
+        self.managerEmailInput.setObjectName(u"managerEmailInput")
+
+        self.verticalLayout_2.addWidget(self.managerEmailInput)
+
+        self.managerPasswordPrompt = QLabel(self.locationManagerCreationFrame)
+        self.managerPasswordPrompt.setObjectName(u"managerPasswordPrompt")
+
+        self.verticalLayout_2.addWidget(self.managerPasswordPrompt)
+
+        self.managerPasswordInput = QLineEdit(self.locationManagerCreationFrame)
+        self.managerPasswordInput.setObjectName(u"managerPasswordInput")
+
+        self.verticalLayout_2.addWidget(self.managerPasswordInput)
+
+        self.managerLocationPrompt = QLabel(self.locationManagerCreationFrame)
+        self.managerLocationPrompt.setObjectName(u"managerLocationPrompt")
+
+        self.verticalLayout_2.addWidget(self.managerLocationPrompt)
+
+        self.managerLocationComboBox = QComboBox(self.locationManagerCreationFrame)
+        self.managerLocationComboBox.setObjectName(u"comboBox")
+
+        self.verticalLayout_2.addWidget(self.managerLocationComboBox)
+
+        self.managerCreationBtn = QPushButton(self.locationManagerCreationFrame)
+        self.managerCreationBtn.setObjectName(u"managerCreationBtn")
+
+        self.verticalLayout_2.addWidget(self.managerCreationBtn)
+
+
+        self.retranslateUi()
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("LocationPage", u"Form", None))
+        self.locationCreateTitle.setText(QCoreApplication.translate("LocationPage", u"Add New Location", None))
+        self.locationPrompt.setText(QCoreApplication.translate("LocationPage", u"Location Name", None))
+        self.locationCreateBtn.setText(QCoreApplication.translate("LocationPage", u"Create", None))
+        self.managerCreationTitle.setText(QCoreApplication.translate("LocationPage", u"Create Location Manager", None))
+        self.managerFirstPrompt.setText(QCoreApplication.translate("LocationPage", u"First Name", None))
+        self.managerLastPrompt.setText(QCoreApplication.translate("LocationPage", u"Last Name", None))
+        self.managerEmailPrompt.setText(QCoreApplication.translate("LocationPage", u"Email", None))
+        self.managerPasswordPrompt.setText(QCoreApplication.translate("LocationPage", u"Password", None))
+        self.managerLocationPrompt.setText(QCoreApplication.translate("LocationPage", u"Location", None))
+        self.managerCreationBtn.setText(QCoreApplication.translate("LocationPage", u"Add Manager", None))
+    # retranslateUi
+
+    def SubmitLocation(self):
+        newLocation = Location("", self.locationNameInput.text(), "")
+        self.locationNameInput.clear()
+        return newLocation
+    def SubmitLocationManager(self):
+        manager = User("",self.managerFirstInput.text(),self.managerLastInput.text(),self.managerEmailInput.text(),self.managerPasswordInput.text(),"Manager","") #Does not have an ID as must be requested from the main to maintain the level of abstraction
+        self.managerFirstInput.clear()
+        self.managerLastInput.clear()
+        self.managerEmailInput.clear()
+        self.managerPasswordInput.clear()
+        return manager
+    def GetLocations(self,locations : list[Location]):
+        self.managerLocationComboBox.clear()
+        for location in locations:
+            self.managerLocationComboBox.addItem(location.location_name)
+
+#endregion
+#endregion
+
+#region Report Pages
+class ReportPage(QWidget):
+    def __init__(self):
+        super().__init__()
+
+        self.Graphs = QFrame(self)
+        self.Graphs.setObjectName(u"Graphs")
+        self.Graphs.setGeometry(QRect(180, 50, 411, 361))
+        self.Graphs.setFrameShape(QFrame.Shape.StyledPanel)
+        self.Graphs.setFrameShadow(QFrame.Shadow.Raised)
+        self.graphsStackedWidget = QStackedWidget(self.Graphs)
+        self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
+        self.graphsStackedWidget.setGeometry(QRect(10, 60, 391, 291))
+        self.Occupancy = PieChart((),(), "Occupancy Levels")
+        self.Occupancy.setObjectName(u"Occupancy")
+        self.graphsStackedWidget.addWidget(self.Occupancy)
+        self.MaintenceCost = PieChart((),(), "Maintenance Costs")
+        self.MaintenceCost.setObjectName(u"MaintenceCost")
+        self.graphsStackedWidget.addWidget(self.MaintenceCost)
+        self.CollectionRate = PieChart((),(), "Collection Rates")
+        self.CollectionRate.setObjectName(u"CollectionRate")
+        self.graphsStackedWidget.addWidget(self.CollectionRate)
+        self.btnGroup = QFrame(self.Graphs)
+        self.btnGroup.setObjectName(u"btnGroup")
+        self.btnGroup.setGeometry(QRect(10, 10, 391, 44))
+        self.btnGroup.setFrameShape(QFrame.Shape.StyledPanel)
+        self.btnGroup.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.btnGroup)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.occupancyBtn = QPushButton(self.btnGroup)
+        self.occupancyBtn.setObjectName(u"occupancyBtn")
+
+        self.horizontalLayout.addWidget(self.occupancyBtn)
+
+        self.collectionBtn = QPushButton(self.btnGroup)
+        self.collectionBtn.setObjectName(u"collectionBtn")
+        self.collectionBtn.setDisabled(True)
+
+        self.horizontalLayout.addWidget(self.collectionBtn)
+
+        self.maintenanceBtn = QPushButton(self.btnGroup)
+        self.maintenanceBtn.setObjectName(u"maintenanceBtn")
+
+        self.horizontalLayout.addWidget(self.maintenanceBtn)
+
+        #Connections
+        self.occupancyBtn.clicked.connect( lambda : self.switchToOccupanyLevels())
+        self.collectionBtn.clicked.connect( lambda : self.switchToCollectionRate())
+        self.maintenanceBtn.clicked.connect( lambda : self.switchToMaintenance())
+
+        self.retranslate()
+    
+    def retranslate(self):
+        self.occupancyBtn.setText(QCoreApplication.translate("Form", u"Occupancy Levels", None))
+        self.collectionBtn.setText(QCoreApplication.translate("Form", u"Collection Rate", None))
+        self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
+
+
+    def switchToOccupanyLevels(self):
+        self.graphsStackedWidget.setCurrentIndex(0)
+
+    def switchToCollectionRate(self):
+        self.graphsStackedWidget.setCurrentIndex(2)
+
+    def switchToMaintenance(self):
+        self.graphsStackedWidget.setCurrentIndex(1)
+
+    def CreatePieCharts(self,occupancy : PieChart , collection : PieChart, maintenance : PieChart):
+        self.CreateOccupancyLevels(occupancy)
+        self.CreateMaintenance(maintenance)
+        self.CreateCollectionRates(collection)
+
+    def CreateOccupancyLevels(self, pie :PieChart):
+        self.Occupancy.setChart(pie.chart())
+        self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
+        self.Occupancy.setParent(self.graphsStackedWidget)
+        print("Created Occupancy Pie")
+
+    def CreateCollectionRates(self, pie :PieChart):
+        self.CollectionRate.setChart(pie.chart())
+        self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
+        self.CollectionRate.setParent(self.graphsStackedWidget)
+        print("Created Collection Pie")
+
+    def CreateMaintenance(self, pie :PieChart):
+        self.MaintenceCost.setChart(pie.chart())
+        self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
+        self.MaintenceCost.setParent(self.graphsStackedWidget)
+        print("Created Maintenence Pie")
+
+
+
+class ReportPageWithAllLocations(QWidget):
+        def __init__(self):
+            super().__init__()
+            self.Graphs = QFrame(self)
+            self.Graphs.setObjectName(u"Graphs")
+            self.Graphs.setGeometry(QRect(180, 50, 411, 361))
+            self.Graphs.setFrameShape(QFrame.Shape.StyledPanel)
+            self.Graphs.setFrameShadow(QFrame.Shadow.Raised)
+            self.graphsStackedWidget = QStackedWidget(self.Graphs)
+            self.graphsStackedWidget.setObjectName(u"graphsStackedWidget")
+            self.graphsStackedWidget.setGeometry(QRect(10, 60, 391, 291))
+            self.Occupancy = PieChart((),(), "Occupancy Levels")
+            self.Occupancy.setObjectName(u"Occupancy")
+            self.graphsStackedWidget.addWidget(self.Occupancy)
+            self.MaintenceCost = PieChart((),(), "Maintenance Costs")
+            self.MaintenceCost.setObjectName(u"MaintenceCost")
+            self.graphsStackedWidget.addWidget(self.MaintenceCost)
+            self.CollectionRate = PieChart((),(), "Collection Rates")
+            self.CollectionRate.setObjectName(u"CollectionRate")
+            self.graphsStackedWidget.addWidget(self.CollectionRate)
+            self.btnGroup = QFrame(self.Graphs)
+            self.btnGroup.setObjectName(u"btnGroup")
+            self.btnGroup.setGeometry(QRect(10, 10, 391, 44))
+            self.btnGroup.setFrameShape(QFrame.Shape.StyledPanel)
+            self.btnGroup.setFrameShadow(QFrame.Shadow.Raised)
+            self.horizontalLayout = QHBoxLayout(self.btnGroup)
+            self.horizontalLayout.setObjectName(u"horizontalLayout")
+            self.occupancyBtn = QPushButton(self.btnGroup)
+            self.occupancyBtn.setObjectName(u"occupancyBtn")
+
+            self.horizontalLayout.addWidget(self.occupancyBtn)
+
+            self.collectionBtn = QPushButton(self.btnGroup)
+            self.collectionBtn.setObjectName(u"collectionBtn")
+            self.collectionBtn.setDisabled(True)
+
+            self.horizontalLayout.addWidget(self.collectionBtn)
+
+            self.maintenanceBtn = QPushButton(self.btnGroup)
+            self.maintenanceBtn.setObjectName(u"maintenanceBtn")
+
+            self.horizontalLayout.addWidget(self.maintenanceBtn)
+
+            self.reportLocationDropdown = QComboBox(self.btnGroup)
+            self.reportLocationDropdown.setObjectName(u"reportLocationDropdown")
+            self.horizontalLayout.addWidget(self.reportLocationDropdown)
+            #Connections
+            self.occupancyBtn.clicked.connect(lambda : self.switchToOccupanyLevels())
+            self.collectionBtn.clicked.connect(lambda : self.switchToCollectionRate())
+            self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenance())
+
+            self.retranslate()
+        def retranslate(self):
+            self.occupancyBtn.setText(QCoreApplication.translate("Form", u"Occupancy Levels", None))
+            self.collectionBtn.setText(QCoreApplication.translate("Form", u"Collection Rate", None))
+            self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
+
+
+        def switchToOccupanyLevels(self):
+            self.graphsStackedWidget.setCurrentIndex(0)
+
+        def switchToCollectionRate(self):
+            self.graphsStackedWidget.setCurrentIndex(2)
+
+        def switchToMaintenance(self):
+            self.graphsStackedWidget.setCurrentIndex(1)
+
+
+        
+        def CreatePieCharts(self,occupancy : PieChart , collection : PieChart, maintenance : PieChart):
+            self.CreateOccupancyLevels(occupancy)
+            self.CreateMaintenance(maintenance)
+            self.CreateCollectionRates(collection)
+
+        def CreateOccupancyLevels(self, pie :PieChart):
+                self.Occupancy.setChart(pie.chart())
+                self.Occupancy.setGeometry(QRect(10, 60, 391, 291))
+                self.Occupancy.setParent(self.graphsStackedWidget)
+                print("Created Occupancy Pie")
+
+        def CreateCollectionRates(self, pie :PieChart):
+            self.CollectionRate.setChart(pie.chart())
+            self.CollectionRate.setGeometry(QRect(10, 60, 391, 291))
+            self.CollectionRate.setParent(self.graphsStackedWidget)
+            print("Created Collection Pie")
+
+        def CreateMaintenance(self, pie :PieChart):
+            self.MaintenceCost.setChart(pie.chart())
+            self.MaintenceCost.setGeometry(QRect(10, 60, 391, 291))
+            self.MaintenceCost.setParent(self.graphsStackedWidget)
+            print("Created Maintenence Pie")
+
+        def GetLocations(self,locations : list[Location]):
+                self.reportLocationDropdown.clear()
+                for location in locations:
+                    self.reportLocationDropdown.addItem(location.location_name)
+
+#endregion
