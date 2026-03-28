@@ -15,11 +15,15 @@ preferredFixedPolicy = QSizePolicy(QSizePolicy.Policy.Preferred,       QSizePoli
 fixedPolicy          = QSizePolicy(QSizePolicy.Policy.Fixed,           QSizePolicy.Policy.Fixed)
 minExpandingPolicy   = QSizePolicy(QSizePolicy.Policy.MinimumExpanding,QSizePolicy.Policy.Preferred)
 
-
-
-class TenantOverviewPage(QWidget):
+class TenantPage(QWidget):
     def __init__(self):
+        super().__init__()
+    
+    def AddPageDetail():
+        pass
 
+class TenantOverviewPage(TenantPage):
+    def __init__(self):
         super().__init__()
         self.setObjectName(u"OverviewPage")
         self.verticalLayout = QVBoxLayout()
@@ -160,38 +164,44 @@ class TenantOverviewPage(QWidget):
         self.logoutBtn.setText(QCoreApplication.translate("Form", u"Log Out", None))
         self.leaveTenancyBtn.setText(QCoreApplication.translate("Form", u"Leave Tenancy", None))
     
-    def UpdateTenantInfomation(self,userName : str, price: str, dueDate: str , numRequests: str, nameApartment : str, nameLocation : str):
+    def AddPageDetail(self,userName : str, price: str, dueDate: str , numRequests: str, nameApartment : str, nameLocation : str):
         self.userName.setText(userName)
-        self.priceNextRent.setText(price)
+        self.priceNextRent.setText(str(price))
         self.dueDate.setText(dueDate)
-        self.numRequests.setText(numRequests)
-        self.apartmentInfoTitle.setText(nameApartment + " " + nameLocation)
+        self.numRequests.setText(str(numRequests))
+        self.apartmentInfoTitle.setText("Location: " + str(nameLocation) + " In Apartment: "  + str(nameApartment))
+    
 
-        
-class TenantPaymentsPage(QWidget):
+class TenantPaymentsPage(TenantPage):
     def __init__(self):
         super().__init__()
         self.resize(809, 622)
-        self.horizontalLayout = QHBoxLayout(self)
+        self.horizontalLayout = QHBoxLayout()
         self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.setLayout(self.horizontalLayout)
         self.prevPayments = QGroupBox(self)
         self.prevPayments.setObjectName(u"prevPayments")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self.prevPayments.setSizePolicy(sizePolicy)
+
+        self.horizontalLayout.addWidget(self.prevPayments)
         self.verticalLayout_2 = QVBoxLayout(self.prevPayments)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         
         self.paymentHistory = Table([],[])
         self.paymentHistory.setParent(self.prevPayments)
         self.paymentHistory.setObjectName(u"paymentHistory")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Expanding)
-        self.paymentHistory.setSizePolicy(sizePolicy)
+
 
         self.verticalLayout_2.addWidget(self.paymentHistory)
 
 
-        self.horizontalLayout.addWidget(self.prevPayments)
 
         self.paymentsNow = QGroupBox(self)
         self.paymentsNow.setObjectName(u"paymentsNow")
+        self.horizontalLayout.addWidget(self.paymentsNow)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Expanding)
+        self.paymentHistory.setSizePolicy(sizePolicy)
         self.verticalLayout = QVBoxLayout(self.paymentsNow)
         self.verticalLayout.setSpacing(0)
         self.verticalLayout.setObjectName(u"verticalLayout")
@@ -248,12 +258,8 @@ class TenantPaymentsPage(QWidget):
         self.verticalLayout.addWidget(self.payNowBtn, 0, Qt.AlignmentFlag.AlignHCenter)
 
 
-        self.horizontalLayout.addWidget(self.paymentsNow)
-
 
         self.retranslateUi()
-
-        QMetaObject.connectSlotsByName(self)
     # setupUi
 
     def retranslateUi(self):
@@ -270,9 +276,14 @@ class TenantPaymentsPage(QWidget):
         self.payNowBtn.setText(QCoreApplication.translate("PaymentsPage", u"Pay", None))
     # retranslateUi
 
+    def SubmitPayment(self):
+        if self.CurrentDue.text() != "£0":
+            self.cardNumInput
+            self.expDateInput
+            self.cvvInput
+            return self.cardNumInput.text(),self.expDateInput.text(),self.cvvInput.text()
 
-
-class TenantAccountPage(QWidget):
+class TenantAccountPage(TenantPage):
         def __init__(self):
             super().__init__()
             self.resize(811,621)
@@ -500,8 +511,8 @@ class TenantAccountPage(QWidget):
 
             self.horizontalLayout_3.addWidget(self.requirements)
 
-            self.retranslate()
-        def retranslate(self):
+            self.retranslateUi()
+        def retranslateUi(self):
             
 
             self.formTitle.setText(QCoreApplication.translate("Form", u"Change User Info", None))
@@ -533,3 +544,28 @@ class TenantAccountPage(QWidget):
             self.submitReqsBtn.setText(QCoreApplication.translate("Form", u"Set", None))
         # retranslateUi
 
+        def SubmitRequirements(self):
+            reqs = Requirements("","", "", self.roomTypeComboBox.currentText(), self.maxRentInput.cleanText(), self.numRoomsInput.text(),self.numBathroomsInput.text())
+            self.locationComboBox.setCurrentIndex(0)
+            self.roomTypeComboBox.setCurrentIndex(0)
+            self.maxRentInput.setValue(0.000000)
+            self.numRoomsInput.setValue(1)
+            self.numBathroomsInput.setValue(1)
+            return reqs
+        
+        def GetLocations(self,locations : list[Location]):
+            self.locationComboBox.clear()
+
+
+            for location in locations:
+                self.locationComboBox.addItem(location.location_name)
+        
+        def SubmitNewUserInfo(self):
+            return Tenant("",self.firstNameInput.text(),self.lastNameInput.text(), self.nationalNumInput.text(),self.emailInput.text(), self.passwordInput.text() ,self.phoneNumInput.text(),self.occupationComboBox.currentText(), 'Null')
+        
+        def AddPageDetail(self,firstName, lastName,email,national, phone):
+            self.firstNameInput.setText(firstName)
+            self.lastNameInput.setText(lastName)
+            self.emailInput.setText(email)
+            self.nationalNumInput.setText(national)
+            self.phoneNumInput.setText(phone)

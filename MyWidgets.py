@@ -452,7 +452,8 @@ class TenantDashboard(QWidget):
     def __init__(self):
         super().__init__()
         self.tenant = Tenant("","","", "", "", "", "", "","")
-
+        self.contract = Contract("","","","","","","")
+        self.apartment = Apartment("","","","","","",True)
         self.resize(831, 758)
 
         #Title Section
@@ -510,9 +511,9 @@ class TenantDashboard(QWidget):
         self.OverviewPage = TenantOverviewPage()
         self.mainSection.addWidget(self.OverviewPage)
                 
-        self.paymentsPage = TenantPaymentsPage()
-        self.paymentsPage.setObjectName(u"paymentsPage")
-        self.mainSection.addWidget(self.paymentsPage)
+        self.PaymentsPage = TenantPaymentsPage()
+        self.PaymentsPage.setObjectName(u"paymentsPage")
+        self.mainSection.addWidget(self.PaymentsPage)
     
 
         self.verticalLayout_2.addWidget(self.mainSection)
@@ -541,15 +542,24 @@ class TenantDashboard(QWidget):
         self.maintanenceBtn.setText(QCoreApplication.translate("Form", u"Maintanence", None))
         self.accountBtn.setText(QCoreApplication.translate("Form", u"Account", None))
         self.OverviewPage.retranslateUi()
-        self.paymentsPage.retranslateUi()
+        self.PaymentsPage.retranslateUi()
        
     # retranslateUi
 
-    def setUser(self, tenant : Tenant):
+    def setUser(self, tenant : Tenant, contract : Contract, apartment : Apartment):
         self.tenant = tenant
-        self.OverviewPage.UpdateTenantInfomation(self.tenant.first_name,"Not yet implmented", "£NOT YET IMPLMENTED", "not yet implemented" , "Not yet implmentedf" ,"not yet implemented")
-    def clearUser(self, tenat: Tenant):
+        self.contract = contract
+        self.apartment = apartment
+    def clearUser(self):
         self.tenant = Tenant("","","", "", "", "", "", "","")
+        self.contract = Contract("","","","","","","")
+        self.apartment = Apartment("","","","","","",True)
+        self.retranslateUi()
+        self.OverviewPage.retranslateUi()
+        self.PaymentsPage.retranslateUi()
+        self.AccountPage.retranslateUi()
+
+
     def switchToPaymentsPage(self):
         self.mainSection.setCurrentIndex(1)
     def switchToOverviewPage(self):
@@ -557,6 +567,19 @@ class TenantDashboard(QWidget):
     def switchToAccountPage(self):
         self.mainSection.setCurrentIndex(2)
         
+    def AddPageDetail(self,locations : list[Location], OutstandingMaintence : list[MaintenanceRequest], dueDate: str):
+        for location in locations:
+            if location.id == self.apartment.location_id:
+                locationName = location.location_name
+        
+        self.OverviewPage.AddPageDetail(self.tenant.first_name,self.apartment.monthly_rent,dueDate,len(OutstandingMaintence),self.apartment.id,self.apartment.location_id)
+        self.AccountPage.GetLocations(locations)
+        self.AccountPage.AddPageDetail(self.tenant.first_name,self.tenant.last_name,self.tenant.email,self.tenant.national_insurance,self.tenant.phone_number)
+
+    def SubmitUserInfo(self):
+        info = self.AccountPage.SubmitNewUserInfo()
+        NewTenant = Tenant(self.tenant.id ,info.first_name, info.last_name,info.national_insurance,info.email,info.password,info.phone_number,info.occupation,info.references)
+        return NewTenant
 
 #endregion
 
@@ -1029,11 +1052,96 @@ class FinanceDashboard(userPage):
         self.invoiceTitle.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.horizontalLayout_7.addWidget(self.invoiceTitle)
 
-        self.createInvoice = QFrame(self.invoiceFrame)
-        self.createInvoice.setObjectName(u"createInvoice")
-        self.createInvoice.setGeometry(QRect(10, 60, 771, 361))
-        self.createInvoice.setFrameShape(QFrame.Shape.StyledPanel)
-        self.createInvoice.setFrameShadow(QFrame.Shadow.Raised)
+        self.content = QFrame(self.invoiceFrame)
+        self.content.setObjectName(u"content")
+        self.content.setGeometry(QRect(10, 65, 771, 361))
+        self.content.setFrameShape(QFrame.Shape.StyledPanel)
+        self.content.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.content)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.Form = QFrame(self.content)
+        self.Form.setObjectName(u"Form")
+        self.Form.setFrameShape(QFrame.Shape.StyledPanel)
+        self.Form.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout = QVBoxLayout(self.Form)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.issueRentBtn = QPushButton(self.Form)
+        self.issueRentBtn.setObjectName(u"issueRentBtn")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.issueRentBtn.sizePolicy().hasHeightForWidth())
+        self.issueRentBtn.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.issueRentBtn)
+
+        self.horizontalSpacer = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.verticalLayout.addItem(self.horizontalSpacer)
+
+        self.tenantIDPrompt = QLabel(self.Form)
+        self.tenantIDPrompt.setObjectName(u"tenantIDPrompt")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Preferred)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.tenantIDPrompt.sizePolicy().hasHeightForWidth())
+        self.tenantIDPrompt.setSizePolicy(sizePolicy1)
+
+        self.verticalLayout.addWidget(self.tenantIDPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.tenantIDInput = QSpinBox(self.Form)
+        self.tenantIDInput.setObjectName(u"tenantIDInput")
+        self.tenantIDInput.setButtonSymbols(QAbstractSpinBox.ButtonSymbols.NoButtons)
+        self.tenantIDInput.setMaximum(999)
+
+        self.verticalLayout.addWidget(self.tenantIDInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.dueDatePrompt = QLabel(self.Form)
+        self.dueDatePrompt.setObjectName(u"dueDatePrompt")
+        sizePolicy1.setHeightForWidth(self.dueDatePrompt.sizePolicy().hasHeightForWidth())
+        self.dueDatePrompt.setSizePolicy(sizePolicy1)
+
+        self.verticalLayout.addWidget(self.dueDatePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.dueDateInput = QDateEdit(self.Form)
+        self.dueDateInput.setObjectName(u"dueDateInput")
+        self.dueDateInput.setDateTime(QDateTime.currentDateTime())
+        self.dueDateInput.setDateRange(QDateTime.currentDateTime().date(), QDate(QDate.currentDate().addMonths(3)))
+
+        self.verticalLayout.addWidget(self.dueDateInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.amountPrompt = QLabel(self.Form)
+        self.amountPrompt.setObjectName(u"amountPrompt")
+        sizePolicy1.setHeightForWidth(self.amountPrompt.sizePolicy().hasHeightForWidth())
+        self.amountPrompt.setSizePolicy(sizePolicy1)
+
+        self.verticalLayout.addWidget(self.amountPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.amountInput = QDoubleSpinBox(self.Form)
+        self.amountInput.setObjectName(u"amountInput")
+
+        self.verticalLayout.addWidget(self.amountInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.referencePrompt = QLabel(self.Form)
+        self.referencePrompt.setObjectName(u"referencePrompt")
+        sizePolicy1.setHeightForWidth(self.referencePrompt.sizePolicy().hasHeightForWidth())
+        self.referencePrompt.setSizePolicy(sizePolicy1)
+
+        self.verticalLayout.addWidget(self.referencePrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.referenceInput = QLineEdit(self.Form)
+        self.referenceInput.setObjectName(u"referenceInput")
+        self.referenceInput.setMaxLength(255)
+
+        self.verticalLayout.addWidget(self.referenceInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.submitInvoiceBtn = QPushButton(self.Form)
+        self.submitInvoiceBtn.setObjectName(u"submitInvoiceBtn")
+
+        self.verticalLayout.addWidget(self.submitInvoiceBtn, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.horizontalLayout.addWidget(self.Form)
+
         self.stackedWidget.addWidget(self.InvoicePage)
         #endregion
         
@@ -1089,6 +1197,8 @@ class FinanceDashboard(userPage):
         self.horizontalLayout_5.setObjectName(u"horizontalLayout_5")
         self.latePaymentsBtn = QPushButton(self.toolBar)
         self.latePaymentsBtn.setObjectName(u"latePaymentsBtn")
+        self.latePaymentsBtn.setCheckable(True)
+        self.latePaymentsBtn.setChecked(False)
         sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
@@ -1126,7 +1236,10 @@ class FinanceDashboard(userPage):
         self.invoicesBtn.clicked.connect(lambda : self.switchToInvoices())
         self.paymentsBtn.clicked.connect(lambda : self.switchToPayments())
         self.reportBtn.clicked.connect(lambda : self.switchToReport())
+        self.searchBar_2.textChanged.connect(lambda : self.paymentTable.search(self.searchBar_2.text()))
 
+
+        self.latePaymentsBtn.clicked.connect(lambda : self.ToggleLatePayments())
         self.stackedWidget.setCurrentIndex(2)
         self.retranslateUi()
     # setupUi
@@ -1143,8 +1256,33 @@ class FinanceDashboard(userPage):
         self.paymentsBtn.setText(QCoreApplication.translate("Form", u"Payments", None))
         self.invoicesBtn.setText(QCoreApplication.translate("Form", u"Invoices", None))
         self.reportBtn.setText(QCoreApplication.translate("Form", u"Report", None))
+        self.issueRentBtn.setText(QCoreApplication.translate("InvoicePage", u"Issue All Monthlty Payments", None))
+        self.tenantIDPrompt.setText(QCoreApplication.translate("InvoicePage", u"Tenant ID", None))
+        self.dueDatePrompt.setText(QCoreApplication.translate("InvoicePage", u"Due Date", None))
+        self.amountPrompt.setText(QCoreApplication.translate("InvoicePage", u"Amount", None))
+        self.amountInput.setPrefix(QCoreApplication.translate("InvoicePage", u"\u00a3", None))
+        self.referencePrompt.setText(QCoreApplication.translate("InvoicePage", u"Reference", None))
+        self.submitInvoiceBtn.setText(QCoreApplication.translate("InvoicePage", u"Send Invoice", None))
+        
     # retranslateUi
-    
+
+    def ToggleLatePayments(self):
+        if self.latePaymentsBtn.isChecked():
+            self.ShowLatePayments()
+        else:
+            self.ShowAllPayments()
+
+    def ShowLatePayments(self):
+     # STATUS of payment 5
+        self.paymentTable.selectColumn(5)
+        for item in self.paymentTable.selectedItems():
+            if item.text() == 'Paid':
+                self.paymentTable.hideRow(item.row())
+        self.paymentTable.clearSelection()
+        
+    def ShowAllPayments(self):
+        for row in range(0,self.paymentTable.rowCount()):
+            self.paymentTable.showRow(row) 
 
     def switchToInvoices(self):
         self.stackedWidget.setCurrentIndex(1)
@@ -1153,6 +1291,10 @@ class FinanceDashboard(userPage):
     def switchToReport(self):
         self.stackedWidget.setCurrentIndex(0)
 
+    def SubmitInvoice(self):
+        
+        dueDate = self.dueDateInput.dateTime().toString("yyyy-MM-dd HH:mm:ss")
+        return (self.tenantIDInput.text(), dueDate, self.amountInput.cleanText(), self.referenceInput.text())
 
 #endregion
 
@@ -1213,6 +1355,7 @@ class AdminDashboard(userPage):
         #region Report Page
         self.ReportPage = ReportPageWithAllLocations()
         self.ReportPage.setObjectName(u"ReportPage")
+        self.stackedWidget.addWidget(self.ReportPage)
         #endregion
         
 
@@ -1428,7 +1571,9 @@ class AdminDashboard(userPage):
         self.reportBtn.clicked.connect(lambda : self.switchToReportsPage())
         self.staffBtn.clicked.connect(lambda: self.switchToStaffTable())
         self.tenantsBtn.clicked.connect(lambda: self.switchToTenantTable())
-
+        self.apartmentSearchBar.textChanged.connect(lambda : self.apartmentTable.search(self.apartmentSearchBar.text()))
+        self.userSearchBar.textChanged.connect(lambda : self.staffTable.search(self.userSearchBar.text()))
+        self.userSearchBar.textChanged.connect(lambda : self.tenantTable.search(self.userSearchBar.text()))
         #endregion
 
         self.retranslateUi()
@@ -1487,7 +1632,7 @@ class AdminDashboard(userPage):
             self.userLocationDropdown.addItem(location.location_name)
             self.apartmentLocationDropdown.addItem(location.location_name)
     
-    def CreateUserTable(self, staffRecords, staffHeaders, tenantRecords, tenantHeaders ):
+    def CreateUserTable(self, staffRecords, staffHeaders, tenantRecords : list[Tenant], tenantHeaders ):
         self.staffBtn.setChecked(True)
         self.tenantsBtn.setChecked(False)
 
@@ -1496,10 +1641,13 @@ class AdminDashboard(userPage):
         self.staffTable.setParent(self.manageUsers)
 
         self.tenantTable.UpdateTable(tenantRecords,tenantHeaders)
+        for tenant in tenantRecords:
+            print(tenant.GetDataBaseFormat())
+            print("")
+        print(tenantHeaders)
         self.tenantTable.setParent(self.manageUsers)   
 
-        self.staffTable.show()
-        self.tenantTable.hide()
+        self.switchToStaffTable()
 
     def CreateApartmentTable(self, apartments : list[Apartment], apartmentHeaders : list[str]):
         self.apartmentTable.UpdateTable(apartments, apartmentHeaders)
@@ -1958,8 +2106,6 @@ class ReportPage(QWidget):
 
         self.collectionBtn = QPushButton(self.btnGroup)
         self.collectionBtn.setObjectName(u"collectionBtn")
-        self.collectionBtn.setDisabled(True)
-
         self.horizontalLayout.addWidget(self.collectionBtn)
 
         self.maintenanceBtn = QPushButton(self.btnGroup)
@@ -2048,7 +2194,6 @@ class ReportPageWithAllLocations(QWidget):
 
             self.collectionBtn = QPushButton(self.btnGroup)
             self.collectionBtn.setObjectName(u"collectionBtn")
-            self.collectionBtn.setDisabled(True)
 
             self.horizontalLayout.addWidget(self.collectionBtn)
 

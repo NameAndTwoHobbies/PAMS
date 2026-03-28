@@ -18,8 +18,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setMaximumSize(self.size())
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
-        self.loginStaffMember("manager@gmail.com", "")
+        #self.loginStaffMember("manager@gmail.com", "")
         #self.loginStaffMember("finance@gmail.com" , "")
+        #self.loginStaffMember("admin@gmail.com" ,"")
+        #self.LoginTenantBTN("peter@gmail.com", "")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -49,11 +51,11 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #endregion
 
         #Admin Dashboard
-        self.AdminDash.userLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []))
-        self.AdminDash.userRefreshBtn.clicked.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []))
+        self.AdminDash.userLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")))
+        self.AdminDash.userRefreshBtn.clicked.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")))
         self.AdminDash.apartmentLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
         self.AdminDash.apartmentRefresh.clicked.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
-        self.AdminDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : [self.AdminDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText())), self.AdminDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))]) #TODO Create a function that updates both graphs at the same time
+        self.AdminDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText())))
         
         #Sign Up Customer Page
         self.DetailedSignUp.submitBtn.clicked.connect(lambda : SignUpTenant(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
@@ -62,15 +64,22 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Customer Page
 
         self.CustDash.OverviewPage.logoutBtn.clicked.connect(lambda : self.logoutTenant())
+        self.CustDash.PaymentsPage.payNowBtn.clicked.connect(lambda : self.Pay(self.CustDash.contract))
+        self.CustDash.AccountPage.submitReqsBtn.clicked.connect(lambda : self.CreateTenantRequirement(self.CustDash.AccountPage.locationComboBox.currentText(),self.CustDash.tenant.GetID(),self.CustDash.AccountPage.SubmitRequirements()))
+        self.CustDash.AccountPage.submitBtn.clicked.connect(lambda : self.UpdateTenant(self.CustDash.tenant, self.CustDash.SubmitUserInfo()))
 
         #Manager Page
         self.ManagerDash.LocationPage.locationCreateBtn.clicked.connect(lambda : self.CreateLocation(self.ManagerDash.LocationPage.SubmitLocation()))
         self.ManagerDash.LocationPage.managerCreationBtn.clicked.connect(lambda : self.CreateLocationManager(self.ManagerDash.LocationPage.SubmitLocationManager(), self.ManagerDash.LocationPage.managerLocationComboBox.currentText()))
         
         self.ManagerDash.ApartmentPage.apartmentCreateBtn.clicked.connect(lambda  : self.CreateApartments(self.ManagerDash.ApartmentPage.Submit() , self.ManagerDash.ApartmentPage.locationComboBox.currentText()))
-        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
-        #self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateCollectionRates(self.(manager.location_id)))
-        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda :  self.ManagerDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
+        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()) , self.MakePieChartPaymentInsights(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()), self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
+
+        #Finance Page
+        self.FinanceDash.refreshBtn.clicked.connect(lambda: self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments")))
+        self.FinanceDash.issueRentBtn.clicked.connect(lambda : IssueRentPayments(self.FinanceDash.user.location_id))
+        self.FinanceDash.submitInvoiceBtn.clicked.connect(lambda: self.CreateInvoice(self.FinanceDash.SubmitInvoice()))
+
 #region Page Functions
 # This section is responsible for the functions that switch the pages and that load the data into these pages.
     def switchWelcomePage(self):
@@ -92,9 +101,20 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchCustomerView(self, tenant : Tenant):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentIndex(3)
-        self.CustDash.paymentsPage.paymentHistory.UpdateTable(GetTenantPaymentHistory(tenant.GetID()), GetHeaders("payments"))
-        self.CustDash.setUser(tenant)
+        contract = GetContract(tenant.GetID())
+        apartment = GetApartment(contract.apartment_id)
+        self.CustDash.setUser(tenant,contract,apartment)
+        paymentHistory = GetTenantPaymentHistory(tenant.GetID())
+        totalToPay = 0
+        for payment in paymentHistory:
+            if payment.payment_status == 'Unpaid':
+                totalToPay = totalToPay + payment.amount_paid
+            self.CustDash.PaymentsPage.CurrentDue.setText("£" + str(totalToPay))
 
+        self.CustDash.PaymentsPage.paymentHistory.UpdateTable(paymentHistory, GetHeaders("payments"))
+        date = QDate.currentDate()
+        dueDate = QDate(date.year(), date.month(),date.daysInMonth())
+        self.CustDash.AddPageDetail(GetLocations(),[],dueDate.toString())
     
     def switchAdminView(self, admin : User):
         #Change when page is implemented to customer dashboard
@@ -102,10 +122,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.setUser(admin)
         self.setWindowTitle(admin.firstName)
         self.AdminDash.GetLocations(GetLocations())
-
-        self.AdminDash.ReportPage.CreateOccupancyLevels(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
-        self.AdminDash.ReportPage.CreateMaintenance(self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText())) 
-        self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),[], []) 
+        self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
+        self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")) 
         self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     
     
@@ -120,12 +138,13 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.stackedView.setCurrentIndex(8)
         self.FinanceDash.setUser(finance)
         self.setWindowTitle(finance.firstName)
-        self.FinanceDash.paymentTable.UpdateTable((),())
-        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), PieChart((),(),""),self.MakeMaintanenceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
+        print(GetHeaders("payments"))
+        self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments"))
+        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), self.MakePieChartPaymentInsights(GetLocationFromID(finance.location_id).location_name),self.MakeMaintanenceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
     def switchToManagerDashboard(self, manager : User):
         self.ManagerDash.setUser(manager)
         self.ManagerDash.GetLocations(GetLocations())
-        self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()), PieChart((),(), ""), self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()))
+        self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(manager.location_id).location_name),self.MakePieChartPaymentInsights(GetLocationFromID(manager.location_id).location_name), self.MakeMaintanenceRequestsPieChart(GetLocationFromID(manager.location_id).location_name))
         self.stackedView.setCurrentIndex(10)
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
@@ -199,7 +218,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                     self.errorBox = ErrorBox(ErrorMessage("Role Error", "Something went wrong, please contact your administrator"))
                     self.errorBox.show()
     def logoutTenant(self):
-        self.CustDash.setUser(Tenant("","","", "", "", "", "", "",""))
+        self.CustDash.clearUser()
         self.switchWelcomePage()
 
 
@@ -227,7 +246,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             apartments = GetApartmentsFromLocation(location.id)
             if apartments != None:
                 total = len(apartments)
-                unoccupied = GetUnoccupiedApartmentsForLocation(location.id)
+                unoccupied : list[Apartment] = []
+                for apartment in apartments:
+                    if apartment.occupancy_status == False:
+                        unoccupied.append(apartment)
                 if unoccupied is None:
                     self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
                     self.error.show() #Change to ann error manager
@@ -236,6 +258,28 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                     pie = PieChart(("Occupied","Unoccupied") , (total - unoccupied, unoccupied) , "Occupied vs Unoccupied of " + locationName)
                     return pie
         print("Done")
+    def MakePieChartPaymentInsights(self, locationName : str):
+        location = GetLocation(locationName)
+        if location is None:
+            self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
+            self.error.show() #Change to ann error manager
+        else:
+            payments = GetAllPaymentsFromLocation(location.id)
+            if payments != None:
+                total = len(payments)
+                unpaid : list[Payment] = []
+                for payment in payments:
+                    if payment.payment_status == "Unpaid":
+                        unpaid.append(payment)
+                if unpaid is None:
+                    self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
+                    self.error.show() #Change to ann error manager
+                else:
+                    unpaid = len(unpaid)
+                    pie = PieChart(("Paid","Outstanding") , (total - unpaid, unpaid) , "Paid vs Outstanding payments of " + locationName)
+                    return pie
+        print("Done")
+
     # Creates a pie chart that shows the number of maintanence requests in a given location compared to the apartments that are functional.
     def MakeMaintanenceRequestsPieChart(self, locationName : str):
         location = GetLocation(locationName)
@@ -280,6 +324,43 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             for apartment in apartments:
                 apartment.location_id = location.id
                 AddApartment(apartment)
+    def CreateTenantRequirement(self,location_id,tenant_id: str, reqs : Requirements):
+        reqs.tenant_id = tenant_id
+        reqs.location_id =  GetLocation(location_id).GetID() # AT THAT time it is the name of the location
+        print(reqs.GetDataBaseFormat())
+        AddRequirements(reqs)
+    def CreateInvoice(self, invoiceInfo :tuple[str,str,str,str]):
+        contract = GetContract(invoiceInfo[0])
+        if contract is None:
+            self.errorBox = ErrorBox(ErrorMessage("Tenant Doesn't Exists", "No Tenants with this ID"))
+            self.errorBox.show()
+        else:
+            CreateInvoice(Payment("", contract.id,'NULL',invoiceInfo[1],invoiceInfo[2],'Unpaid','DirectDebit', invoiceInfo[3]))
+
+    def Pay(self, contract: Contract):
+        MakePayment(self.CustDash.contract)
+        self.switchCustomerView(self.CustDash.tenant)
+    def UpdateTenant(self, currentTenant: Tenant, changeTenant: Tenant):
+        changeTenant.references = currentTenant.references
+        validTenant = True
+        for field in changeTenant.GetDataBaseFormat():
+            print(field)
+            if field == "":
+                validTenant = False
+        if validTenant == True:
+            if changeTenant.email != currentTenant.email:
+                if CheckEmailIsValid(changeTenant.email):
+                    changeTenant.id = currentTenant.id
+                else:
+                    self.errorBox = ErrorBox(ErrorMessage("Invalid Email", "This email is already in use please re-enter"))
+                    self.errorBox.show()
+            UpdateTenant(changeTenant)
+            self.switchCustomerView(changeTenant)
+        else:
+            self.errorBox = ErrorBox(ErrorMessage("Invalid Tenant", "Please Re-enter"))
+            self.errorBox.show()
+
+
 
 #endregion
 

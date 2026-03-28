@@ -10,9 +10,9 @@ from Entities import *
 
 isUsingDev = True
 
-host = ""
-user = ""
-password = ""
+local = "127.0.0.1"
+localUser = "root"
+localDbPassword = "WebDev1234"
 dbName = ""
 
 # Gets the connection to the database.
@@ -23,10 +23,10 @@ def GetConnection():
         password = devPassword
         dbName = devName
     else: 
-        host = prodHost
-        user = prodUser
-        password = prodPassword
-        dbName = prodName
+        host = local
+        user = localUser
+        password = localDbPassword
+        dbName = devName
 
     try:
         conn = mysql.connector.connect(host = host, user = user, password =password)
@@ -108,7 +108,20 @@ def AddStaff(user : User):
         print("Database Closed")
         print("------------------")
         return True
+def GetApartment(apartment_id : str):
+    query = "SELECT * FROM apartments WHERE apartment_id = %s"
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database") 
+    print("Purpose: Retriving apartment")
 
+    dbcursor.execute(query, (apartment_id,))
+
+    dbApartment = dbcursor.fetchone()
+
+    return Apartment(dbApartment[0],dbApartment[1],dbApartment[2],dbApartment[3],dbApartment[4],dbApartment[5],dbApartment[6])
 def AddApartment(apartment : Apartment):
     query = "INSERT INTO apartments (location_id,room_type, monthly_rent, bedrooms,bathrooms) VALUES (%s,%s,%s,%s,%s)"
     
@@ -235,7 +248,7 @@ def GetApartmentsFromLocation(Id : str):
     if apartments is None:
         return None
     else: 
-        building = []
+        building : list[Apartment] = []
         for apartment in apartments:
             building.append(Apartment(apartment[0],apartment[1],apartment[2],apartment[3],apartment[4],apartment[5],apartment[6]))
         return building
@@ -272,7 +285,7 @@ def GetTenants():
 
 # Gets all the headers from a table in the database
 def GetHeaders(table : str):
-    query = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_name = %s;"
+    query = "SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE table_schema = DATABASE() AND table_name = %s;"
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
@@ -391,22 +404,6 @@ def LoginUser(email : str, hashedPassword : str):
 
 #region Report Functionaility
 # Returns the ids of the unoccupied apartments in a location matching an ID.
-def GetUnoccupiedApartmentsForLocation(locationID : int):
-    query = "SELECT * from apartments WHERE location_id = %s AND occupancy_status = 0;"
-
-    conn = GetConnection()
-    dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
-    print("------------------")
-    print("Entered Database") 
-    print("Purpose: Retrieve all empty apartments in the location")
-    dbcursor.execute(query, (locationID,))
-    unoccupiedApartments = []
-
-    for apartment in dbcursor.fetchall():
-        unoccupiedApartments.append(Apartment(apartment[0],apartment[1],apartment[2],apartment[3],apartment[4],apartment[5],apartment[6]))
-    
-    return unoccupiedApartments
 
 # def GetPaymentInsights(locationName : str):
 #     id = GetLocation(locationName)
@@ -473,51 +470,33 @@ def GetUsersFromLocation(locationName: str):
 
 #TODO not finished and ineffcient due to database
 def GetTenantsFromLocation(locationName : str):
-    return None
-    # location = GetLocation(locationName)
+    
+    location = GetLocation(locationName)
+    locationID = location.GetID()
+    query = "SELECT tenants.* FROM tenants INNER JOIN contracts ON contracts.tenant_id = tenants.tenant_id INNER JOIN apartments ON contracts.apartment_id = apartments.apartment_id WHERE apartments.location_id = %s"
+    
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Gather all the tenants for a given location")
 
-    # if location is not None:
-    #     query = "SELECT apartment_id from apartments WHERE location_id = %s AND occupancy_status = 1;"
+    dbcursor.execute(query , (locationID, ))
 
-    #     conn = GetConnection()
-    #     dbcursor = conn.cursor()    #Creating cursor object
-    #     dbcursor.execute('USE {};'.format(devName)) #use database'
-    #     print("------------------")
-    #     print("Entered Database") 
-    #     print("Purpose: Retrieve all tenants living in the location" + locationName)
-    #     dbcursor.execute(query, (location.id,))
-    #     apartmentIds = dbcursor.fetchall()
+    dbTenants = dbcursor.fetchall()
+    tenants = []
+    for dbTenant in dbTenants:
+        tenants.append(Tenant(dbTenant[0],dbTenant[1],dbTenant[2],dbTenant[3],dbTenant[4],"Blocked",dbTenant[6],dbTenant[7],dbTenant[8]))
 
-    #     query2 = "SELECT tenant_id FROM contracts WHERE apartment_id = %s;" #TODO remove those that no longer live in there by checking for days that are in date
-    #     dbTenants = []
-    #     for id in apartmentIds:
-    #         dbcursor.execute(query, (id[0],))
-    #         dbTenants.append(dbcursor.fetchall())
-
-    #     query3 = "SELECT * FROM tenants WHERE tenant_id = %s;"
-    #     tenants = []
-    #     print(dbTenants)
-    #     for tenantID in dbTenants:
-    #         dbcursor.execute(query, (tenantID[0]))
-    #         tenant = dbcursor.fetchone()
-    #         tenants.append(Tenant(tenant[0],tenant[1],tenant[2],tenant[3],tenant[4],"Blocked", tenant[6],tenant[7],tenant[8]))
-    #     dbcursor.close()
-    #     conn.close()
-    #     print("Closed Database")
-
-    #     return tenants
-    # else:
-    #     dbcursor.close()
-    #     conn.close()
-    #     print("Closed Database")
-
-    #     return None
-
-        
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+    return tenants
 
 #Retrieving the tenants payment history 
 def GetTenantPaymentHistory(tenantID : str):
-    query = "SELECT * FROM payments WHERE tenant_id = %s"
+    query = "SELECT payments.* from payments INNER JOIN contracts on payments.contract_id = contracts.contract_id WHERE contracts.tenant_id = %s"
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
@@ -530,10 +509,216 @@ def GetTenantPaymentHistory(tenantID : str):
 
     dbPayments = dbcursor.fetchall()
 
-    payments = []
+    payments : list[Payment]= []
     for dbPayment in dbPayments:
-        payment = Payment(dbPayment[0],dbPayment[1],dbPayment[2],dbPayment[3],dbPayment[4],dbPayment[5],dbPayment[6],dbPayment[7],dbPayment[8])
+        payment = Payment(dbPayment[0],dbPayment[1],dbPayment[2],dbPayment[3],dbPayment[4],dbPayment[5],dbPayment[6],dbPayment[7])
         payments.append(payment)
-    
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
     return payments
+
+def GetAllPaymentsFromLocation(locationID : str):
+    query = "SELECT payments.* FROM payments INNER JOIN contracts ON payments.contract_id = contracts.contract_id INNER JOIN apartments ON contracts.apartment_id = apartments.apartment_id WHERE apartments.location_id = %s" # Gets all the payments from the location through the contract of the payments
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Get Payment History of location " + str(locationID))
+
+    dbcursor.execute(query, (locationID,))
+
+    dbPayments = dbcursor.fetchall()
+
+    payments : list[Payment] = []  
+    for dbPayment in dbPayments:
+        payments.append(Payment(dbPayment[0],dbPayment[1],dbPayment[2], dbPayment[3], dbPayment[4],dbPayment[5],dbPayment[6],dbPayment[7]))
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+    return payments    
+
+def GetContract(tenant_id : str):
+    query = "SELECT * FROM contracts WHERE tenant_id = %s AND end_date > CURRENT_TIMESTAMP()"
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Retreive the contract for a given tenant")
+
+    dbcursor.execute(query ,(tenant_id,))
+
+    contract =  dbcursor.fetchone()
+
+    if contract is not None:
+        return Contract(contract[0],contract[1],contract[2],contract[3],contract[4],contract[5],contract[6])
+       
+    else:
+        dbcursor.close()
+        conn.close()
+        print("Closed Database")
+        return None
+
+def GetRentPayments(contract : Contract):
+        if contract is not None:
+            conn = GetConnection()
+            dbcursor = conn.cursor()    #Creating cursor object
+            dbcursor.execute('USE {};'.format(devName)) #use database'
+            print("------------------")
+            print("Entered Database")
+            print("Purpose: Retreive the most recent rent payment for the tenant")
+
+            query = "SELECT * FROM payments WHERE reference = 'Rent' AND payment_status = 'Unpaid' AND contract_id = %s"
+            dbcursor.execute(query, (contract.id,))
+
+            rentPayments = dbcursor.fetchall()
+            dbcursor.close()
+            conn.close()
+            print("Closed Database")
+            if rentPayments is not None:
+                payments : list[Payment] = []
+                for payment in rentPayments:
+                    payments.append(Payment(payment[0],payment[1],payment[2],payment[3],payment[4],payment[5],payment[6],payment[7],))
+                return payments
+            else:
+                return None 
+        
+
+def AddRequirements(reqs : Requirements):
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Checking if a tenant has a previous requirement")
+
+    query = "SELECT requirements_id FROM requirements WHERE tenant_id = %s;"
+    dbcursor.execute(query , (reqs.tenant_id,))
+
+    dbReqs = dbcursor.fetchone()
+
+    if dbReqs is not None:
+        print(dbReqs)
+        query = "UPDATE requirements SET location_id = %s, tenant_id= %s, room_type = %s , monthly_rent = %s, bedrooms = %s, bathrooms = %s WHERE requirements_id = %s"
+        reqs.id = dbReqs[0]
+        dbcursor.execute(query,(int(reqs.location_id),int(reqs.tenant_id),reqs.room_type, float(reqs.monthly_rent),reqs.bedrooms,reqs.bathrooms , reqs.id))
+    else:
+        query = "INSERT INTO requirements (location_id, tenant_id,room_type,monthly_rent,bedrooms,bathrooms) VALUES (%s,%s,%s,%s,%s,%s)"
+        dbcursor.execute(query,(int(reqs.location_id),int(reqs.tenant_id),reqs.room_type, float(reqs.monthly_rent),reqs.bedrooms,reqs.bathrooms ,))
+    
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+
+    
+def CreateInvoice(invoice :Payment):
+    query = "INSERT INTO payments (contract_id, due_date,amount,payment_status,reference) VALUES (%s,%s,%s,%s,%s)"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Issue invoice")
+
+    dbcursor.execute(query, (invoice.contract_id,invoice.dueDate,invoice.amount_paid,invoice.payment_status,invoice.reference,))
+
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+
+def IssueRentPayments(location_id : str):
+    query = "SELECT * FROM apartments WHERE location_id = %s AND occupancy_status = 1"
+
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Gather all occupied apartments")
+
+    dbcursor.execute(query, (location_id,))
+
+    dbApartments= dbcursor.fetchall()
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+    for apartment in dbApartments :
+        conn = GetConnection()
+        dbcursor = conn.cursor()    #Creating cursor object
+        dbcursor.execute('USE {};'.format(devName)) #use database'
+        print("------------------")
+        print("Entered Database")
+        print("Purpose: Checking if there is already a monthly payment")
+
+        query = "SELECT contract_id FROM contracts WHERE apartment_id = %s AND end_date > CURRENT_TIMESTAMP()" # contracts from appartments stillbeing run
+
+        dbcursor.execute(query, (apartment[0],))
+
+        dbTenant = dbcursor.fetchone()
+        if dbTenant is not None:
+            dbContract_id = dbTenant[0]
+            query = "SELECT * FROM payments WHERE contract_id = %s AND due_date > CURRENT_TIMESTAMP() AND reference = 'Rent'" # Checks if there is already a rent invoice for this month in the payments table for the tenant
+            dbcursor.execute(query, (dbContract_id,))
+            payments = dbcursor.fetchall()
+            dbcursor.execute("SELECT LAST_DAY(CURRENT_TIMESTAMP())")
+            lastDay = dbcursor.fetchone()  
+            dbcursor.close()
+            conn.close()
+            print("Closed Database")
+            if payments == []:
+                print("isNull")
+                CreateInvoice(Payment("", dbContract_id, 'NULL' , lastDay[0],apartment[3],"Unpaid","", "Rent"))
+        else:
+            dbcursor.close()
+            conn.close()
+            print("Closed Database")
+
+def UpdateTenant(tenant : Tenant):
+    db = tenant.GetDataBaseFormat()
+    #TODO check if the user exits
+    query = "UPDATE tenants SET first_name = %s, last_name = %s, national_insurance = %s, email = %s, tenants.password= %s, phone_number = %s, occupation= %s, tenants.references = %s WHERE tenant_id = %s"
+    conn = GetConnection()
+    dbcursor = conn.cursor()    #Creating cursor object
+    dbcursor.execute('USE {};'.format(devName)) #use database'
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Update Tenants Details")
+
+    dbcursor.execute(query, (tenant.first_name,tenant.last_name,tenant.national_insurance,tenant.email,tenant.password,tenant.phone_number,tenant.occupation,tenant.references , tenant.id,))
+
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+
+def MakePayment(contract : Contract):
+    #TODO CHECK WITH THE UPDATING PAYMENT HISTORY TABLE AND USE THAT TO PUT INTO THE CURRENT DUE
+    if contract is not None:
+        query = "SELECT * FROM payments WHERE payment_status = 'Unpaid' AND contract_id = %s"
+        conn = GetConnection()
+        dbcursor = conn.cursor()    #Creating cursor object
+        dbcursor.execute('USE {};'.format(devName)) #use database'
+        print("------------------")
+        print("Entered Database")
+        print("Purpose: Paying all outstanding payments")
+
+        dbcursor.execute(query,(contract.id,))
+
+        dbPayments = dbcursor.fetchall()
+        if dbPayments is not None:
+            for payment in dbPayments:
+                query = "UPDATE payments SET payment_date = CURRENT_TIMESTAMP() , payment_status = 'Paid', method = 'BankTransfer' WHERE payment_id = %s"
+
+                dbcursor.execute(query,(payment[0],))
+            conn.commit()
+
+        dbcursor.close()
+        conn.close()
+        print("Closed Database")
         
