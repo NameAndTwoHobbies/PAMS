@@ -1,6 +1,6 @@
 import sys
 import random
-from PySide6.QtWidgets import *
+from PySide6.QtWidgets import * #the asterisks mean import everything
 from PySide6.QtGui import *
 from PySide6.QtCore import * 
 from uiMainWindow import Ui_MainWindow
@@ -48,6 +48,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 
         #Front Desk Page
         self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
+
+        #Maintenance rquest Page
+        self.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
+        self.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView())
         #endregion
 
         #Admin Dashboard
@@ -62,7 +66,6 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.DetailedSignUp.submitBtn.clicked.connect(lambda : self.switchCustomerView(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
 
         #Customer Page
-
         self.CustDash.OverviewPage.logoutBtn.clicked.connect(lambda : self.logoutTenant())
         self.CustDash.PaymentsPage.payNowBtn.clicked.connect(lambda : self.Pay(self.CustDash.contract))
         self.CustDash.AccountPage.submitReqsBtn.clicked.connect(lambda : self.CreateTenantRequirement(self.CustDash.AccountPage.locationComboBox.currentText(),self.CustDash.tenant.GetID(),self.CustDash.AccountPage.SubmitRequirements()))
@@ -141,11 +144,13 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         print(GetHeaders("payments"))
         self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments"))
         self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), self.MakePieChartPaymentInsights(GetLocationFromID(finance.location_id).location_name),self.MakeMaintanenceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
+        
     def switchToManagerDashboard(self, manager : User):
         self.ManagerDash.setUser(manager)
         self.ManagerDash.GetLocations(GetLocations())
         self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(manager.location_id).location_name),self.MakePieChartPaymentInsights(GetLocationFromID(manager.location_id).location_name), self.MakeMaintanenceRequestsPieChart(GetLocationFromID(manager.location_id).location_name))
         self.stackedView.setCurrentIndex(10)
+  
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
 
