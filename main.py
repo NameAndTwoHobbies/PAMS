@@ -83,6 +83,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.FinanceDash.issueRentBtn.clicked.connect(lambda : IssueRentPayments(self.FinanceDash.user.location_id))
         self.FinanceDash.submitInvoiceBtn.clicked.connect(lambda: self.CreateInvoice(self.FinanceDash.SubmitInvoice()))
 
+        #Maintenance Page
+        
+
 #region Page Functions
 # This section is responsible for the functions that switch the pages and that load the data into these pages.
     def switchWelcomePage(self):

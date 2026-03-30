@@ -2331,3 +2331,201 @@ class ReportPageWithAllLocations(QWidget):
                     self.reportLocationDropdown.addItem(location.location_name)
 
 #endregion
+
+
+
+#region Maintenance Dashboard
+
+class MaintenanceDashboard(userPage):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 581)
+        
+        self.Main = QFrame(self)
+        self.Main.setObjectName(u"Main")
+        self.Main.setGeometry(QRect(0, 80, 831, 501))
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.Main.sizePolicy().hasHeightForWidth())
+        self.Main.setSizePolicy(sizePolicy)
+        self.Main.setFrameShape(QFrame.Shape.StyledPanel)
+        self.Main.setFrameShadow(QFrame.Shadow.Raised)
+
+
+
+        self.tableToolBar = QFrame(self.Main)
+        self.tableToolBar.setObjectName(u"tableToolBar")
+        self.tableToolBar.setGeometry(QRect(0, 0, 831, 71))
+        sizePolicy.setHeightForWidth(self.tableToolBar.sizePolicy().hasHeightForWidth())
+        self.tableToolBar.setSizePolicy(sizePolicy)
+        self.tableToolBar.setFrameShape(QFrame.Shape.StyledPanel)
+        self.tableToolBar.setFrameShadow(QFrame.Shadow.Raised)
+        self.titleBar = QFrame(self)
+        self.titleBar.setObjectName(u"titleBar")
+        self.titleBar.setGeometry(QRect(0, 0, 831, 81))
+
+
+
+
+        self.tableFrame = QFrame(self.Main)
+        self.tableFrame.setObjectName(u"tableFrame")
+        self.tableFrame.setGeometry(QRect(0, 70, 831, 431))
+        self.tableFrame.setFrameShadow(QFrame.Shadow.Raised)
+        sizePolicy.setHeightForWidth(self.tableFrame.sizePolicy().hasHeightForWidth())
+        self.tableFrame.setSizePolicy(sizePolicy)
+        self.tableFrame.setFrameShape(QFrame.Shape.StyledPanel)
+
+        self.table = Table([],[])
+        self.table.setParent(self.tableFrame)
+        self.table.setObjectName(u"tenantTable")
+        self.table.setGeometry(QRect(10, 30, 821, 430))
+
+
+        self.searchBar = QLineEdit(self.tableToolBar)
+        self.searchBar.setObjectName(u"searchBar")
+        self.searchBar.setGeometry(QRect(610, 10, 113, 22))
+
+        
+        sizePolicy.setHeightForWidth(self.titleBar.sizePolicy().hasHeightForWidth())
+        self.titleBar.setSizePolicy(sizePolicy)
+        self.titleBar.setFrameShape(QFrame.Shape.StyledPanel)
+        self.titleBar.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.titleBar)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.title = QLabel(self.titleBar)
+        self.title.setObjectName(u"title")
+
+        self.horizontalLayout.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.retranslateUi()
+
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("MaintenanceDashboard", u"Form", None))
+        self.title.setText(QCoreApplication.translate("MaintenanceDashboard", u"Maintenance Dashboard", None))
+    # retranslateUi
+
+
+class MaintenanceDialogBox(QDialog):
+    def __init__(self, startedDate : str, currentMaintenanceNotes : str , costRepair : int):
+        super().__init__()
+        self.resize(400, 300)
+        self.startedDate = startedDate
+        self.currentMaintenanceNotes = currentMaintenanceNotes
+        self.currentCostRepair = costRepair
+
+        self.wizardFrame = QFrame(self)
+        self.wizardFrame.setObjectName(u"wizardFrame")
+        self.wizardFrame.setGeometry(QRect(0, 0, 450, 400))
+        self.wizardFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.wizardFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_3 = QVBoxLayout(self.wizardFrame)
+        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
+        self.title = QLabel(self.wizardFrame)
+        self.title.setObjectName(u"title")
+
+        self.verticalLayout_3.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.frame = QFrame(self.wizardFrame)
+        self.frame.setObjectName(u"frame")
+        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout = QVBoxLayout(self.frame)
+        self.verticalLayout.setObjectName(u"verticalLayout")
+        self.maintenanceNotesInput = QTextEdit(self.frame)
+        self.maintenanceNotesInput.setObjectName(u"maintenanceNotesInput")
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.maintenanceNotesInput.sizePolicy().hasHeightForWidth())
+        self.maintenanceNotesInput.setSizePolicy(sizePolicy)
+
+        self.verticalLayout.addWidget(self.maintenanceNotesInput)
+
+        self.addNotesBtn = QPushButton(self.frame)
+        self.addNotesBtn.setObjectName(u"addNotesBtn")
+
+        self.verticalLayout.addWidget(self.addNotesBtn)
+
+
+        self.verticalLayout_3.addWidget(self.frame)
+
+        self.frame_2 = QFrame(self.wizardFrame)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_2 = QVBoxLayout(self.frame_2)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.costPrompt = QLabel(self.frame_2)
+        self.costPrompt.setObjectName(u"costPrompt")
+
+        self.verticalLayout_2.addWidget(self.costPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.costInput = QDoubleSpinBox(self.frame_2)
+        self.costInput.setObjectName(u"costInput")
+        self.costInput.setMaximum(99999.000000000000000)
+        self.costInput.setMinimum(self.currentCostRepair)
+
+        self.verticalLayout_2.addWidget(self.costInput, 0, Qt.AlignmentFlag.AlignHCenter)
+
+        self.pushButton = QPushButton(self.frame_2)
+        self.pushButton.setObjectName(u"pushButton")
+
+        self.verticalLayout_2.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
+
+
+        self.verticalLayout_3.addWidget(self.frame_2)
+
+        self.buttonsFrame = QFrame(self.wizardFrame)
+        self.buttonsFrame.setObjectName(u"buttonsFrame")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.buttonsFrame.sizePolicy().hasHeightForWidth())
+        self.buttonsFrame.setSizePolicy(sizePolicy1)
+        self.buttonsFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.buttonsFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.buttonsFrame)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.completeRequestBtn = QPushButton(self.buttonsFrame)
+        self.completeRequestBtn.setObjectName(u"completeRequestBtn")
+
+        self.horizontalLayout.addWidget(self.completeRequestBtn)
+
+
+        self.verticalLayout_3.addWidget(self.buttonsFrame)
+
+
+        self.retranslateUi()
+    # setupUi
+
+    def retranslateUi(self):
+        self.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
+        self.title.setText(QCoreApplication.translate("Dialog", u"Maintenance Wizard", None))
+        self.maintenanceNotesInput.setDocumentTitle(QCoreApplication.translate("Dialog", u"Maitenance Notes", None))
+        self.maintenanceNotesInput.setPlaceholderText(QCoreApplication.translate("Dialog", u"Please add maintenance notes", None))
+        if self.currentMaintenanceNotes != "":
+            self.maintenanceNotesInput.setText(self.currentMaintenanceNotes)
+        self.addNotesBtn.setText(QCoreApplication.translate("Dialog", u"Add Notes", None))
+        self.costPrompt.setText(QCoreApplication.translate("Dialog", u"Cost Of Request", None))
+        self.costInput.setPrefix(QCoreApplication.translate("Dialog", u"\u00a3", None))
+        self.pushButton.setText(QCoreApplication.translate("Dialog", u"Add Cost", None))
+        self.completeRequestBtn.setText(QCoreApplication.translate("Dialog", u"Complete Request", None))
+    # retranslateUi
+
+    def AddNotes(self):
+        if self.currentMaintenanceNotes != self.maintenanceNotesInput.toPlainText():
+            self.currentMaintenanceNotes == self.maintenanceNotesInput.toPlainText()
+            return self.currentMaintenanceNotes
+        
+    def AddCost(self):
+        if self.currentCostRepair > float(self.costInput.cleanText()): 
+            return float(self.costInput.cleanText())
+
+         
+
+        
+#endregion
