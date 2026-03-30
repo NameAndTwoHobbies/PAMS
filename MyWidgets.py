@@ -306,6 +306,69 @@ class AdminLoginPage(QWidget):
             self.staff = admin
 #endregion 
 
+#I have put my code in this spot, this file it very different to the one I worked on
+
+#region Maintenance Request Page
+
+# This page lets a tenant describe a problem in their apartment and submit it.
+# QWidget is the base "blank canvas" class everything is built on.
+class MaintenanceRequestPage(QWidget):
+    def __init__(self):
+        super().__init__()        # Always call the parent class constructor first
+        self.resize(831, 581)
+
+        # QLabel is just a text label — it doesn't do anything, it just displays text
+        self.title = QLabel(self)
+        self.title.setGeometry(QRect(290, 30, 250, 40))   # (x, y, width, height)
+        self.title.setFont(heading)
+        self.title.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
+        # QGroupBox draws a box with a title around a group of related widgets
+        self.formGroup = QGroupBox(self)
+        self.formGroup.setGeometry(QRect(150, 90, 530, 400))
+
+        #QLabel for the description field
+        self.descriptionLabel = QLabel(self.formGroup)
+        self.descriptionLabel.setGeometry(QRect(20, 30, 120, 20))
+
+        # QTextEdit is a multi-line text input box — good for longer descriptions
+        self.descriptionInput = QTextEdit(self.formGroup)
+        self.descriptionInput.setGeometry(QRect(20, 55, 490, 100))
+        self.descriptionInput.setPlaceholderText("Describe the issue in detail...")
+
+        # QLabel for the priority dropdown
+        self.priorityLabel = QLabel(self.formGroup)
+        self.priorityLabel.setGeometry(QRect(20, 175, 120, 20))
+
+        # QComboBox is a dropdown menu — you add the options with addItem()
+        self.priorityDropdown = QComboBox(self.formGroup)
+        self.priorityDropdown.setGeometry(QRect(20, 200, 200, 26))
+        self.priorityDropdown.addItem("Low")
+        self.priorityDropdown.addItem("Medium")
+        self.priorityDropdown.addItem("High")
+
+        # QPushButton is a clickable button
+        # The actual click action is connected later in main.py — not here
+        self.submitBtn = QPushButton(self.formGroup)
+        self.submitBtn.setGeometry(QRect(380, 340, 110, 32))
+
+        # A back button so the tenant can return to their dashboard
+        self.backBtn = QPushButton(self)
+        self.backBtn.setGeometry(QRect(20, 20, 80, 30))
+
+        self.retranslateUi()
+
+    # retranslateUi sets all the visible text separately from the layout.
+    # This is a Qt convention — it makes it easier to support multiple languages later.
+    def retranslateUi(self):
+        self.title.setText("Submit a Maintenance Request")
+        self.formGroup.setTitle("Request Details")
+        self.descriptionLabel.setText("Description of Issue")
+        self.priorityLabel.setText("Priority Level")
+        self.submitBtn.setText("Submit")
+        self.backBtn.setText("< Back")
+
+#endregion
 
 #region Client Dashboard
 
