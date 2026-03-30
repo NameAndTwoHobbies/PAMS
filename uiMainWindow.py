@@ -162,5 +162,7 @@ class Ui_MainWindow(object):
         self.FinanceDash.retranslateUi()
 
         self.AdminDash.retranslateUi()
+
+        self.MaintenanceReq.retranslateUi()
     # retranslateUi
 
