@@ -718,4 +718,24 @@ def MakePayment(contract : Contract):
         dbcursor.close()
         conn.close()
         print("Closed Database")
-        
+
+def SubmitMaintenanceRequest(tenant_id: int, apartment_id: int, description: str, priority: str):
+    query = """
+        INSERT INTO maintenance_requests 
+        (tenant_id, apartment_id, description, priority, status) 
+        VALUES (%s, %s, %s, %s, 'Pending');
+    """
+    conn = GetConnection() #opens a connection to the database
+    dbcursor = conn.cursor()
+    dbcursor.execute('USE {};'.format(prodName))
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Insert a new maintenance request")
+
+    dbcursor.execute(query, (tenant_id, apartment_id, description, priority))
+    conn.commit()   # commit() is what actually saves the change — without this nothing is written
+
+    dbcursor.close()
+    conn.close() #closes the connection to the database
+    print("Closed Database")
+    print("------------------")
