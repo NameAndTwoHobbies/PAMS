@@ -8,25 +8,20 @@ from Entities import *
 
 
 
-isUsingDev = True
+isUsingDev = False
 
-local = "127.0.0.1"
-localUser = "root"
-localDbPassword = "WebDev1234"
-dbName = ""
 
 # Gets the connection to the database.
 def GetConnection():
+    print(prodHost)
     if isUsingDev:
         host = devHost
         user = devUser
         password = devPassword
-        dbName = devName
     else: 
-        host = local
-        user = localUser
-        password = localDbPassword
-        dbName = devName
+        host = prodHost
+        user = prodUser
+        password = prodPassword
 
     try:
         conn = mysql.connector.connect(host = host, user = user, password =password)
@@ -48,7 +43,7 @@ def AddLocation(location : Location):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Adding new location " + location.location_name)
@@ -64,7 +59,7 @@ def AddStaff(user : User):
     query = "SELECT * FROM users WHERE email = %s AND password = %s"
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Checking if a user exists")
@@ -90,7 +85,7 @@ def AddStaff(user : User):
             query = "SELECT user_id FROM users WHERE email = %s AND password = %s"
             conn = GetConnection()
             dbcursor = conn.cursor()    #Creating cursor object
-            dbcursor.execute('USE {};'.format(devName)) #use database'
+            dbcursor.execute('USE {};'.format(prodName)) #use database'
             print("------------------")
             print("Entered Database") 
             print("Purpose: Checking if a user exists")
@@ -112,7 +107,7 @@ def GetApartment(apartment_id : str):
     query = "SELECT * FROM apartments WHERE apartment_id = %s"
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Retriving apartment")
@@ -127,7 +122,7 @@ def AddApartment(apartment : Apartment):
     
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Adding Apartment to Location " + str(apartment.location_id))
@@ -150,7 +145,7 @@ def GetLocationFromID(locationID : str):
     conn = GetConnection()    
     
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Retrieve all locations that match the ID " + str(locationID))
@@ -176,7 +171,7 @@ def GetLocation(locationName: str):
     conn = GetConnection()    
     
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose: Retrieve all locations that match the name " + locationName)
@@ -204,7 +199,7 @@ def GetLocations():
     conn = GetConnection()
 
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose : Retrieve all locations from the database")  
@@ -232,7 +227,7 @@ def GetApartmentsFromLocation(Id : str):
     
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database") 
     print("Purpose : Retrieve all apartments in a given location")
@@ -265,7 +260,7 @@ def GetTenants():
     conn = GetConnection()
 
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")   
     print("Retrieve all the tenants from the database")
@@ -289,7 +284,7 @@ def GetHeaders(table : str):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Return the headers from the table " + table)
@@ -311,7 +306,7 @@ def CheckEmailIsValid(email : str):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Check if a tenant with email" + email + " exists")
@@ -330,7 +325,7 @@ def SignUpTenant(tenant : Tenant):
     conn = GetConnection()
 
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")   
     print("Purpose : Inserting the a new tenant into the database")
@@ -351,7 +346,7 @@ def LoginTenant(email : str, hashedPassword : str):
     conn = GetConnection()
 
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")   
     print("Purpose: Checking the database to see if the email and password match a tenant")
@@ -380,7 +375,7 @@ def LoginUser(email : str, hashedPassword : str):
     conn = GetConnection()
 
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")   
     print("Purpose: Checking the database to see if the email and password match a user")
@@ -419,7 +414,7 @@ def GetMainanenceRequestsForLocation(locationID : str):
     else:
         conn = GetConnection()
         dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(devName)) #use database'
+        dbcursor.execute('USE {};'.format(prodName)) #use database'
         print("------------------")
         print("Entered Database")
         print("Reason: Gather Maintanence requests by Apartment Id")
@@ -446,7 +441,7 @@ def GetUsersFromLocation(locationName: str):
 
         conn = GetConnection()
         dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(devName)) #use database'
+        dbcursor.execute('USE {};'.format(prodName)) #use database'
         print("------------------")
         print("Entered Database")
         print("Purpose: Get users from location " + locationName)
@@ -477,7 +472,7 @@ def GetTenantsFromLocation(locationName : str):
     
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Gather all the tenants for a given location")
@@ -500,7 +495,7 @@ def GetTenantPaymentHistory(tenantID : str):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Get Payment History of tenant " + str(tenantID))
@@ -523,7 +518,7 @@ def GetAllPaymentsFromLocation(locationID : str):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Get Payment History of location " + str(locationID))
@@ -544,7 +539,7 @@ def GetContract(tenant_id : str):
     query = "SELECT * FROM contracts WHERE tenant_id = %s AND end_date > CURRENT_TIMESTAMP()"
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Retreive the contract for a given tenant")
@@ -566,7 +561,7 @@ def GetRentPayments(contract : Contract):
         if contract is not None:
             conn = GetConnection()
             dbcursor = conn.cursor()    #Creating cursor object
-            dbcursor.execute('USE {};'.format(devName)) #use database'
+            dbcursor.execute('USE {};'.format(prodName)) #use database'
             print("------------------")
             print("Entered Database")
             print("Purpose: Retreive the most recent rent payment for the tenant")
@@ -590,7 +585,7 @@ def GetRentPayments(contract : Contract):
 def AddRequirements(reqs : Requirements):
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Checking if a tenant has a previous requirement")
@@ -620,7 +615,7 @@ def CreateInvoice(invoice :Payment):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Issue invoice")
@@ -637,7 +632,7 @@ def IssueRentPayments(location_id : str):
 
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Gather all occupied apartments")
@@ -651,7 +646,7 @@ def IssueRentPayments(location_id : str):
     for apartment in dbApartments :
         conn = GetConnection()
         dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(devName)) #use database'
+        dbcursor.execute('USE {};'.format(prodName)) #use database'
         print("------------------")
         print("Entered Database")
         print("Purpose: Checking if there is already a monthly payment")
@@ -685,7 +680,7 @@ def UpdateTenant(tenant : Tenant):
     query = "UPDATE tenants SET first_name = %s, last_name = %s, national_insurance = %s, email = %s, tenants.password= %s, phone_number = %s, occupation= %s, tenants.references = %s WHERE tenant_id = %s"
     conn = GetConnection()
     dbcursor = conn.cursor()    #Creating cursor object
-    dbcursor.execute('USE {};'.format(devName)) #use database'
+    dbcursor.execute('USE {};'.format(prodName)) #use database'
     print("------------------")
     print("Entered Database")
     print("Purpose: Update Tenants Details")
@@ -703,7 +698,7 @@ def MakePayment(contract : Contract):
         query = "SELECT * FROM payments WHERE payment_status = 'Unpaid' AND contract_id = %s"
         conn = GetConnection()
         dbcursor = conn.cursor()    #Creating cursor object
-        dbcursor.execute('USE {};'.format(devName)) #use database'
+        dbcursor.execute('USE {};'.format(prodName)) #use database'
         print("------------------")
         print("Entered Database")
         print("Purpose: Paying all outstanding payments")
