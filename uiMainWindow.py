@@ -142,7 +142,7 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"MainWindow", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Back", None))
 
-        #retranslate ui for the pages
+        #retranslate ui for the pages, restranslate is a method that sets the text labels, it useful for changing languages although not too important for us as paragon is a UK based company
         self.Welcome.retranslateUi()
 
         self.CustLogin.retranslateUi()
