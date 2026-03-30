@@ -2408,6 +2408,9 @@ class MaintenanceDashboard(userPage):
         self.title.setText(QCoreApplication.translate("MaintenanceDashboard", u"Maintenance Dashboard", None))
     # retranslateUi
 
+    def CreateDialogBox(self, startedDate: str, currentNotes: str, costRepair : str):
+        self.box =MaintenanceDialogBox(startedDate, currentNotes, costRepair)
+        self.box.show()
 
 class MaintenanceDialogBox(QDialog):
     def __init__(self, startedDate : str, currentMaintenanceNotes : str , costRepair : int):

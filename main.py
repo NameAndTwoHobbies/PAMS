@@ -20,8 +20,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     #This section is used test functionality, quick testing and debugging. 
         #self.loginStaffMember("manager@gmail.com", "")
         #self.loginStaffMember("finance@gmail.com" , "")
-        #self.loginStaffMember("admin@gmail.com" ,"")
-        self.LoginTenantBTN("peter@gmail.com", "1234")
+        self.loginStaffMember("dragon@gmail" ,"")
+        #self.LoginTenantBTN("peter@gmail.com", "1234")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -84,7 +84,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.FinanceDash.submitInvoiceBtn.clicked.connect(lambda: self.CreateInvoice(self.FinanceDash.SubmitInvoice()))
 
         #Maintenance Page
-        
+
 
 #region Page Functions
 # This section is responsible for the functions that switch the pages and that load the data into these pages.
@@ -157,6 +157,40 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
 
+    def switchMaintenancePage(self, maintenance :User):
+        self.stackedView.setCurrentIndex(11)
+
+
+        requests = GetMaintenanceRequestsForMaintenanceTeam(maintenance)
+        headers  = ["request_id", "scheduled_start", "description" ,"maintenance_notes", "priority" ,"cost" , "Details"]
+        self.MaintenanceDash.table.clear()
+        lenHeader = len(headers)
+        lenRecords = len(requests)
+        self.MaintenanceDash.table.setColumnCount(lenHeader)
+        self.MaintenanceDash.table.setRowCount(lenRecords)
+        self.MaintenanceDash.table.verticalHeader().setVisible(False)
+        for header in range(0,lenHeader):
+            self.MaintenanceDash.table.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header])))
+        
+        # Converts the database format of the records into table
+        for x in range(len(requests)):
+            record = requests[x]
+            for y in range(0,len(record)):
+                self.MaintenanceDash.table.setItem(x,y,QTableWidgetItem(str(record[y])))
+        
+
+        self.MaintenanceDash.setUser(maintenance)
+
+        self.MaintenanceDash.table.selectColumn(self.MaintenanceDash.table.columnCount()-1)
+
+        for column in self.MaintenanceDash.table.selectedItems():
+            btn = QPushButton("Details")
+            index = column.row()
+            btn.clicked.connect(lambda : self.MaintenanceDash.CreateDialogBox(self.MaintenanceDash.table.item(index,1),self.MaintenanceDash.table.item(index,3),self.MaintenanceDash.table.item(index,5)))
+            self.MaintenanceDash.table.setCellWidget(column.row(),column.column(),btn)
+
+
+
 #endregion
 
 #region Interaction Functions
@@ -218,7 +252,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                 case "Finance":
                     self.switchToFinanceDashboard(staff)
                 case "Maintenance":
-                    self.maitn
+                    self.switchMaintenancePage(staff)
                 case "Admin":
                     self.switchAdminView(staff)
                 

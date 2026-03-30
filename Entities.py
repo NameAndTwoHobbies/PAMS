@@ -1,3 +1,5 @@
+from PySide6.QtWidgets import QPushButton
+
 class IEntity:
     def __init__(self, id : str):
         self.id = id

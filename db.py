@@ -735,3 +735,43 @@ def SubmitMaintenanceRequest(tenant_id: int, apartment_id: int, description: str
     conn.close() #closes the connection to the database
     print("Closed Database")
     print("------------------")
+
+
+
+def GetMaintenanceRequestsForMaintenanceTeam(user: User):
+    #MAINTENCE SCHEDYLE 
+    #ID
+    #Request ID
+    # USER ID
+    #SCHEDULED START
+    # SCHEDULED END
+
+    query = "SELECT s.request_id, s.scheduled_start, r.description, r.maintenance_notes, r.priority, r.cost FROM maintenance_scheduling s JOIN maintenance_requests r ON s.request_id = r.request_id WHERE r.status = 'Scheduled' AND s.user_id = %s;" 
+    conn = GetConnection() #opens a connection to the database
+    dbcursor = conn.cursor()
+    dbcursor.execute('USE {};'.format(prodName))
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Retrieve all uncompleted scheduled requests for user : " + str(user.GetID()))
+
+    dbcursor.execute(query,(user.GetID(), ))
+
+    requests = dbcursor.fetchall()
+
+    maintenanceRequests = []
+    for request in requests:
+        maintenanceRequests.append((request[:]))
+
+    return maintenanceRequests
+
+def GetDetailsMaintenanceRequest(id: str):
+    query = "SELECT * FROM maintenance_requests WHERE request_id = %s" 
+    conn = GetConnection() #opens a connection to the database
+    dbcursor = conn.cursor()
+    dbcursor.execute('USE {};'.format(prodName))
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Retrieve details for maintenance request")
+
+
+    
