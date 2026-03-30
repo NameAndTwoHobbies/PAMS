@@ -21,6 +21,9 @@ class Location:
         self.apartments: List["Apartment"] = []
         self.staff: List["User"] = []
 
+    def __repr__(self):
+        return f"Location(id={self.location_id}, name='{self.name}', manager='{self.manager}')"
+
     def add_apartment(self, apartment: "Apartment"):
         self.apartments.append(apartment)
 
@@ -41,6 +44,9 @@ class User:
         self.location = location
         self.availability: List["WorkerAvailability"] = []
 
+    def __repr__(self):
+        return f"User(id={self.user_id}, name='{self.first_name} {self.last_name}', email='{self.email}', role='{self.role}', location='{self.location.name}')"
+
     def is_worker(self) -> bool:
         return self.role.lower() == "worker"
 
@@ -51,15 +57,20 @@ class User:
 # Tenant
 class Tenant:
     def __init__(self, tenant_id: int, first_name: str,
-                 last_name: str, email: str):
+                 last_name: str, email: str, occupation = None, references = None):
         self.tenant_id = tenant_id
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.occupation = occupation
+        self.references = references
 
         self.contracts: List["Contract"] = []
         self.maintenance_requests: List["MaintenanceRequest"] = []
         self.notifications: List["Notification"] = []
+
+    def __repr__(self):
+        return f"Tenant(id={self.tenant_id}, name='{self.first_name} {self.last_name}', email='{self.email}')"
 
     def get_active_contract(self) -> Optional["Contract"]:
         today = datetime.today().date()
@@ -69,9 +80,9 @@ class Tenant:
         return None
 
     def get_location(self) -> Optional["Location"]:
-        contract = self.get_active_contract()
-        if contract:
-            return contract.apartment.location
+        active_contract = self.get_active_contract()
+        if active_contract:
+            return active_contract.apartment.location
         return None
 
 
@@ -91,6 +102,9 @@ class Apartment:
 
         self.contracts: List["Contract"] = []
         self.maintenance_requests: List["MaintenanceRequest"] = []
+
+    def __repr__(self):
+        return f"Apartment(id={self.apartment_id}, location='{self.location.name}', room_type='{self.room_type}', monthly_rent={self.monthly_rent}, bedrooms={self.bedrooms}, bathrooms={self.bathrooms}, occupied={self.occupied})"
 
     def mark_occupied(self):
         self.occupied = True
@@ -121,7 +135,18 @@ class Contract:
 
         self.payment_schedules: List["PaymentSchedule"] = []
 
+    def __repr__(self):
+        return f"Contract(id={self.contract_id}, apartment='{self.apartment.location.name} - {self.apartment.room_type}', tenant='{self.tenant.first_name} {self.tenant.last_name}', start_date='{self.start_date}', end_date='{self.end_date}', payment_frequency='{self.payment_frequency}', early_leave={self.early_leave}, penalty_amount={self.penalty_amount})"
+
     def is_active(self, today: datetime) -> bool:
+        from datetime import datetime
+
+        # Ensure start_date and end_date are datetime objects
+        if isinstance(self.start_date, str):
+            self.start_date = datetime.strptime(self.start_date, "%Y-%m-%d")
+        if isinstance(self.end_date, str):
+            self.end_date = datetime.strptime(self.end_date, "%Y-%m-%d")
+
         return self.start_date.date() <= today <= self.end_date.date()
 
     def calculate_penalty(self) -> float:

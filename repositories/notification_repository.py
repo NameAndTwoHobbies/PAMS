@@ -32,7 +32,7 @@ class NotificationRepository(BaseRepository):
         else:
             return []
 
-        query += " ORDER BY created_at DESC"
+        query += " ORDER BY created_at DESC LIMIT 50"
 
         results = self.fetch_all(query, tuple(params))
 

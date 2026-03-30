@@ -109,7 +109,7 @@ class Ui_MainWindow(object):
         #end region
         
         #region Page 8 Front Desk Dashboard
-        self.FrontDeskDash = FrontDeskDashboard()
+        self.FrontDeskDash = FrontDeskDashboardNew()
         self.stackedView.addWidget(self.FrontDeskDash)
         #endregion
         

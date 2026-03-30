@@ -44,7 +44,6 @@ class InboxController(QWidget):
         notifications = self.service.get_notifications(personal, public)
 
         self.populate_list(notifications)
-        self.check_for_new_notifications(notifications)
         if not personal and not public:
             return
 
@@ -83,22 +82,3 @@ class InboxController(QWidget):
         if not data["is_read"]:
             self.service.mark_as_read(data["notification_id"])
             self.load_notifications()
-
-    # Popup for New Messages
-
-    def check_for_new_notifications(self, notifications):
-
-        if not notifications:
-            return
-
-        newest_id = notifications[0]["notification_id"]
-
-        if newest_id > self.service.last_notification_id:
-            if self.service.last_notification_id != 0:
-                QMessageBox.information(
-                    self,
-                    "New Notification",
-                    notifications[0]["subject"]
-                )
-
-        self.service.last_notification_id = newest_id

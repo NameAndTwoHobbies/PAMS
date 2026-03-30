@@ -5,7 +5,8 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 from PySide6.QtCharts import *
 from components.ErrorBoxes import ErrorBox
-from models.Entities import *
+from models import domain_models
+from models.domain_models import *
 import controllers.inboxController as inboxController
 
 class TenantOverviewPage(QWidget):
@@ -198,8 +199,8 @@ class TenantPaymentsPage(QWidget):
 #region Notifications Dashboard
 
 class TenantNotificationsDashboard(QWidget):
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self):
+        super().__init__()
         self.setObjectName("NotificationsDashboard")
         self.resize(831, 487)
 
@@ -240,10 +241,12 @@ class TenantNotificationsDashboard(QWidget):
         self.personal = QCheckBox(self.header)
         self.personal.setGeometry(QRect(90, 50, 85, 20))
         self.personal.setText("Personal")
+        self.personal.setChecked(True)
 
         self.public = QCheckBox(self.header)
         self.public.setGeometry(QRect(10, 50, 85, 20))
         self.public.setText("Public")
+        self.public.setChecked(True)
 
         self.label = QLabel(self.header)
         self.label.setGeometry(QRect(10, 10, 200, 31))
@@ -275,9 +278,9 @@ class TenantNotificationsDashboard(QWidget):
         self.label.setText(QCoreApplication.translate("NotificationsDashboard", "Your Inbox", None))
         self.subject.setText(QCoreApplication.translate("NotificationsDashboard", "Message Subject", None))
     
-    def setTenant(self, tenant: Tenant):
+    def setTenant(self, tenant: domain_models.Tenant):
         self.currentTenant = tenant
         if self.controller is None:
-            self.controller = inboxController.InboxController(self, tenant.id, '1')
+            self.controller = inboxController.InboxController(self, tenant.tenant_id, tenant.get_location().location_id)
 
 #endregion

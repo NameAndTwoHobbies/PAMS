@@ -5,8 +5,11 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 from PySide6.QtCharts import *
 from components.ErrorBoxes import ErrorBox
+from components.frontDeskPage import *
+from database.db import GetHeaders
 from models.Entities import *
 from components.tenantPage import *
+from services.maintenanceService import MaintenanceService
 
 #region Fonts
 
@@ -35,8 +38,10 @@ class userPage(QWidget):
     def __init__(self):
         super().__init__()
         self.user = None
-    def setUser(self, user: IEntity):
+    def setUser(self, user: domain_models.User):
         self.user = user
+    def getUser(self):
+        return self.user
     def logoutUser(self):
         self.setUser(None)
 #endregion
@@ -221,7 +226,7 @@ class SignUpPage(QWidget):
 class AdminLoginPage(QWidget):
     def __init__(self):
         super().__init__()
-        self.staff = User("","", "", "" , "" ,"", "")
+        self.staff = User("", "", "", "", "", "")
         self.setObjectName(u"AdminLogin")
 
         # Group Box
@@ -444,7 +449,7 @@ class Dashboard(userPage):
 class TenantDashboard(QWidget):
     def __init__(self):
         super().__init__()
-        self.tenant = Tenant("","","", "", "", "", "", "","")
+        self.tenant = domain_models.Tenant("","","", "")
 
         self.resize(831, 758)
 
@@ -596,12 +601,32 @@ class Table(QTableWidget):
         
         # Converts the database format of the records into table
         for x in range(len(records)):
-            record = records[x].GetDataBaseFormat()
+            try:
+                record = records[x].GetDataBaseFormat()
+            except: 
+                record = records[x].to_tuple()
             for y in range(0,len(record)):
                 self.setItem(x,y,QTableWidgetItem(str(record[y])))
-        
 
-        
+    def UpdateObjectTable(self, records, headers):
+        self.clear()
+
+        column_names = [h[0] for h in headers]
+
+        self.setColumnCount(len(column_names))
+        self.setRowCount(len(records))
+        self.verticalHeader().setVisible(False)
+
+        # Set headers (make them nicer if you want)
+        for col, name in enumerate(column_names):
+            display_name = name.replace("_", " ").title()
+            self.setHorizontalHeaderItem(col, QTableWidgetItem(display_name))
+
+        # Fill table using attributes directly
+        for row, obj in enumerate(records):
+            for col, attr in enumerate(column_names):
+                value = getattr(obj, attr, "")
+                self.setItem(row, col, QTableWidgetItem(str(value)))
 
 #endregion 
 
@@ -971,7 +996,39 @@ class FrontDeskDashboard(userPage):
         self.resize(831, 581)
         self.title = QLabel(self)
         self.title.setObjectName(u"title")
-        self.title.setGeometry(QRect(350, 20, 118, 16))
+        self.title.setGeometry(QRect(350, 20, 150, 16))
+        self.maintenance_service = MaintenanceService()
+
+        #Managing maintenance section
+        self.manageMaintenance = QGroupBox(self)
+        self.manageMaintenance.setObjectName(u"manageMaintenance")
+        self.manageMaintenance.setGeometry(QRect(40, 570, 731, 241))
+
+        self.maintenanceLayout = QVBoxLayout(self.manageMaintenance)
+        topBar = QHBoxLayout()
+
+        self.viewPendingBtn = QPushButton("View Pending")
+        self.viewScheduledBtn = QPushButton("View Scheduled")
+
+        self.notificationLabel = QLabel("Pending Requests: 0")
+
+        topBar.addWidget(self.viewPendingBtn)
+        topBar.addWidget(self.viewScheduledBtn)
+        topBar.addStretch()
+        topBar.addWidget(self.notificationLabel)
+
+        self.maintenanceLayout.addLayout(topBar)
+
+        # Stacked widget
+        self.maintenanceStack = QStackedWidget(self.manageMaintenance)
+        self.pendingMaintenance = FrontDeskPendingMaintenance(self.maintenance_service)
+        self.scheduledMaintenance = FrontDeskScheduledMaintenance(self.maintenance_service)
+
+        self.maintenanceStack.addWidget(self.pendingMaintenance)
+        self.maintenanceStack.addWidget(self.scheduledMaintenance)
+
+        self.maintenanceLayout.addWidget(self.maintenanceStack)
+
 
         # Managing tenants section
         self.manageTenants = QGroupBox(self)
@@ -1027,6 +1084,8 @@ class FrontDeskDashboard(userPage):
         #Connections
 
         self.searchBar.textChanged.connect(lambda : self.tenantTable.search(self.searchBar.text()))
+        self.viewPendingBtn.clicked.connect(lambda: self.maintenanceStack.setCurrentWidget(self.pendingMaintenance))
+        self.viewScheduledBtn.clicked.connect(lambda: self.maintenanceStack.setCurrentWidget(self.scheduledMaintenance))
 
         self.retranslateUi()
     # setupUi
@@ -1050,6 +1109,7 @@ class FrontDeskDashboard(userPage):
         self.occupationDropdown.setItemText(1, QCoreApplication.translate("Form", u"Unemployed", None))
         self.occupationDropdown.setItemText(2, QCoreApplication.translate("Form", u"Employed", None))
         self.occupationDropdown.setItemText(3, QCoreApplication.translate("Form", u"Part-Time", None))
+        self.manageMaintenance.setTitle(QCoreApplication.translate("Form", u"Manage Maintenance", None))
 
         self.occupationDropdown.setPlaceholderText(QCoreApplication.translate("Form", u"Occupation", None))
         self.submitButton.setText(QCoreApplication.translate("Form", u"Submit", None))
@@ -1068,7 +1128,7 @@ class FrontDeskDashboard(userPage):
         nationalInsurance = self.nationalInsuranceInput.text()
         occupation = self.occupationDropdown.currentText()
         references = ""
-        tenant = Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
+        tenant = domain_models.Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
         self.firstNameInput.clear()
         self.lastNameInput.clear()
         self.emailInput.clear()
@@ -1078,8 +1138,123 @@ class FrontDeskDashboard(userPage):
         self.occupationDropdown.setCurrentIndex(0)
         return tenant
     
+    def setUser(self, user):
+        super().setUser(user)
+        self.pendingMaintenance.setUser(user)
+        self.scheduledMaintenance.setUser(user)
+    
 
 #endregion
+
+#region
+#FRONT DESK DASH NEW
+class FrontDeskDashboardNew(userPage):
+    def __init__(self):
+        super().__init__()
+        self.resize(831, 758)
+        self.maintenance_service = MaintenanceService()
+
+        #Title Section
+        self.verticalLayout_2 = QVBoxLayout(self)
+        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
+        self.titleSection = QFrame()
+        self.titleSection.setObjectName(u"titleSection")
+        self.titleSection.setFrameShape(QFrame.Shape.StyledPanel)
+        self.titleSection.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout_2 = QHBoxLayout(self.titleSection)
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.title = QLabel(self.titleSection)
+        self.title.setObjectName(u"title")
+        self.horizontalLayout_2.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+        self.verticalLayout_2.addWidget(self.titleSection)
+
+        #Tabs
+        self.tabSection = QFrame()
+        self.tabSection.setObjectName(u"tabSection")
+        self.tabSection.setFrameShape(QFrame.Shape.StyledPanel)
+        self.tabSection.setFrameShadow(QFrame.Shadow.Raised)
+        self.horizontalLayout = QHBoxLayout(self.tabSection)
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+
+        self.manageTenantsBtn = QPushButton(self.tabSection)
+        self.manageTenantsBtn.setObjectName(u"manageTenantsBtn")
+        self.horizontalLayout.addWidget(self.manageTenantsBtn, 1)
+
+        self.managePendingMaintenanceBtn = QPushButton(self.tabSection)
+        self.managePendingMaintenanceBtn.setObjectName(u"managePendingMaintenanceBtn")
+        self.horizontalLayout.addWidget(self.managePendingMaintenanceBtn, 1)
+
+        self.manageScheduledMaintenanceBtn = QPushButton(self.tabSection)
+        self.manageScheduledMaintenanceBtn.setObjectName(u"manageScheduledMaintenaceBtn")
+        self.horizontalLayout.addWidget(self.manageScheduledMaintenanceBtn, 1)
+
+
+        self.manageNotificationsBtn = QPushButton(self.tabSection)
+        self.manageNotificationsBtn.setObjectName(u"manageNotifcationsBtn")
+        self.horizontalLayout.addWidget(self.manageNotificationsBtn , 1)
+
+        self.verticalLayout_2.addWidget(self.tabSection)
+
+
+        #Main Content
+        self.mainSection = QStackedWidget()
+        self.mainSection.setObjectName(u"mainSection")
+        self.mainSection.setFrameShape(QFrame.Shape.StyledPanel)
+        self.mainSection.setFrameShadow(QFrame.Shadow.Raised)
+
+        self.manageTenants = FrontDeskManageTenants()
+        self.mainSection.addWidget(self.manageTenants)
+                
+        self.managePendingMaintenance = FrontDeskPendingMaintenance(self.maintenance_service)
+        self.mainSection.addWidget(self.managePendingMaintenance)
+
+        self.manageScheduledMaintenance = FrontDeskScheduledMaintenance(self.maintenance_service)
+        self.mainSection.addWidget(self.manageScheduledMaintenance)
+
+        self.manageNotifications = FrontDeskScheduledMaintenance(self.maintenance_service)
+        self.mainSection.addWidget(self.manageNotifications)
+    
+
+        self.verticalLayout_2.addWidget(self.mainSection)
+
+        #Connections
+
+        self.manageTenantsBtn.clicked.connect(lambda: self.switchToManageTenants())
+        self.managePendingMaintenanceBtn.clicked.connect(lambda: self.switchToManagePendingMaintenance())
+        self.manageScheduledMaintenanceBtn.clicked.connect(lambda: self.switchToManageScheduledMaintenance())
+        self.manageNotificationsBtn.clicked.connect(lambda: self.switchToManageNotifcations())
+
+        self.mainSection.setCurrentWidget(self.manageTenants)
+        self.manageTenants.tenantTable.UpdateTable(self.maintenance_service.get_tenants(), GetHeaders("tenants"))
+        self.retranslateUi()
+    
+    def retranslateUi(self):
+        self.setWindowTitle(" ")
+        self.title.setText("Front Desk Dashboard")
+        self.manageTenantsBtn.setText("Manage Tenants")
+        self.managePendingMaintenanceBtn.setText("Pending Maintenance")
+        self.manageScheduledMaintenanceBtn.setText("Scheduled Maintenance")
+        self.manageNotificationsBtn.setText("Notifications")
+        self.manageTenants.retranslateUi()
+
+    def setUser(self, user):
+        super().setUser(user)
+        self.managePendingMaintenance.setUser(user)
+        self.manageScheduledMaintenance.setUser(user)
+        self.manageNotifications.setUser(user)
+            
+    def switchToManageTenants(self):
+        self.mainSection.setCurrentWidget(self.manageTenants)
+        self.manageTenants.tenantTable.UpdateTable(self.maintenance_service.get_tenants(), GetHeaders("tenants"))
+    def switchToManagePendingMaintenance(self):
+        self.mainSection.setCurrentWidget(self.managePendingMaintenance)
+        self.managePendingMaintenance.load_pending_requests()
+    def switchToManageScheduledMaintenance(self):
+        self.mainSection.setCurrentWidget(self.manageScheduledMaintenance)
+        self.manageScheduledMaintenance.load_scheduled_requests()
+    def switchToManageNotifcations(self):
+        self.mainSection.setCurrentWidget(self.manageNotifications)
+        
 
 
 
@@ -1866,4 +2041,4 @@ class AdminDashboard(userPage):
 #endregion
 
 
-#region  
+#region

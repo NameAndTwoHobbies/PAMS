@@ -1,16 +1,26 @@
 from models.domain_models import Tenant
+from models.db_models import TenantDTO
 from .base_repository import BaseRepository
 
 
 class TenantRepository(BaseRepository):
 
     def get_all(self):
-        rows = self.fetch_all("SELECT * FROM tenants")
-        return [Tenant(r["tenant_id"],
-                       r["first_name"],
-                       r["last_name"],
-                       r["email"])
-                for r in rows]
+        records = self.fetch_all("SELECT * FROM tenants")
+        tenants = []
+        for record in records:
+            tenants.append(TenantDTO(
+                record["tenant_id"],
+                record["first_name"],
+                record["last_name"],
+                record["national_insurance"],
+                record["email"],
+                record["password"],
+                record["phone_number"],
+                record["occupation"],
+                record["references"]
+            ))
+        return tenants
 
     def get_by_email(self, email: str):
         query = "SELECT * FROM tenants WHERE email = %s"

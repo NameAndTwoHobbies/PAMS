@@ -5,7 +5,11 @@ from components.uiMainWindow import Ui_MainWindow
 from database.db import *
 from components.ErrorBoxes import *
 from components.MyWidgets import *
-from models.Entities import Tenant
+from models import domain_models
+from models.Entities import *
+from repositories.tenant_repository import TenantRepository
+from services.maintenanceService import MaintenanceService
+from repositories import *
 
 class mainScreen(QMainWindow , Ui_MainWindow):
     def __init__(self):
@@ -16,7 +20,21 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
         #self.switchToFinanceDashboard()
-        self.switchCustomerView(tenant=Tenant("5","","","", "", "", "", "",""))
+
+        # TESTING TENANT DASHBOARD
+        # location = domain_models.Location(1, " ", " ")
+        # apartment = domain_models.Apartment(1, location, " ", 0.0, 0, 0, True)
+        # tenant = domain_models.Tenant(5, "harry", "potter","harry@gmail.com" )
+        # contract = domain_models.Contract(1, apartment, tenant, "2026-01-01", "2026-12-31", "Monthly", False, 0.0)
+        # tenant.contracts.append(contract)
+        # self.switchCustomerView(tenant = tenant)
+
+        #TESTING FRONT DESK DASHBOARD
+        current_location = domain_models.Location(location_id=1, name="Main Building", manager=None)
+        current_user = domain_models.User(user_id=1, first_name="Max", last_name = "Jones", email="max.jones@example.com", location = current_location, role="FrontDesk")
+        self.switchFrontDeskDashboard(current_user)
+
+
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -42,7 +60,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.StaffLogin.loginBtn.clicked.connect(lambda : self.loginStaffMember(self.StaffLogin.emailInput.toPlainText(), self.StaffLogin.passwordInput.toPlainText()))
 
         #Front Desk Page
-        #self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
+        self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
         #endregion
 
         #Admin Dashboard
@@ -77,7 +95,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.stackedView.setCurrentIndex(6)
         self.DetailedSignUp.emailInput.setText(email)
     
-    def switchCustomerView(self, tenant : Tenant):
+    def switchCustomerView(self, tenant : domain_models.Tenant):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentWidget(self.CustDash)
         self.CustDash.setUser(tenant)
@@ -96,12 +114,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     
     
-    def switchFrontDeskDashboard(self , frontDesk: User):
-        self.stackedView.setCurrentIndex(7)
+    def switchFrontDeskDashboard(self , frontDesk: domain_models.User):
         self.FrontDeskDash.setUser(frontDesk)
-        self.setWindowTitle(frontDesk.firstName)
-        self.FrontDeskDash.tenantTable.UpdateTable(GetTenants(), GetHeaders("tenants"))
-
+        self.stackedView.setCurrentWidget(self.FrontDeskDash)
+        self.setWindowTitle(frontDesk.first_name)
     
     def switchToFinanceDashboard(self, finance : User):
         self.stackedView.setCurrentIndex(8)
@@ -244,7 +260,6 @@ app = QApplication()
 
 #Creates a main window and places the ui created in designer onto it 
 mainWindow = mainScreen()
-
 mainWindow.show()
 
 app.exec()
