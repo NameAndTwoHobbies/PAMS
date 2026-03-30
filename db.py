@@ -1,12 +1,9 @@
 import sys
 import random
-
 import mysql.connector
 from mysql.connector import errorcode
 from dbSecrets import *
 from Entities import *
-
-
 
 isUsingDev = True
 
@@ -57,7 +54,7 @@ def AddLocation(location : Location):
     conn.commit()
     dbcursor.close()
     conn.close()
-    print("Database Closed")
+    print("Closed Database")
     print("------------------")
 
 def AddStaff(user : User):
@@ -76,7 +73,7 @@ def AddStaff(user : User):
     if users is not None:
         dbcursor.close()
         conn.close()
-        print("Database Closed")
+        print("Closed Database")
         print("------------------")
         return False
     else:
@@ -105,7 +102,7 @@ def AddStaff(user : User):
             conn.commit()
         dbcursor.close()
         conn.close()
-        print("Database Closed")
+        print("Closed Database")
         print("------------------")
         return True
 def GetApartment(apartment_id : str):
@@ -137,7 +134,7 @@ def AddApartment(apartment : Apartment):
     conn.commit()
     dbcursor.close()
     conn.close()
-    print("Database Closed")
+    print("Closed Database")
     print("------------------")
 
 #region Database to Objects
@@ -160,13 +157,13 @@ def GetLocationFromID(locationID : str):
     if(location is None):
         dbcursor.close()
         conn.close()
-        print("Database Closed")
+        print("Closed Database")
         print("------------------")
         return None
     else:
         dbcursor.close()
         conn.close()
-        print("Database Closed")
+        print("Closed Database")
         print("------------------")
         return Location(location[0], location[1], location[2])
 # Searches the database for a location with the matching name and returns a location object if found, otherwise returns None
@@ -186,7 +183,7 @@ def GetLocation(locationName: str):
     if(location is None):
         dbcursor.close()
         conn.close()
-        print("Database Closed")
+        print("Closed Database")
         print("------------------")
         return None
     else:
@@ -242,7 +239,7 @@ def GetApartmentsFromLocation(Id : str):
 
     dbcursor.close()
     conn.close()
-    print("Database Closed")
+    print("Closed Database")
     print("------------------")
 
     if apartments is None:
