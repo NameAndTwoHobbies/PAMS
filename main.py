@@ -21,7 +21,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #self.loginStaffMember("manager@gmail.com", "")
         #self.loginStaffMember("finance@gmail.com" , "")
         #self.loginStaffMember("admin@gmail.com" ,"")
-        #self.LoginTenantBTN("peter@gmail.com", "")
+        self.LoginTenantBTN("peter@gmail.com", "1234")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -49,10 +49,6 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Front Desk Page
         self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
 
-        #Maintenance rquest Page
-        self.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
-        self.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView())
-        #endregion
 
         #Admin Dashboard
         self.AdminDash.userLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")))
@@ -70,6 +66,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustDash.PaymentsPage.payNowBtn.clicked.connect(lambda : self.Pay(self.CustDash.contract))
         self.CustDash.AccountPage.submitReqsBtn.clicked.connect(lambda : self.CreateTenantRequirement(self.CustDash.AccountPage.locationComboBox.currentText(),self.CustDash.tenant.GetID(),self.CustDash.AccountPage.SubmitRequirements()))
         self.CustDash.AccountPage.submitBtn.clicked.connect(lambda : self.UpdateTenant(self.CustDash.tenant, self.CustDash.SubmitUserInfo()))
+        #Maintenance rquest Page
+        self.CustDash.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
+        self.CustDash.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView()) #DONT worry
+        #endregion
 
         #Manager Page
         self.ManagerDash.LocationPage.locationCreateBtn.clicked.connect(lambda : self.CreateLocation(self.ManagerDash.LocationPage.SubmitLocation()))
@@ -215,7 +215,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                 case "Finance":
                     self.switchToFinanceDashboard(staff)
                 case "Maintenance":
-                    self.switchWelcomePage()
+                    self.maitn
                 case "Admin":
                     self.switchAdminView(staff)
                 
@@ -365,7 +365,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.errorBox = ErrorBox(ErrorMessage("Invalid Tenant", "Please Re-enter"))
             self.errorBox.show()
 
-
+    def SubmitMaintenanceRequest(self):
+        request = self.CustDash.SubmitRequest()
+        SubmitMaintenanceRequest(request.tenant_id, request.apartment_id,request.description,request.priority)
 
 #endregion
 

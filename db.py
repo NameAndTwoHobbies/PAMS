@@ -5,12 +5,8 @@ from mysql.connector import errorcode
 from dbSecrets import *
 from Entities import *
 
-isUsingDev = True
+isUsingDev = False
 
-local = "127.0.0.1"
-localUser = "root"
-localDbPassword = "WebDev1234"
-dbName = ""
 
 # Gets the connection to the database.
 def GetConnection():
@@ -732,7 +728,7 @@ def SubmitMaintenanceRequest(tenant_id: int, apartment_id: int, description: str
     print("Entered Database")
     print("Purpose: Insert a new maintenance request")
 
-    dbcursor.execute(query, (tenant_id, apartment_id, description, priority))
+    dbcursor.execute(query, (tenant_id, apartment_id, description, priority,))
     conn.commit()   # commit() is what actually saves the change — without this nothing is written
 
     dbcursor.close()

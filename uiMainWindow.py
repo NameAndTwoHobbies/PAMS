@@ -127,6 +127,9 @@ class Ui_MainWindow(object):
         self.ManagerDash = ManagerDashboard()
         self.stackedView.addWidget(self.ManagerDash)
         #endregion
+
+        #region Page 12 Maintenance Dashboard
+        #endregion
         
         MainWindow.setCentralWidget(self.View)
 
@@ -163,6 +166,5 @@ class Ui_MainWindow(object):
 
         self.AdminDash.retranslateUi()
 
-        self.MaintenanceReq.retranslateUi()
     # retranslateUi
 

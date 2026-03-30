@@ -368,6 +368,7 @@ class MaintenanceRequestPage(QWidget):
         self.submitBtn.setText("Submit")
         self.backBtn.setText("< Back")
 
+
 #endregion
 
 #region Client Dashboard
@@ -586,11 +587,17 @@ class TenantDashboard(QWidget):
         self.AccountPage = TenantAccountPage()
         self.mainSection.addWidget(self.AccountPage)
 
+        #Maintenance Page 
+        
+        self.MaintenanceReq = MaintenanceRequestPage()
+        self.mainSection.addWidget(self.MaintenanceReq)
+
         #Connections
 
         self.overviewBtn.clicked.connect(lambda: self.switchToOverviewPage())
         self.paymentsBtn.clicked.connect(lambda: self.switchToPaymentsPage())
         self.accountBtn.clicked.connect(lambda : self.switchToAccountPage())
+        self.maintanenceBtn.clicked.connect(lambda : self.switchToMaintenence())
 
         self.mainSection.setCurrentIndex(0)
         self.retranslateUi()
@@ -629,6 +636,8 @@ class TenantDashboard(QWidget):
         self.mainSection.setCurrentIndex(0)
     def switchToAccountPage(self):
         self.mainSection.setCurrentIndex(2)
+    def switchToMaintenence(self):
+        self.mainSection.setCurrentIndex(3)
         
     def AddPageDetail(self,locations : list[Location], OutstandingMaintence : list[MaintenanceRequest], dueDate: str):
         for location in locations:
@@ -644,6 +653,8 @@ class TenantDashboard(QWidget):
         NewTenant = Tenant(self.tenant.id ,info.first_name, info.last_name,info.national_insurance,info.email,info.password,info.phone_number,info.occupation,info.references)
         return NewTenant
 
+    def SubmitRequest(self):
+        return MaintenanceRequest("",self.tenant.id, self.apartment.id, self.MaintenanceReq.descriptionInput.toPlainText(),self.MaintenanceReq.priorityDropdown.currentText(), '', "","","","","")
 #endregion
 
 
