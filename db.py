@@ -774,4 +774,32 @@ def GetDetailsMaintenanceRequest(id: str):
     print("Purpose: Retrieve details for maintenance request")
 
 
-    
+def UpdateContractEarlyLeave(contract_id: str, early_leave_date: str):
+    """
+    Marks a contract as an early leave and moves its end_date forward
+    to the date the tenant has chosen.
+
+    We update end_date (not just the flag) because all existing queries
+    filter on  end_date > CURRENT_TIMESTAMP()  —  shrinking end_date
+    means the contract naturally expires on the new date.
+    """
+    query = """
+        UPDATE contracts
+        SET    early_leave = TRUE,
+               end_date    = %s
+        WHERE  contract_id = %s
+    """
+    conn = GetConnection()
+    dbcursor = conn.cursor()
+    dbcursor.execute('USE {};'.format(prodName))
+    print("------------------")
+    print("Entered Database")
+    print("Purpose: Record early leave request for contract", contract_id)
+
+    dbcursor.execute(query, (early_leave_date, contract_id))
+
+    conn.commit()
+    dbcursor.close()
+    conn.close()
+    print("Closed Database")
+    print("------------------")

@@ -406,6 +406,34 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         request = self.CustDash.SubmitRequest()
         SubmitMaintenanceRequest(request.tenant_id, request.apartment_id,request.description,request.priority)
 
+    def LeaveTenancyEarly(self):
+        contract = self.CustDash.contract
+
+    # Guard: if no contract is loaded yet, do nothing
+        if not contract.id:
+            ErrorBox("No active contract found.")
+            return
+
+    # Open the calendar dialog, passing the current contract so it
+    # knows the end_date boundary
+        dialog = EarlyLeaveDateDialog(contract, parent=self)
+
+        if dialog.exec() == QDialog.DialogCode.Accepted:
+            chosen_date = dialog.GetSelectedDate()          # "YYYY-MM-DD"
+            UpdateContractEarlyLeave(contract.id, chosen_date)
+
+        # Update the in-memory contract so the UI stays consistent
+        # without needing a full re-login
+            self.CustDash.contract.end_date = chosen_date
+            self.CustDash.contract.early_leave = True
+
+            QMessageBox.information(
+                self,
+                "Early Leave Confirmed",
+                f"Your tenancy has been updated.\n"
+                f"Your new move-out date is {chosen_date}."
+            )
+
 #endregion
 
 #region App

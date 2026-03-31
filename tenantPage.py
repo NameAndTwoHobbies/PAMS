@@ -569,3 +569,65 @@ class TenantAccountPage(TenantPage):
             self.emailInput.setText(email)
             self.nationalNumInput.setText(national)
             self.phoneNumInput.setText(phone)
+
+class EarlyLeaveDateDialog(QDialog):
+    def __init__(self, contract: Contract, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Select Early Leave Date")
+        self.setMinimumWidth(400)
+
+        # ── Work out the date boundaries ──────────────────────────────────────
+        # Earliest allowed: strictly more than one month away
+        self._min_date = QDate.currentDate().addMonths(1).addDays(1)
+
+        # Latest allowed: the contract end_date.
+        # The DB driver returns end_date as a Python datetime/date object,
+        # so we convert to string "YYYY-MM-DD" then parse into QDate.
+        end_str = str(contract.end_date)[:10]          # keeps "YYYY-MM-DD"
+        self._max_date = QDate.fromString(end_str, "yyyy-MM-dd")
+
+        # ── Build the UI ───────────────────────────────────────────────────────
+        layout = QVBoxLayout(self)
+
+        # Explanatory label
+        info = QLabel(
+            f"Choose your move-out date.\n"
+            f"It must be after {self._min_date.toString('dd MMM yyyy')} "
+            f"and no later than {self._max_date.toString('dd MMM yyyy')}."
+        )
+        info.setWordWrap(True)
+        layout.addWidget(info)
+
+        # The calendar widget
+        self.calendar = QCalendarWidget()
+        self.calendar.setMinimumDate(self._min_date)
+        self.calendar.setMaximumDate(self._max_date)
+        self.calendar.setSelectedDate(self._min_date)   # sensible default
+        self.calendar.setGridVisible(True)
+        layout.addWidget(self.calendar)
+
+        # Selected date readout
+        self._selected_label = QLabel(
+            f"Selected: {self._min_date.toString('dd MMM yyyy')}"
+        )
+        layout.addWidget(self._selected_label)
+
+        # Update the label whenever the user clicks a different date
+        self.calendar.selectionChanged.connect(self._on_date_changed)
+
+        # Confirm / Cancel buttons
+        btn_box = QDialogButtonBox(
+            QDialogButtonBox.StandardButton.Ok | QDialogButtonBox.StandardButton.Cancel
+        )
+        btn_box.accepted.connect(self.accept)
+        btn_box.rejected.connect(self.reject)
+        layout.addWidget(btn_box)
+
+    # ── Slot: keep the label in sync with the calendar ────────────────────────
+    def _on_date_changed(self):
+        date = self.calendar.selectedDate()
+        self._selected_label.setText(f"Selected: {date.toString('dd MMM yyyy')}")
+
+    # ── Public helper: returns the chosen date as "YYYY-MM-DD" string ─────────
+    def GetSelectedDate(self) -> str:
+        return self.calendar.selectedDate().toString("yyyy-MM-dd")
