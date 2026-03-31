@@ -1211,7 +1211,7 @@ class FrontDeskDashboardNew(userPage):
         self.manageScheduledMaintenance = FrontDeskScheduledMaintenance(self.maintenance_service)
         self.mainSection.addWidget(self.manageScheduledMaintenance)
 
-        self.manageNotifications = FrontDeskScheduledMaintenance(self.maintenance_service)
+        self.manageNotifications = FrontDeskSendNotifications(self.maintenance_service)
         self.mainSection.addWidget(self.manageNotifications)
     
 

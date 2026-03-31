@@ -502,3 +502,17 @@ class FrontDeskManageTenants(QWidget):
         self.nationalInsuranceInput.clear()
         self.occupationDropdown.setCurrentIndex(0)
         return tenant
+    
+class FrontDeskSendNotifications(QWidget):
+    def __init__(self, maintenance_service):
+        super().__init__()
+        self.maintenance_service = maintenance_service
+        current_user = None
+        self.init_ui()
+
+    def setUser(self, user):
+        current_user = user
+
+    def init_ui(self):
+        layout = QVBoxLayout()
+        self.setLayout(layout)
