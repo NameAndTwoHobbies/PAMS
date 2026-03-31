@@ -517,11 +517,11 @@ class MaintenanceRequestPage(QWidget):
     
 
 
-class TenantDashboard(QWidget):
+class TenantDashboard(userPage):
     def __init__(self):
         super().__init__()
-        self.tenant = Tenant("","","", "", "", "", "", "","")
-        self.contract = Contract("","","","","","","")
+        self.tenant = Tenant("","","", "", "", "")
+        self.contract = Contract("","","","","","","","")
         self.apartment = Apartment("","","","","","",True)
         self.resize(831, 758)
 
@@ -588,8 +588,6 @@ class TenantDashboard(QWidget):
         self.PaymentsPage.setObjectName(u"paymentsPage")
         self.mainSection.addWidget(self.PaymentsPage)
 
-        self.notificationsPage = TenantNotificationsDashboard()
-        self.mainSection.addWidget(self.notificationsPage)
     
 
         self.verticalLayout_2.addWidget(self.mainSection)
@@ -604,14 +602,15 @@ class TenantDashboard(QWidget):
         self.MaintenanceReq = MaintenanceRequestPage()
         self.mainSection.addWidget(self.MaintenanceReq)
 
+        self.notificationsPage = TenantNotificationsDashboard()
+        self.mainSection.addWidget(self.notificationsPage)
         #Connections
 
         self.overviewBtn.clicked.connect(lambda: self.switchToOverviewPage())
         self.paymentsBtn.clicked.connect(lambda: self.switchToPaymentsPage())
         self.accountBtn.clicked.connect(lambda : self.switchToAccountPage())
-        self.maintanenceBtn.clicked.connect(lambda : self.switchToMaintenence())
-        self.maintenanceBtn.clicked.connect(lambda: self.switchToMaintenancePage())
-        self.notifcationsBtn.clicked.connect(lambda: self.switchToNotificationsPage())
+        self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenence())
+        self.notifcationsBtn.clicked.connect(lambda: self.switchToNotifications())
 
         self.mainSection.setCurrentIndex(0)
         self.retranslateUi()
@@ -636,8 +635,8 @@ class TenantDashboard(QWidget):
         self.contract = contract
         self.apartment = apartment
     def clearUser(self):
-        self.tenant = Tenant("","","", "", "", "", "", "","")
-        self.contract = Contract("","","","","","","")
+        self.tenant = Tenant("","","", "", "", "")
+        self.contract = Contract("","","","","","","","")
         self.apartment = Apartment("","","","","","",True)
         self.retranslateUi()
         self.OverviewPage.retranslateUi()
@@ -653,6 +652,8 @@ class TenantDashboard(QWidget):
         self.mainSection.setCurrentIndex(2)
     def switchToMaintenence(self):
         self.mainSection.setCurrentIndex(3)
+    def switchToNotifications(self):
+        self.mainSection.setCurrentIndex(4)
         
     def AddPageDetail(self,locations : list[Location], OutstandingMaintence : list[MaintenanceRequest], dueDate: str):
         for location in locations:

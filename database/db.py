@@ -2,12 +2,12 @@ import sys
 import random
 import mysql.connector
 from mysql.connector import errorcode
-from dbSecrets import *
-from Entities import *
+from security.dbSecrets import *
+from models.Entities import *
 
 
 
-isUsingDev = True
+isUsingDev = False
 
 host = ""
 user = ""

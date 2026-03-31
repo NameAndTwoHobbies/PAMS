@@ -1,7 +1,7 @@
 from PySide6.QtCore import *
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
-from Entities import *
+from models.Entities import *
 
 #region Database Widgets
 
@@ -47,7 +47,11 @@ class Table(QTableWidget):
         
         # Converts the database format of the records into table
         for x in range(len(records)):
-            record = records[x].GetDataBaseFormat()
+            try:
+                record = records[x].GetDataBaseFormat()
+            except:
+                record = records[x].to_tuple()
+                
             for y in range(0,len(record)):
                 self.setItem(x,y,QTableWidgetItem(str(record[y])))
         

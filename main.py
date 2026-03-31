@@ -34,7 +34,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #TESTING FRONT DESK DASHBOARD
         current_location = domain_models.Location(location_id=1, name="Main Building", manager=None)
         current_user = domain_models.User(user_id=1, first_name="Max", last_name = "Jones", email="max.jones@example.com", location = current_location, role="FrontDesk")
-        self.switchFrontDeskDashboard(current_user)
+        #self.switchFrontDeskDashboard(current_user)
 
 
         #Testing Page
@@ -70,7 +70,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.userRefreshBtn.clicked.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")))
         self.AdminDash.apartmentLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
         self.AdminDash.apartmentRefresh.clicked.connect(lambda : self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments")))
-        self.AdminDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText())))
+        self.AdminDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintenanceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText())))
         
         #Sign Up Customer Page
         self.DetailedSignUp.submitBtn.clicked.connect(lambda : SignUpTenant(Tenant("", self.DetailedSignUp.firstNameInput.text(),self.DetailedSignUp.lastNameInput.text(),self.DetailedSignUp.nationalNumInput.text(),self.DetailedSignUp.emailInput.text(),self.DetailedSignUp.passwordInput.text(),self.DetailedSignUp.phoneNumInput.text(),self.DetailedSignUp.occupationComboBox.currentText(),"")))
@@ -124,19 +124,29 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentIndex(3)
         contract = GetContract(tenant.GetID())
-        apartment = GetApartment(contract.apartment_id)
-        self.CustDash.setUser(tenant,contract,apartment)
-        paymentHistory = GetTenantPaymentHistory(tenant.GetID())
-        totalToPay = 0
-        for payment in paymentHistory:
-            if payment.payment_status == 'Unpaid':
-                totalToPay = totalToPay + payment.amount_paid
-            self.CustDash.PaymentsPage.CurrentDue.setText("£" + str(totalToPay))
+        if contract is None:
+            self.CustDash.setUser(tenant , Contract("","","","","","",""), Apartment("","","","","","",True))
+            self.CustDash.switchToAccountPage()
+            self.CustDash.accountBtn.setEnabled(False)
+            self.CustDash.overviewBtn.setEnabled(False)
+            self.CustDash.paymentsBtn.setEnabled(False)
+            self.CustDash.maintenanceBtn.setEnabled(False)
+            self.CustDash.notifcationsBtn.setEnabled(False)
+            self.CustDash.AddPageDetail(GetLocations(),[],"")
+        else: 
+            apartment = GetApartment(contract.apartment_id)
+            self.CustDash.setUser(tenant,contract,apartment)
+            paymentHistory = GetTenantPaymentHistory(tenant.GetID())
+            totalToPay = 0
+            for payment in paymentHistory:
+                if payment.payment_status == 'Unpaid':
+                    totalToPay = totalToPay + payment.amount_paid
+                self.CustDash.PaymentsPage.CurrentDue.setText("£" + str(totalToPay))
 
-        self.CustDash.PaymentsPage.paymentHistory.UpdateTable(paymentHistory, GetHeaders("payments"))
-        date = QDate.currentDate()
-        dueDate = QDate(date.year(), date.month(),date.daysInMonth())
-        self.CustDash.AddPageDetail(GetLocations(),[],dueDate.toString())
+            self.CustDash.PaymentsPage.paymentHistory.UpdateTable(paymentHistory, GetHeaders("payments"))
+            date = QDate.currentDate()
+            dueDate = QDate(date.year(), date.month(),date.daysInMonth())
+            self.CustDash.AddPageDetail(GetLocations(),[],dueDate.toString())
     
     def switchAdminView(self, admin : User):
         #Change when page is implemented to customer dashboard
@@ -144,7 +154,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.setUser(admin)
         self.setWindowTitle(admin.firstName)
         self.AdminDash.GetLocations(GetLocations())
-        self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintanenceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
+        self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintenanceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
         self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")) 
         self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     
@@ -160,12 +170,12 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setWindowTitle(finance.firstName)
         print(GetHeaders("payments"))
         self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments"))
-        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), self.MakePieChartPaymentInsights(GetLocationFromID(finance.location_id).location_name),self.MakeMaintanenceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
+        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(finance.location_id).location_name), self.MakePieChartPaymentInsights(GetLocationFromID(finance.location_id).location_name),self.MakeMaintenanceRequestsPieChart(GetLocationFromID(finance.location_id).location_name) )
         
     def switchToManagerDashboard(self, manager : User):
         self.ManagerDash.setUser(manager)
         self.ManagerDash.GetLocations(GetLocations())
-        self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(manager.location_id).location_name),self.MakePieChartPaymentInsights(GetLocationFromID(manager.location_id).location_name), self.MakeMaintanenceRequestsPieChart(GetLocationFromID(manager.location_id).location_name))
+        self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(manager.location_id).location_name),self.MakePieChartPaymentInsights(GetLocationFromID(manager.location_id).location_name), self.MakeMaintenanceRequestsPieChart(GetLocationFromID(manager.location_id).location_name))
         self.stackedView.setCurrentIndex(10)
   
     def switchTestingPage(self):
