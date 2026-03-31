@@ -20,8 +20,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     #This section is used test functionality, quick testing and debugging. 
         #self.loginStaffMember("manager@gmail.com", "")
         #self.loginStaffMember("finance@gmail.com" , "")
-        self.loginStaffMember("dragon@gmail" ,"")
-        #self.LoginTenantBTN("peter@gmail.com", "1234")
+        #self.loginStaffMember("dragon@gmail" ,"")
+        self.LoginTenantBTN("peter@gmail.com", "1234")
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -66,6 +66,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustDash.PaymentsPage.payNowBtn.clicked.connect(lambda : self.Pay(self.CustDash.contract))
         self.CustDash.AccountPage.submitReqsBtn.clicked.connect(lambda : self.CreateTenantRequirement(self.CustDash.AccountPage.locationComboBox.currentText(),self.CustDash.tenant.GetID(),self.CustDash.AccountPage.SubmitRequirements()))
         self.CustDash.AccountPage.submitBtn.clicked.connect(lambda : self.UpdateTenant(self.CustDash.tenant, self.CustDash.SubmitUserInfo()))
+        self.CustDash.OverviewPage.leaveTenancyBtn.clicked.connect(lambda : self.LeaveTenancyEarly())
         #Maintenance rquest Page
         self.CustDash.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
         self.CustDash.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView()) #DONT worry
