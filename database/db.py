@@ -424,12 +424,13 @@ def GetMaintenanceRequestsForLocation(locationID : str):
         print("Entered Database")
         print("Reason: Gather Maintanence requests by Apartment Id")
         
-        requests = []
+        requests=[]
         for apartment in apartments:
             dbcursor.execute(query3, (apartment.id,))
-            request = dbcursor.fetchone()
-            if request is not None:
-                requests.append(request)
+            dbReqs = dbcursor.fetchall()
+            for request in dbReqs:
+                if request is not None:
+                    requests.append(request)
         
         conn.close()
         dbcursor.close()

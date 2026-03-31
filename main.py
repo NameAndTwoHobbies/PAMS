@@ -77,7 +77,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
 
         #Finance Page
         self.FinanceDash.refreshBtn.clicked.connect(lambda: self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments")))
-        self.FinanceDash.issueRentBtn.clicked.connect(lambda : IssueRentPayments(self.FinanceDash.user.location_id))
+        self.FinanceDash.issueRentBtn.clicked.connect(lambda : self.RentPayments())
         self.FinanceDash.submitInvoiceBtn.clicked.connect(lambda: self.CreateInvoice(self.FinanceDash.SubmitInvoice()))
 
         #Maintenance Page
@@ -131,11 +131,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             dueDate = QDate(date.year(), date.month(),date.daysInMonth())
             self.CustDash.AddPageDetail(GetLocations(),[],dueDate.toString())
     
-    def switchAdminView(self, admin : User):
+    def switchAdminView(self, admin : Entities.User):
         #Change when page is implemented to customer dashboard
         self.stackedView.setCurrentIndex(9)
         self.AdminDash.setUser(admin)
-        self.setWindowTitle(admin.firstName)
         self.AdminDash.GetLocations(GetLocations())
         self.AdminDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakePieChartPaymentInsights(self.AdminDash.ReportPage.reportLocationDropdown.currentText()),self.MakeMaintenanceRequestsPieChart(self.AdminDash.ReportPage.reportLocationDropdown.currentText()))
         self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")) 
@@ -336,7 +335,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
             self.error.show() #Change to ann error manager
         else:
-            requests = GetMaintenanceRequestsForLocation(location.id)
+            requests = GetMaintenanceRequestsForLocation(location.GetID())
             apartments = GetApartmentsFromLocation(location.id)
             print(len(requests))
             print(len(apartments))
@@ -441,6 +440,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                 f"Your new move-out date is {chosen_date}."
             )
 
+    def RentPayments(self):
+        IssueRentPayments(self.FinanceDash.user.location_id)
+        self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments"))
+        self.FinanceDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(GetLocationFromID(self.FinanceDash.user.location_id).location_name), self.MakePieChartPaymentInsights(GetLocationFromID(self.FinanceDash.user.location_id).location_name),self.MakeMaintenanceRequestsPieChart(GetLocationFromID(self.FinanceDash.user.location_id).location_name))
 #endregion
 
 #region App
