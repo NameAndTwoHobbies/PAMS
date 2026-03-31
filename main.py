@@ -21,7 +21,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     #This section is used test functionality, quick testing and debugging. 
         #self.switchToFinanceDashboard()
 
-        # TESTING TENANT DASHBOARD
+        # # TESTING TENANT DASHBOARD
         # location = domain_models.Location(1, " ", " ")
         # apartment = domain_models.Apartment(1, location, " ", 0.0, 0, 0, True)
         # tenant = domain_models.Tenant(5, "harry", "potter","harry@gmail.com" )
@@ -38,7 +38,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
-        self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeMaintanenceRequestsPieChart("London"))
+        self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeMaintenanceRequestsPieChart("London"))
         #self.TestingPage.testBtn4.clicked.connect(lambda : )
 
     #endregion
@@ -60,7 +60,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.StaffLogin.loginBtn.clicked.connect(lambda : self.loginStaffMember(self.StaffLogin.emailInput.toPlainText(), self.StaffLogin.passwordInput.toPlainText()))
 
         #Front Desk Page
-        self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
+        #self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
         #endregion
 
         #Admin Dashboard
@@ -237,13 +237,13 @@ class mainScreen(QMainWindow , Ui_MainWindow):
                     return pie
         print("Done")
     # Creates a pie chart that shows the number of maintanence requests in a given location compared to the apartments that are functional.
-    def MakeMaintanenceRequestsPieChart(self, locationName : str):
+    def MakeMaintenanceRequestsPieChart(self, locationName : str):
         location = GetLocation(locationName)
         if location is None:
             self.error = ErrorBox(ErrorMessage("No Data", "There is no location by this name"))
             self.error.show() #Change to ann error manager
         else:
-            requests = GetMainanenceRequestsForLocation(location.id)
+            requests = GetMaintenanceRequestsForLocation(location.id)
             apartments = GetApartmentsFromLocation(location.id)
             print(len(requests))
             print(len(apartments))

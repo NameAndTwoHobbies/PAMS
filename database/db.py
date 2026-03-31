@@ -301,8 +301,8 @@ def GetUnoccupiedApartmentsForLocation(locationID : int):
 #     id = GetLocation(locationName)
 
 
-# Returns a list of all maintanence requests for apartments in a location matching an ID. If there are no requests it returns an empty list
-def GetMainanenceRequestsForLocation(locationID : str):
+# Returns a list of all maintenance requests for apartments in a location matching an ID. If there are no requests it returns an empty list
+def GetMaintenanceRequestsForLocation(locationID : str):
     query3 = "SELECT * from maintenance_requests WHERE apartment_id = %s;"
 
     apartments = GetApartmentsFromLocation(locationID)
