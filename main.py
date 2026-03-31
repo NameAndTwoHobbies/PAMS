@@ -1,5 +1,3 @@
-import sys
-import random
 from PySide6.QtWidgets import * #the asterisks mean import everything
 from PySide6.QtGui import *
 from PySide6.QtCore import * 
@@ -8,8 +6,6 @@ from database.db import *
 from components.ErrorBoxes import *
 from components.MyWidgets import *
 from models.Entities import *
-from repositories.tenant_repository import TenantRepository
-from services.maintenanceService import MaintenanceService
 from repositories import *
 
 class mainScreen(QMainWindow , Ui_MainWindow):
@@ -20,22 +16,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setMaximumSize(self.size())
     #region Testing Section
     #This section is used test functionality, quick testing and debugging. 
-        #self.switchToFinanceDashboard()
-
-        # # TESTING TENANT DASHBOARD
-        # location = domain_models.Location(1, " ", " ")
-        # apartment = domain_models.Apartment(1, location, " ", 0.0, 0, 0, True)
-        # tenant = domain_models.Tenant(5, "harry", "potter","harry@gmail.com" )
-        # contract = domain_models.Contract(1, apartment, tenant, "2026-01-01", "2026-12-31", "Monthly", False, 0.0)
-        # tenant.contracts.append(contract)
-        # self.switchCustomerView(tenant = tenant)
-
-        # #TESTING FRONT DESK DASHBOARD
-        # current_location = domain_models.Location(location_id=1, name="Main Building", manager=None)
-        # current_user = domain_models.User(user_id=1, first_name="Max", last_name = "Jones", email="max.jones@example.com", location = current_location, role="FrontDesk")
-        # #self.switchFrontDeskDashboard(current_user)
-
-
+    
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
@@ -136,6 +117,8 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         else: 
             apartment = GetApartment(contract.apartment_id)
             self.CustDash.setUser(tenant,contract,apartment)
+            print(apartment.GetDataBaseFormat())
+            self.CustDash.notificationsPage.setTenant(tenant, apartment.location_id)
             paymentHistory = GetTenantPaymentHistory(tenant.GetID())
             totalToPay = 0
             for payment in paymentHistory:

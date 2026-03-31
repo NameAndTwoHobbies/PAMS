@@ -714,9 +714,9 @@ class TenantNotificationsDashboard(QWidget):
         self.label.setText(QCoreApplication.translate("NotificationsDashboard", "Your Inbox", None))
         self.subject.setText(QCoreApplication.translate("NotificationsDashboard", "Message Subject", None))
     
-    def setTenant(self, tenant: Tenant):
+    def setTenant(self, tenant: Tenant, location_id: int):
         self.currentTenant = tenant
         if self.controller is None:
-            self.controller = inboxController.InboxController(self, tenant.id, location_id=1)
+            self.controller = inboxController.InboxController(self, tenant.id, location_id=location_id)
 
 #endregion

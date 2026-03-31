@@ -121,6 +121,7 @@ def GetApartment(apartment_id : str):
     dbApartment = dbcursor.fetchone()
 
     return Apartment(dbApartment[0],dbApartment[1],dbApartment[2],dbApartment[3],dbApartment[4],dbApartment[5],dbApartment[6])
+
 def AddApartment(apartment : Apartment):
     query = "INSERT INTO apartments (location_id,room_type, monthly_rent, bedrooms,bathrooms) VALUES (%s,%s,%s,%s,%s)"
     

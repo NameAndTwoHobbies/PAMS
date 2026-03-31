@@ -653,8 +653,6 @@ class TenantDashboard(userPage):
         self.mainSection.setCurrentIndex(3)
     def switchToNotifications(self):
         self.mainSection.setCurrentIndex(4)
-        self.notificationsPage.setTenant(self.tenant)
-        
     def AddPageDetail(self,locations : list[Location], OutstandingMaintence : list[MaintenanceRequest], dueDate: str):
         for location in locations:
             if location.id == self.apartment.location_id:
