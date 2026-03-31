@@ -1,4 +1,4 @@
-from models.domain_models import Tenant
+from models.Entities import *
 from models.db_models import TenantDTO
 from .base_repository import BaseRepository
 

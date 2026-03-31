@@ -2,7 +2,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtCore import QCoreApplication, QDate, QRect
 from datetime import datetime, time
 
-from models import domain_models
+from models import Entities
 
 class AssignDialog(QDialog):
     def __init__(self, maintenance_service, current_user, request_id, parent=None):
@@ -493,7 +493,7 @@ class FrontDeskManageTenants(QWidget):
         nationalInsurance = self.nationalInsuranceInput.text()
         occupation = self.occupationDropdown.currentText()
         references = ""
-        tenant = domain_models.Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
+        tenant = Entities.Tenant(-1,fName,lName,nationalInsurance,email,password,phoneNumber,occupation ,references )
         self.firstNameInput.clear()
         self.lastNameInput.clear()
         self.emailInput.clear()

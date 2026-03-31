@@ -3,7 +3,6 @@ from repositories.maintenance_repository import MaintenanceRepository
 from repositories.scheduling_repository import SchedulingRepository
 from repositories.user_repository import UserRepository
 from repositories.tenant_repository import TenantRepository
-from datetime import datetime
 
 class MaintenanceService:
     def __init__(self):
@@ -14,14 +13,14 @@ class MaintenanceService:
         self.tenant_repo = TenantRepository(db_connection)
     
     def get_pending_requests(self, current_user):
-        return self.maintenance_repo.get_pending_requests_by_location(location_id=current_user.location.location_id)
+        return self.maintenance_repo.get_pending_requests_by_location(location_id=current_user.location_id)
     
     def get_request_details(self, request_id):
     
         return self.maintenance_repo.get_request_by_id(request_id)
 
     def get_available_workers(self, start, end, current_user):
-        return self.user_repo.get_available_workers(location_id=current_user.location.location_id, start=start, end=end)
+        return self.user_repo.get_available_workers(location_id=current_user.location_id, start=start, end=end)
 
     def assign_worker_to_request(self, request_id, worker_id, start, end):
 

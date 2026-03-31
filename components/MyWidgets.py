@@ -232,7 +232,7 @@ class SignUpPage(QWidget):
 class AdminLoginPage(QWidget):
     def __init__(self):
         super().__init__()
-        self.staff = User("", "", "", "", "", "")
+        self.staff = User("", "", "", "", "", "", "")
         self.setObjectName(u"AdminLogin")
 
         # Group Box
@@ -520,8 +520,8 @@ class MaintenanceRequestPage(QWidget):
 class TenantDashboard(userPage):
     def __init__(self):
         super().__init__()
-        self.tenant = Tenant("","","", "", "", "")
-        self.contract = Contract("","","","","","","","")
+        self.tenant = Tenant("","","", "", "", "","", "", "")
+        self.contract = Contract("","","","","","","")
         self.apartment = Apartment("","","","","","",True)
         self.resize(831, 758)
 
@@ -1040,7 +1040,7 @@ class FrontDeskDashboard(userPage):
         nationalInsurance = self.nationalInsuranceInput.text()
         occupation = self.occupationDropdown.currentText()
         references = ""
-        tenant = domain_models.Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
+        tenant = Tenant(-1,fName,lName,email,password,phoneNumber,nationalInsurance,occupation ,references )
         self.firstNameInput.clear()
         self.lastNameInput.clear()
         self.emailInput.clear()

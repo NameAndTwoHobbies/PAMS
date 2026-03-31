@@ -1,4 +1,4 @@
-from models.domain_models import User, Location
+from models.Entities import *
 from .base_repository import BaseRepository
 
 

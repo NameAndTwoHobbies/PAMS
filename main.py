@@ -7,7 +7,6 @@ from components.uiMainWindow import Ui_MainWindow
 from database.db import *
 from components.ErrorBoxes import *
 from components.MyWidgets import *
-from models import domain_models
 from models.Entities import *
 from repositories.tenant_repository import TenantRepository
 from services.maintenanceService import MaintenanceService
@@ -62,7 +61,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.StaffLogin.loginBtn.clicked.connect(lambda : self.loginStaffMember(self.StaffLogin.emailInput.toPlainText(), self.StaffLogin.passwordInput.toPlainText()))
 
         #Front Desk Page
-        #self.FrontDeskDash.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
+        self.FrontDeskDash.manageTenants.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.Submit()))
         #endregion
 
         #Admin Dashboard
@@ -160,10 +159,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.AdminDash.CreateApartmentTable(GetApartmentsFromLocation(GetLocation(self.AdminDash.apartmentLocationDropdown.currentText()).GetID()), GetHeaders("apartments"))
     
     
-    def switchFrontDeskDashboard(self , frontDesk: domain_models.User):
+    def switchFrontDeskDashboard(self , frontDesk: User):
         self.FrontDeskDash.setUser(frontDesk)
         self.stackedView.setCurrentWidget(self.FrontDeskDash)
-        self.setWindowTitle(frontDesk.first_name)
+        self.setWindowTitle(frontDesk.firstName)
     
     def switchToFinanceDashboard(self, finance : User):
         self.stackedView.setCurrentIndex(8)
