@@ -73,7 +73,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.ManagerDash.LocationPage.managerCreationBtn.clicked.connect(lambda : self.CreateLocationManager(self.ManagerDash.LocationPage.SubmitLocationManager(), self.ManagerDash.LocationPage.managerLocationComboBox.currentText()))
         
         self.ManagerDash.ApartmentPage.apartmentCreateBtn.clicked.connect(lambda  : self.CreateApartments(self.ManagerDash.ApartmentPage.Submit() , self.ManagerDash.ApartmentPage.locationComboBox.currentText()))
-        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()) , self.MakePieChartPaymentInsights(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()), self.MakeMaintanenceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
+        self.ManagerDash.ReportPage.reportLocationDropdown.currentIndexChanged.connect(lambda : self.ManagerDash.ReportPage.CreatePieCharts(self.MakePieChartUnoccupied(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()) , self.MakePieChartPaymentInsights(self.ManagerDash.ReportPage.reportLocationDropdown.currentText()), self.MakeMaintenanceRequestsPieChart(self.ManagerDash.ReportPage.reportLocationDropdown.currentText())))
 
         #Finance Page
         self.FinanceDash.refreshBtn.clicked.connect(lambda: self.FinanceDash.paymentTable.UpdateTable(GetAllPaymentsFromLocation(self.FinanceDash.user.location_id), GetHeaders("payments")))
@@ -230,7 +230,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.errorBox.show()
         else: 
             SignUpTenant(tenant)
-            self.switchFrontDeskDashboard(frontDesk=self.FrontDeskDash.user)
+            self.FrontDeskDash.manageTenants.tenantTable.UpdateTable(self.FrontDeskDash.maintenance_service.get_tenants(), GetHeaders("tenants"))
 
     def LoginTenantBTN(self, email: str, password : str):
         tenant = LoginTenant(email,password)
