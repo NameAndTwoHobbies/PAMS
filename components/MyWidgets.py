@@ -39,7 +39,7 @@ class userPage(QWidget):
     def __init__(self):
         super().__init__()
         self.user = None
-    def setUser(self, user: domain_models.User):
+    def setUser(self, user: Entities.User):
         self.user = user
     def getUser(self):
         return self.user
@@ -588,8 +588,6 @@ class TenantDashboard(userPage):
         self.PaymentsPage.setObjectName(u"paymentsPage")
         self.mainSection.addWidget(self.PaymentsPage)
 
-    
-
         self.verticalLayout_2.addWidget(self.mainSection)
 
         #Account Page
@@ -634,6 +632,7 @@ class TenantDashboard(userPage):
         self.tenant = tenant
         self.contract = contract
         self.apartment = apartment
+        
     def clearUser(self):
         self.tenant = Tenant("","","", "", "", "")
         self.contract = Contract("","","","","","","","")
@@ -654,6 +653,7 @@ class TenantDashboard(userPage):
         self.mainSection.setCurrentIndex(3)
     def switchToNotifications(self):
         self.mainSection.setCurrentIndex(4)
+        self.notificationsPage.setTenant(self.tenant)
         
     def AddPageDetail(self,locations : list[Location], OutstandingMaintence : list[MaintenanceRequest], dueDate: str):
         for location in locations:
@@ -666,7 +666,7 @@ class TenantDashboard(userPage):
 
     def SubmitUserInfo(self):
         info = self.AccountPage.SubmitNewUserInfo()
-        NewTenant = Tenant(self.tenant.id ,info.first_name, info.last_name,info.national_insurance,info.email,info.password,info.phone_number,info.occupation,info.references)
+        NewTenant = Entities.Tenant(self.tenant.id ,info.first_name, info.last_name,info.national_insurance,info.email,info.password,info.phone_number,info.occupation,info.references)
         return NewTenant
 
     def SubmitRequest(self):

@@ -39,6 +39,9 @@ class TenantDTO:
         return (self.tenant_id, self.first_name, self.last_name,
                 self.national_insurance, self.email,
                 self.password_hash, self.phone_number, self.occupation)
+    
+    def GetID(self):
+        return self.tenant_id
 
 
 # Locations

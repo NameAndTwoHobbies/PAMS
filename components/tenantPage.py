@@ -5,7 +5,7 @@ from PySide6.QtGui import *
 from PySide6.QtCore import *
 from PySide6.QtCharts import *
 from components.ErrorBoxes import ErrorBox
-from models import domain_models
+from models import Entities, domain_models
 from models.domain_models import *
 import controllers.inboxController as inboxController
 from Table import Table
@@ -547,7 +547,7 @@ class TenantAccountPage(TenantPage):
         # retranslateUi
 
         def SubmitRequirements(self):
-            reqs = Requirements("","", "", self.roomTypeComboBox.currentText(), self.maxRentInput.cleanText(), self.numRoomsInput.text(),self.numBathroomsInput.text())
+            reqs = Entities.Requirements("","", "", self.roomTypeComboBox.currentText(), self.maxRentInput.cleanText(), self.numRoomsInput.text(),self.numBathroomsInput.text())
             self.locationComboBox.setCurrentIndex(0)
             self.roomTypeComboBox.setCurrentIndex(0)
             self.maxRentInput.setValue(0.000000)
@@ -563,7 +563,7 @@ class TenantAccountPage(TenantPage):
                 self.locationComboBox.addItem(location.location_name)
         
         def SubmitNewUserInfo(self):
-            return Tenant("",self.firstNameInput.text(),self.lastNameInput.text(), self.nationalNumInput.text(),self.emailInput.text(), self.passwordInput.text() ,self.phoneNumInput.text(),self.occupationComboBox.currentText(), 'Null')
+            return Entities.Tenant("",self.firstNameInput.text(),self.lastNameInput.text(), self.nationalNumInput.text(),self.emailInput.text(), self.passwordInput.text() ,self.phoneNumInput.text(),self.occupationComboBox.currentText(), 'Null')
         
         def AddPageDetail(self,firstName, lastName,email,national, phone):
             self.firstNameInput.setText(firstName)
@@ -715,9 +715,9 @@ class TenantNotificationsDashboard(QWidget):
         self.label.setText(QCoreApplication.translate("NotificationsDashboard", "Your Inbox", None))
         self.subject.setText(QCoreApplication.translate("NotificationsDashboard", "Message Subject", None))
     
-    def setTenant(self, tenant: domain_models.Tenant):
+    def setTenant(self, tenant: Entities.Tenant):
         self.currentTenant = tenant
         if self.controller is None:
-            self.controller = inboxController.InboxController(self, tenant.tenant_id, tenant.get_location().location_id)
+            self.controller = inboxController.InboxController(self, tenant.id, location_id=1)
 
 #endregion

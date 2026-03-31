@@ -31,10 +31,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         # tenant.contracts.append(contract)
         # self.switchCustomerView(tenant = tenant)
 
-        #TESTING FRONT DESK DASHBOARD
-        current_location = domain_models.Location(location_id=1, name="Main Building", manager=None)
-        current_user = domain_models.User(user_id=1, first_name="Max", last_name = "Jones", email="max.jones@example.com", location = current_location, role="FrontDesk")
-        #self.switchFrontDeskDashboard(current_user)
+        # #TESTING FRONT DESK DASHBOARD
+        # current_location = domain_models.Location(location_id=1, name="Main Building", manager=None)
+        # current_user = domain_models.User(user_id=1, first_name="Max", last_name = "Jones", email="max.jones@example.com", location = current_location, role="FrontDesk")
+        # #self.switchFrontDeskDashboard(current_user)
 
 
         #Testing Page
@@ -82,6 +82,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustDash.AccountPage.submitReqsBtn.clicked.connect(lambda : self.CreateTenantRequirement(self.CustDash.AccountPage.locationComboBox.currentText(),self.CustDash.tenant.GetID(),self.CustDash.AccountPage.SubmitRequirements()))
         self.CustDash.AccountPage.submitBtn.clicked.connect(lambda : self.UpdateTenant(self.CustDash.tenant, self.CustDash.SubmitUserInfo()))
         self.CustDash.OverviewPage.leaveTenancyBtn.clicked.connect(lambda : self.LeaveTenancyEarly())
+
         #Maintenance rquest Page
         self.CustDash.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
         self.CustDash.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView()) #DONT worry
@@ -120,9 +121,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.stackedView.setCurrentIndex(6)
         self.DetailedSignUp.emailInput.setText(email)
     
-    def switchCustomerView(self, tenant : domain_models.Tenant):
+    def switchCustomerView(self, tenant : Tenant):
         #Change when page is implemented to customer dashboard
-        self.stackedView.setCurrentIndex(3)
+        self.stackedView.setCurrentWidget(self.CustDash)
         contract = GetContract(tenant.GetID())
         if contract is None:
             self.CustDash.setUser(tenant , Contract("","","","","","",""), Apartment("","","","","","",True))
