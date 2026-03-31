@@ -5,7 +5,7 @@ from security.dbSecrets import devHost, devUser, devPassword, devName, prodHost,
 
 class DatabaseConnection:
 
-    def __init__(self, use_dev=True):
+    def __init__(self, use_dev=False):
         self.use_dev = use_dev
 
     def get_connection(self):

@@ -292,7 +292,7 @@ class FrontDeskScheduledMaintenance(QWidget):
         if self.current_user == None: 
             return print("no user")
         try:
-            self.requests = self.maintenance_service.see_scheduled_requests(self.current_user.location.location_id)
+            self.requests = self.maintenance_service.see_scheduled_requests(self.current_user.location_id)
             self.populate_table(self.requests)
         except Exception as e:
             QMessageBox.warning(self, "Error", str(e))
