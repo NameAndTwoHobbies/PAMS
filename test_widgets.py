@@ -7,7 +7,7 @@ import pytest
 import sys
 from PySide6.QtWidgets import QApplication, QWidget, QPushButton, QLabel, QTextEdit
 from PySide6.QtCore import Qt
-from MyWidgets import (
+from components.MyWidgets import (
     WelcomePage,
     CustomerLoginPage,
     SignUpPage,
@@ -18,7 +18,7 @@ from MyWidgets import (
     FinanceDashboard,
     Table,
 )
-from Entities import IEntity
+from models.Entities import IEntity
 
 
 @pytest.fixture(scope="session")
