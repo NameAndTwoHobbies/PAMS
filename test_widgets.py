@@ -12,8 +12,8 @@ from components.MyWidgets import (
     CustomerLoginPage,
     SignUpPage,
     AdminLoginPage,
-    Dashboard,
-    DetailedSignUpPage,
+    TenantDashboard,
+    SignUpDetailed,
     FrontDeskDashboard,
     FinanceDashboard,
     Table,
@@ -319,59 +319,59 @@ class TestSignUpPage:
         assert page.submitBtn.isEnabled()
 
 
-class TestDetailedSignUpPage:
-    """Tests for DetailedSignUpPage widget."""
+class TestSignUpDetailed:
+    """Tests for SignUpDetailed widget."""
 
     def test_detailed_signup_creation(self, qtbot):
-        """Test DetailedSignUpPage is created successfully."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed is created successfully."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         assert page is not None
         assert isinstance(page, QWidget)
 
     def test_detailed_signup_visible(self, qtbot):
-        """Test DetailedSignUpPage is visible."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed is visible."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         page.show()
         assert page.isVisible()
 
     def test_detailed_signup_has_title(self, qtbot):
-        """Test DetailedSignUpPage has title."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed has title."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         assert hasattr(page, "title")
         assert isinstance(page.title, QLabel)
 
     def test_detailed_signup_title_visible(self, qtbot):
-        """Test DetailedSignUpPage title is visible."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed title is visible."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         page.show()
         assert page.title.isVisible()
 
     def test_detailed_signup_has_email_input(self, qtbot):
-        """Test DetailedSignUpPage has email input."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed has email input."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         assert hasattr(page, "emailInput")
 
     def test_detailed_signup_email_input_visible(self, qtbot):
-        """Test DetailedSignUpPage email input is visible."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed email input is visible."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         page.show()
         assert page.emailInput.isVisible()
 
     def test_detailed_signup_has_first_name_input(self, qtbot):
-        """Test DetailedSignUpPage has first name input."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed has first name input."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         assert hasattr(page, "firstNameInput")
 
     def test_detailed_signup_first_name_visible(self, qtbot):
-        """Test DetailedSignUpPage first name input is visible."""
-        page = DetailedSignUpPage()
+        """Test SignUpDetailed first name input is visible."""
+        page = SignUpDetailed()
         qtbot.addWidget(page)
         page.show()
         assert page.firstNameInput.isVisible()
@@ -382,103 +382,103 @@ class TestDashboard:
 
     def test_dashboard_creation(self, qtbot):
         """Test Dashboard is created successfully."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert dashboard is not None
         assert isinstance(dashboard, QWidget)
 
     def test_dashboard_visible(self, qtbot):
         """Test Dashboard is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.isVisible()
 
     def test_dashboard_has_stacked_widget(self, qtbot):
         """Test Dashboard has stacked widget."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "stackedWidget")
 
     def test_dashboard_stacked_widget_visible(self, qtbot):
         """Test Dashboard stacked widget is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.stackedWidget.isVisible()
 
     def test_dashboard_has_sidebar(self, qtbot):
         """Test Dashboard has sidebar."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "sideBar")
 
     def test_dashboard_sidebar_visible(self, qtbot):
         """Test Dashboard sidebar is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.sideBar.isVisible()
 
     def test_dashboard_has_account_button(self, qtbot):
         """Test Dashboard has account button."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "accountBtn")
         assert isinstance(dashboard.accountBtn, QPushButton)
 
     def test_dashboard_account_button_visible(self, qtbot):
         """Test Dashboard account button is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.accountBtn.isVisible()
 
     def test_dashboard_has_lease_button(self, qtbot):
         """Test Dashboard has lease button."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "leaseBtn")
         assert isinstance(dashboard.leaseBtn, QPushButton)
 
     def test_dashboard_lease_button_visible(self, qtbot):
         """Test Dashboard lease button is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.leaseBtn.isVisible()
 
     def test_dashboard_has_payments_button(self, qtbot):
         """Test Dashboard has payments button."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "paymentsBtn")
         assert isinstance(dashboard.paymentsBtn, QPushButton)
 
     def test_dashboard_payments_button_visible(self, qtbot):
         """Test Dashboard payments button is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.paymentsBtn.isVisible()
 
     def test_dashboard_has_complaints_button(self, qtbot):
         """Test Dashboard has complaints button."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "complaintsBtn")
         assert isinstance(dashboard.complaintsBtn, QPushButton)
 
     def test_dashboard_complaints_button_visible(self, qtbot):
         """Test Dashboard complaints button is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.complaintsBtn.isVisible()
 
     def test_dashboard_buttons_enabled(self, qtbot):
         """Test Dashboard sidebar buttons are enabled."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert dashboard.accountBtn.isEnabled()
         assert dashboard.leaseBtn.isEnabled()
@@ -487,65 +487,65 @@ class TestDashboard:
 
     def test_dashboard_has_default_page(self, qtbot):
         """Test Dashboard has default page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "defaultPage")
 
     def test_dashboard_default_page_visible(self, qtbot):
         """Test Dashboard default page is visible."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.show()
         assert dashboard.defaultPage.isVisible()
 
     def test_dashboard_has_account_page(self, qtbot):
         """Test Dashboard has account page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "accountPage")
 
     def test_dashboard_has_lease_page(self, qtbot):
         """Test Dashboard has lease page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "leasePage")
 
     def test_dashboard_has_payment_page(self, qtbot):
         """Test Dashboard has payment page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "paymentPage")
 
     def test_dashboard_has_complaints_page(self, qtbot):
         """Test Dashboard has complaints page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         assert hasattr(dashboard, "complaintsPage")
 
     def test_dashboard_switch_account_page(self, qtbot):
         """Test Dashboard can switch to account page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.switchAccountPage()
         assert dashboard.stackedWidget.currentIndex() == 1
 
     def test_dashboard_switch_lease_page(self, qtbot):
         """Test Dashboard can switch to lease page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.switchLeasePage()
         assert dashboard.stackedWidget.currentIndex() == 2
 
     def test_dashboard_switch_payments_page(self, qtbot):
         """Test Dashboard can switch to payments page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.switchPaymentsPage()
         assert dashboard.stackedWidget.currentIndex() == 3
 
     def test_dashboard_switch_complaints_page(self, qtbot):
         """Test Dashboard can switch to complaints page."""
-        dashboard = Dashboard()
+        dashboard = TenantDashboard()
         qtbot.addWidget(dashboard)
         dashboard.switchComplaintsPage()
         assert dashboard.stackedWidget.currentIndex() == 4
@@ -683,8 +683,8 @@ class TestWidgetIntegration:
             CustomerLoginPage(),
             SignUpPage(),
             AdminLoginPage(),
-            Dashboard(),
-            DetailedSignUpPage(),
+            TenantDashboard(),
+            SignUpDetailed(),
             FrontDeskDashboard(),
             FinanceDashboard(),
         ]
@@ -701,8 +701,8 @@ class TestWidgetIntegration:
             CustomerLoginPage(),
             SignUpPage(),
             AdminLoginPage(),
-            Dashboard(),
-            DetailedSignUpPage(),
+            TenantDashboard(),
+            SignUpDetailed(),
             FrontDeskDashboard(),
             FinanceDashboard(),
         ]
@@ -719,8 +719,8 @@ class TestWidgetIntegration:
             CustomerLoginPage(),
             SignUpPage(),
             AdminLoginPage(),
-            Dashboard(),
-            DetailedSignUpPage(),
+            TenantDashboard(),
+            SignUpDetailed(),
             FrontDeskDashboard(),
             FinanceDashboard(),
         ]
