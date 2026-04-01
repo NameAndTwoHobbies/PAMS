@@ -1,3 +1,7 @@
+import datetime
+
+from models.Entities import MaintenanceRequest, User
+
 from .base_repository import BaseRepository
 
 
@@ -45,8 +49,13 @@ class MaintenanceRepository(BaseRepository):
         """
         self.execute(query, (request_id,))
 
-    def mark_completed(self, request_id: int):  
-        pass
+    def mark_completed(self, request_id: int, completed_time: datetime):  
+        query = """
+        UPDATE maintenance_requests
+        SET status = 'Completed', resolved_date = %s, time_taken = TIMESTAMPDIFF(MINUTE, scheduled_date, %s)
+        WHERE request_id = %s
+        """
+        self.execute(query, (completed_time, completed_time,request_id))
 
     def cancel_scheduled_request(self, request_id: int):
         query = """
@@ -79,3 +88,60 @@ class MaintenanceRepository(BaseRepository):
         ORDER BY mr.priority DESC;
         """
         return self.fetch_all(query, (location_id,))
+    
+    def get_maintenance_requests_by_worker(self, user_id: int):
+        query = """
+        SELECT 
+            r.request_id,
+            r.tenant_id,
+            r.apartment_id,
+            r.description,
+            r.priority,
+            r.status,
+            r.maintenance_notes,
+            s.scheduled_start,
+            r.resolved_date,
+            r.time_taken,
+            r.cost
+        FROM maintenance_scheduling s
+        JOIN maintenance_requests r ON s.request_id = r.request_id
+        WHERE s.user_id = %s;
+        """
+
+        requests = self.fetch_all(query, (user_id,))
+        maintenanceRequests = []
+
+        for r in requests:
+            maintenanceRequests.append(
+                MaintenanceRequest(
+                    r['request_id'],
+                    r['tenant_id'],
+                    r['apartment_id'],
+                    r['description'],
+                    r['priority'],
+                    r['status'],
+                    r['maintenance_notes'],
+                    r['scheduled_start'],  # maps to scheduled_date
+                    r.get('resolved_date'),
+                    r.get('time_taken'),
+                    r['cost']
+                )
+            )
+
+        return maintenanceRequests
+    
+    def update_maintenance_notes(self, request_id: int, notes: str):
+        query = """
+        UPDATE maintenance_requests
+        SET maintenance_notes = %s
+        WHERE request_id = %s
+        """
+        self.execute(query, (notes, request_id))
+
+    def update_maintenance_cost(self, request_id: int, cost: float):
+        query = """
+        UPDATE maintenance_requests
+        SET cost = %s
+        WHERE request_id = %s
+        """
+        self.execute(query, (cost, request_id))

@@ -385,7 +385,6 @@ class FrontDeskManageTenants(QWidget):
     def init_ui(self):
         from components.MyWidgets import Table
 
-
         # Main layout for whole widget
         mainLayout = QVBoxLayout(self)
 
@@ -504,15 +503,131 @@ class FrontDeskManageTenants(QWidget):
         return tenant
     
 class FrontDeskSendNotifications(QWidget):
-    def __init__(self, maintenance_service):
+    def __init__(self, notification_service):
         super().__init__()
-        self.maintenance_service = maintenance_service
-        current_user = None
+        self.notification_service = notification_service
+        self.current_user = None
         self.init_ui()
-
-    def setUser(self, user):
-        current_user = user
 
     def init_ui(self):
         layout = QVBoxLayout()
+
+        # Top button
+        self.reminder_btn = QPushButton("Send Payment Reminders")
+        self.reminder_btn.clicked.connect(self.send_payment_reminders)
+        layout.addWidget(self.reminder_btn)
+
+        # Subject
+        self.subject_input = QLineEdit()
+        layout.addWidget(QLabel("Subject:"))
+        layout.addWidget(self.subject_input)
+
+        # Message
+        self.message_input = QTextEdit()
+        layout.addWidget(QLabel("Message:"))
+        layout.addWidget(self.message_input)
+
+        # Type
+        self.type_combo = QComboBox()
+        self.type_combo.addItems(["Urgent", "Reminder"])
+        layout.addWidget(QLabel("Type:"))
+        layout.addWidget(self.type_combo)
+
+        # Tenant dropdown
+        self.tenant_dropdown = QComboBox()
+        layout.addWidget(QLabel("Tenant:"))
+        layout.addWidget(self.tenant_dropdown)
+
+        # Show current user's location (locked)
+        self.location_label = QLabel(f"Location: {self.current_user.location_id if self.current_user else 'N/A'}")
+        layout.addWidget(self.location_label)
+
+        # Mode selection
+        self.tenant_checkbox = QCheckBox("Send to Tenant")
+        self.location_checkbox = QCheckBox("Send by Location")
+
+        self.tenant_checkbox.stateChanged.connect(self.toggle_mode)
+        self.location_checkbox.stateChanged.connect(self.toggle_mode)
+
+        layout.addWidget(self.tenant_checkbox)
+        layout.addWidget(self.location_checkbox)
+
+        # Submit button
+        self.submit_btn = QPushButton("Submit")
+        self.submit_btn.clicked.connect(self.submit_form)
+        layout.addWidget(self.submit_btn)
+
         self.setLayout(layout)
+    
+    def send_payment_reminders(self):
+        QMessageBox.information(self, "Info", "Payment reminders triggered")
+        
+
+    def load_tenants(self):
+        if self.current_user != None:
+            tenants = self.notification_service.get_tenants_by_location(self.current_user.location_id)
+            self.tenant_dropdown.clear()
+            self.tenant_dropdown.addItem("Select Tenant", None)
+            for tenant in tenants:
+                self.tenant_dropdown.addItem(f"{tenant.first_name} {tenant.last_name}", tenant.tenant_id)
+
+    def toggle_mode(self):
+        if self.tenant_checkbox.isChecked():
+            self.location_checkbox.setChecked(False)
+            self.tenant_dropdown.setEnabled(True)
+        elif self.location_checkbox.isChecked():
+            self.tenant_checkbox.setChecked(False)
+            self.tenant_dropdown.setDisabled(True)
+        else:
+            self.tenant_dropdown.setEnabled(True)
+
+    def submit_form(self):
+        subject = self.subject_input.text()
+        message = self.message_input.toPlainText()
+        notif_type = self.type_combo.currentText()
+
+        tenant_id = self.tenant_dropdown.currentData() if self.tenant_checkbox.isChecked() else None
+        print("Selected tenant ID:", tenant_id)
+        location_id = self.current_user.location_id if self.location_checkbox.isChecked() else None
+
+        # Auto fields
+        created_at = datetime.now()
+        is_read = 0
+
+        if not subject or not message:
+            QMessageBox.warning(self, "Error", "Subject and message are required")
+            return
+
+        if self.tenant_checkbox.isChecked():
+            if tenant_id is None:
+                QMessageBox.warning(self, "Error", "Select a tenant")
+                return
+            location_id = None
+        elif self.location_checkbox.isChecked():
+            if not location_id:
+                QMessageBox.warning(self, "Error", "Location ID required")
+                return
+            tenant_id = None
+        else:
+            QMessageBox.warning(self, "Error", "Select a sending mode")
+            return
+        
+        try:
+            self.notification_service.send_notification(
+                tenant_id, notif_type, message, is_read, created_at, location_id, subject
+            )
+            QMessageBox.information(self, "Success", "Notification sent successfully")
+            self.subject_input.clear()
+            self.message_input.clear()
+            self.tenant_dropdown.setCurrentIndex(0)
+            self.tenant_checkbox.setChecked(False)
+            self.location_checkbox.setChecked(False)
+        except Exception as e:
+            QMessageBox.warning(self, "Error sending notification", str(e))
+            print(e)
+        
+    def setUser(self, user):
+        self.current_user = user
+        location_text = f"Location: {self.notification_service.get_location_name(self.current_user.location_id)}" if self.current_user else "Location: N/A"
+        self.location_label.setText(location_text)
+        self.load_tenants()

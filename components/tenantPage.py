@@ -7,7 +7,7 @@ from PySide6.QtCharts import *
 from components.ErrorBoxes import ErrorBox
 from models.Entities import *
 import controllers.inboxController as inboxController
-from Table import Table
+from components.Table import Table
 
 expandingPolicy      = QSizePolicy(QSizePolicy.Policy.Expanding,       QSizePolicy.Policy.Expanding)
 expandingFixedPolicy      = QSizePolicy(QSizePolicy.Policy.Expanding,       QSizePolicy.Policy.Fixed)

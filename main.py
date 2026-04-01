@@ -14,36 +14,30 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.setupUi(self)
         self.setWindowTitle("PAMS")
         self.setMaximumSize(self.size())
-    #region Testing Section
-    #This section is used test functionality, quick testing and debugging. 
-    
+
         #Testing Page
         self.TestingPage.testBtn1.clicked.connect(lambda : self.MakePieChartUnoccupied("Madrid"))
         self.TestingPage.testBtn2.clicked.connect(lambda : self.MakePieChartUnoccupied("London"))
         self.TestingPage.testBtn3.clicked.connect(lambda : self.MakeMaintenanceRequestsPieChart("London"))
-        #self.TestingPage.testBtn4.clicked.connect(lambda : )
-
-    #endregion
 
 #region Connecting Interactivity 
 # This region is responsible for connecting the buttons to the front end to the functionailty in the back end.
-        #Welcome Page
 
+        #Welcome Page
         self.Welcome.loginCustomerBtn.clicked.connect(lambda : self.switchCustomerLoginPage())
         self.Welcome.loginAdminBtn.clicked.connect(lambda : self.switchAdminLoginPage())
 
-        #Customer login page
+        #Customer login Page
         self.CustLogin.loginBtn.clicked.connect(lambda : self.LoginTenantBTN(self.CustLogin.emailInput.toPlainText(),self.CustLogin.passwordInput.toPlainText()))
 
         self.CustLogin.signUpBtn.clicked.connect(lambda : self.switchCustomerSignUp())
         self.CustSignUp.submitBtn.clicked.connect(lambda : self.SignUpUser(self.CustSignUp.emailInput.toPlainText()))
 
-        #Staff LoginPage
+        #Staff Login Page
         self.StaffLogin.loginBtn.clicked.connect(lambda : self.loginStaffMember(self.StaffLogin.emailInput.toPlainText(), self.StaffLogin.passwordInput.toPlainText()))
 
         #Front Desk Page
         self.FrontDeskDash.manageTenants.submitButton.clicked.connect(lambda : self.RegisterTenant(self.FrontDeskDash.manageTenants.Submit()))
-        #endregion
 
         #Admin Dashboard
         self.AdminDash.userLocationDropdown.currentIndexChanged.connect(lambda : self.AdminDash.CreateUserTable(GetUsersFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("users"),GetTenantsFromLocation(self.AdminDash.userLocationDropdown.currentText()),GetHeaders("tenants")))
@@ -63,10 +57,9 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.CustDash.AccountPage.submitBtn.clicked.connect(lambda : self.UpdateTenant(self.CustDash.tenant, self.CustDash.SubmitUserInfo()))
         self.CustDash.OverviewPage.leaveTenancyBtn.clicked.connect(lambda : self.LeaveTenancyEarly())
 
-        #Maintenance rquest Page
+        #Maintenance Request Page
         self.CustDash.MaintenanceReq.submitBtn.clicked.connect(lambda: self.SubmitMaintenanceRequest())
         self.CustDash.MaintenanceReq.backBtn.clicked.connect(lambda: self.switchCustomerView()) #DONT worry
-        #endregion
 
         #Manager Page
         self.ManagerDash.LocationPage.locationCreateBtn.clicked.connect(lambda : self.CreateLocation(self.ManagerDash.LocationPage.SubmitLocation()))
@@ -81,6 +74,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
         self.FinanceDash.submitInvoiceBtn.clicked.connect(lambda: self.CreateInvoice(self.FinanceDash.SubmitInvoice()))
 
         #Maintenance Page
+# end region
 
 
 #region Page Functions
@@ -112,7 +106,7 @@ class mainScreen(QMainWindow , Ui_MainWindow):
             self.CustDash.overviewBtn.setEnabled(False)
             self.CustDash.paymentsBtn.setEnabled(False)
             self.CustDash.maintenanceBtn.setEnabled(False)
-            self.CustDash.notifcationsBtn.setEnabled(False)
+            self.CustDash.notificationsBtn.setEnabled(False)
             self.CustDash.AddPageDetail(GetLocations(),[],"")
         else: 
             apartment = GetApartment(contract.apartment_id)
@@ -164,38 +158,10 @@ class mainScreen(QMainWindow , Ui_MainWindow):
     def switchTestingPage(self):
         self.stackedView.setCurrentIndex(5)
 
-    def switchMaintenancePage(self, maintenance :User):
-        self.stackedView.setCurrentIndex(11)
-
-
-        requests = GetMaintenanceRequestsForMaintenanceTeam(maintenance)
-        headers  = ["request_id", "scheduled_start", "description" ,"maintenance_notes", "priority" ,"cost" , "Details"]
-        self.MaintenanceDash.table.clear()
-        lenHeader = len(headers)
-        lenRecords = len(requests)
-        self.MaintenanceDash.table.setColumnCount(lenHeader)
-        self.MaintenanceDash.table.setRowCount(lenRecords)
-        self.MaintenanceDash.table.verticalHeader().setVisible(False)
-        for header in range(0,lenHeader):
-            self.MaintenanceDash.table.setHorizontalHeaderItem(header,QTableWidgetItem(str(headers[header])))
-        
-        # Converts the database format of the records into table
-        for x in range(len(requests)):
-            record = requests[x]
-            for y in range(0,len(record)):
-                self.MaintenanceDash.table.setItem(x,y,QTableWidgetItem(str(record[y])))
-        
-
+    def switchMaintenancePage(self, maintenance : User):
         self.MaintenanceDash.setUser(maintenance)
-
-        self.MaintenanceDash.table.selectColumn(self.MaintenanceDash.table.columnCount()-1)
-
-        for column in self.MaintenanceDash.table.selectedItems():
-            btn = QPushButton("Details")
-            index = column.row()
-            btn.clicked.connect(lambda : self.MaintenanceDash.CreateDialogBox(self.MaintenanceDash.table.item(index,1),self.MaintenanceDash.table.item(index,3),self.MaintenanceDash.table.item(index,5)))
-            self.MaintenanceDash.table.setCellWidget(column.row(),column.column(),btn)
-
+        self.stackedView.setCurrentWidget(self.MaintenanceDash)
+        self.setWindowTitle(maintenance.firstName)
 
 
 #endregion

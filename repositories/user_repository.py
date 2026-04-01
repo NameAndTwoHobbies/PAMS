@@ -1,3 +1,4 @@
+from database.db import GetConnection
 from models.Entities import *
 from .base_repository import BaseRepository
 
@@ -42,3 +43,8 @@ class UserRepository(BaseRepository):
         WHERE user_id = %s
         """
         self.execute(query, (user_id,))
+
+    def get_location_name_from_id(self, location_id: str):
+        query = "SELECT location_name FROM locations WHERE locations.location_id = %s;"
+        result = self.fetch_one(query, (location_id,))
+        return result["location_name"] if result else "Location not found"

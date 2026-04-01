@@ -45,3 +45,19 @@ class NotificationRepository(BaseRepository):
         WHERE notification_id = %s
         """
         self.execute(query, (notification_id,))
+
+    def create(self, tenant_id, notif_type, message, is_read, created_at, location_id, subject):
+        if tenant_id is None:
+            query = """
+            INSERT INTO notifications (type, message, is_read, created_at, location_id, subject)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            self.execute(query, (notif_type, message, is_read, created_at, location_id, subject))
+        elif location_id is None:
+            query = """
+            INSERT INTO notifications (tenant_id, type, message, is_read, created_at, subject)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            """
+            self.execute(query, (tenant_id, notif_type, message, is_read, created_at, subject))
+        else:
+            print("Error: Cannot create notification.")

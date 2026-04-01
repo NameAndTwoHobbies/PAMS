@@ -8,9 +8,10 @@ from components.ErrorBoxes import ErrorBox
 from components.frontDeskPage import *
 from database.db import GetHeaders
 from models.Entities import *
-from Table import Table
+from components.Table import Table
 from components.tenantPage import *
 from services.maintenanceService import MaintenanceService
+from services.notificationsService import NotificationService
 
 #region Fonts
 
@@ -137,7 +138,7 @@ class CustomerLoginPage(QWidget):
             #title
             self.title = QLabel(self.loginGroup)
             self.title.setObjectName(u"title")
-            self.title.setGeometry(QRect(240, 90, 297, 53))
+            self.title.setGeometry(QRect(240, 90, 310, 53))
             
             self.title.setFont(title)
 
@@ -276,7 +277,7 @@ class AdminLoginPage(QWidget):
 
         self.title = QLabel(self.adminGroup)
         self.title.setObjectName(u"adminLoginLabel")
-        self.title.setGeometry(QRect(290, 90, 234, 53))
+        self.title.setGeometry(QRect(290, 90, 250, 53))
 
 
         self.title.setFont(title)
@@ -564,9 +565,9 @@ class TenantDashboard(userPage):
         self.maintenanceBtn.setObjectName(u"maintenanceBtn")
         self.horizontalLayout.addWidget(self.maintenanceBtn)
 
-        self.notifcationsBtn = QPushButton(self.tabSection)
-        self.notifcationsBtn.setObjectName(u"notificationsBtn")
-        self.horizontalLayout.addWidget(self.notifcationsBtn)
+        self.notificationsBtn = QPushButton(self.tabSection)
+        self.notificationsBtn.setObjectName(u"notificationsBtn")
+        self.horizontalLayout.addWidget(self.notificationsBtn)
 
         self.horizontalSpacer = QSpacerItem(533, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
         self.horizontalLayout.addItem(self.horizontalSpacer)
@@ -608,7 +609,7 @@ class TenantDashboard(userPage):
         self.paymentsBtn.clicked.connect(lambda: self.switchToPaymentsPage())
         self.accountBtn.clicked.connect(lambda : self.switchToAccountPage())
         self.maintenanceBtn.clicked.connect(lambda : self.switchToMaintenence())
-        self.notifcationsBtn.clicked.connect(lambda: self.switchToNotifications())
+        self.notificationsBtn.clicked.connect(lambda: self.switchToNotifications())
 
         self.mainSection.setCurrentIndex(0)
         self.retranslateUi()
@@ -622,7 +623,7 @@ class TenantDashboard(userPage):
         self.paymentsBtn.setText(QCoreApplication.translate("Form", u"Payments", None))
         self.maintenanceBtn.setText(QCoreApplication.translate("Form", u"Maintenance", None))
         self.accountBtn.setText(QCoreApplication.translate("Form", u"Account", None))
-        self.notifcationsBtn.setText(QCoreApplication.translate("Form", u"Notifications", None))
+        self.notificationsBtn.setText(QCoreApplication.translate("Form", u"Notifications", None))
         self.OverviewPage.retranslateUi()
         self.PaymentsPage.retranslateUi()
         self.notificationsPage.retranslateUi()       
@@ -634,8 +635,8 @@ class TenantDashboard(userPage):
         self.apartment = apartment
         
     def clearUser(self):
-        self.tenant = Tenant("","","", "", "", "")
-        self.contract = Contract("","","","","","","","")
+        self.tenant = Tenant("","","", "", "", "", "", "", "")
+        self.contract = Contract("","","","","","","")
         self.apartment = Apartment("","","","","","",True)
         self.retranslateUi()
         self.OverviewPage.retranslateUi()
@@ -1063,6 +1064,7 @@ class FrontDeskDashboardNew(userPage):
         super().__init__()
         self.resize(831, 758)
         self.maintenance_service = MaintenanceService()
+        self.notification_service = NotificationService(tenant_id=None, location_id=None)
 
         #Title Section
         self.verticalLayout_2 = QVBoxLayout(self)
@@ -1121,7 +1123,7 @@ class FrontDeskDashboardNew(userPage):
         self.manageScheduledMaintenance = FrontDeskScheduledMaintenance(self.maintenance_service)
         self.mainSection.addWidget(self.manageScheduledMaintenance)
 
-        self.manageNotifications = FrontDeskSendNotifications(self.maintenance_service)
+        self.manageNotifications = FrontDeskSendNotifications(self.notification_service)
         self.mainSection.addWidget(self.manageNotifications)
     
 
@@ -2504,195 +2506,195 @@ class MaintenanceDashboard(userPage):
     def __init__(self):
         super().__init__()
         self.resize(831, 581)
-        
+        self.maintenance_service = MaintenanceService()
+        self.current_user = None
+        self.requests = []
+        self.filtered_requests = []
+
+        # main frame
         self.Main = QFrame(self)
-        self.Main.setObjectName(u"Main")
         self.Main.setGeometry(QRect(0, 80, 831, 501))
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.Main.sizePolicy().hasHeightForWidth())
-        self.Main.setSizePolicy(sizePolicy)
-        self.Main.setFrameShape(QFrame.Shape.StyledPanel)
-        self.Main.setFrameShadow(QFrame.Shadow.Raised)
 
-
-
+        # toolbar
         self.tableToolBar = QFrame(self.Main)
-        self.tableToolBar.setObjectName(u"tableToolBar")
         self.tableToolBar.setGeometry(QRect(0, 0, 831, 71))
-        sizePolicy.setHeightForWidth(self.tableToolBar.sizePolicy().hasHeightForWidth())
-        self.tableToolBar.setSizePolicy(sizePolicy)
-        self.tableToolBar.setFrameShape(QFrame.Shape.StyledPanel)
-        self.tableToolBar.setFrameShadow(QFrame.Shadow.Raised)
-        self.titleBar = QFrame(self)
-        self.titleBar.setObjectName(u"titleBar")
-        self.titleBar.setGeometry(QRect(0, 0, 831, 81))
 
-
-
-
-        self.tableFrame = QFrame(self.Main)
-        self.tableFrame.setObjectName(u"tableFrame")
-        self.tableFrame.setGeometry(QRect(0, 70, 831, 431))
-        self.tableFrame.setFrameShadow(QFrame.Shadow.Raised)
-        sizePolicy.setHeightForWidth(self.tableFrame.sizePolicy().hasHeightForWidth())
-        self.tableFrame.setSizePolicy(sizePolicy)
-        self.tableFrame.setFrameShape(QFrame.Shape.StyledPanel)
-
-        self.table = Table([],[])
-        self.table.setParent(self.tableFrame)
-        self.table.setObjectName(u"tenantTable")
-        self.table.setGeometry(QRect(10, 30, 821, 430))
-
-
+        # search bar
         self.searchBar = QLineEdit(self.tableToolBar)
-        self.searchBar.setObjectName(u"searchBar")
-        self.searchBar.setGeometry(QRect(610, 10, 113, 22))
+        self.searchBar.setGeometry(QRect(600, 10, 150, 30))
+        self.searchBar.setPlaceholderText("Search...")
+        self.searchBar.textChanged.connect(self.apply_filters)
 
-        
-        sizePolicy.setHeightForWidth(self.titleBar.sizePolicy().hasHeightForWidth())
-        self.titleBar.setSizePolicy(sizePolicy)
-        self.titleBar.setFrameShape(QFrame.Shape.StyledPanel)
-        self.titleBar.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.titleBar)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.title = QLabel(self.titleBar)
-        self.title.setObjectName(u"title")
+        # status filter dropdown
+        self.filterBox = QComboBox(self.tableToolBar)
+        self.filterBox.setGeometry(QRect(400, 10, 150, 30))
+        self.filterBox.addItems(["All", "Scheduled", "Completed"])
+        self.filterBox.currentTextChanged.connect(self.apply_filters)
 
-        self.horizontalLayout.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+        # table
+        self.table = QTableWidget(self.Main)
+        self.table.setGeometry(QRect(10, 80, 811, 400))
+        self.table.setColumnCount(6)
+        self.table.setHorizontalHeaderLabels(
+            ["Apartment", "Issue", "Scheduled Date", "Status", "Update", "Complete"]
+        )
+        self.table.horizontalHeader().setStretchLastSection(True)
 
+        # title
+        self.titleBar = QFrame(self)
+        self.titleBar.setGeometry(QRect(0, 0, 831, 81))
+        layout = QHBoxLayout(self.titleBar)
+
+        self.title = QLabel("Maintenance Dashboard")
+        layout.addWidget(self.title, alignment=Qt.AlignmentFlag.AlignCenter)
 
         self.retranslateUi()
 
-    # setupUi
-
     def retranslateUi(self):
-        self.setWindowTitle(QCoreApplication.translate("MaintenanceDashboard", u"Form", None))
-        self.title.setText(QCoreApplication.translate("MaintenanceDashboard", u"Maintenance Dashboard", None))
-    # retranslateUi
+        self.setWindowTitle(QCoreApplication.translate("MaintenanceDashboard", "Maintenance Dashboard"))
+        self.title.setText(QCoreApplication.translate("MaintenanceDashboard", "Maintenance Dashboard"))
+        self.searchBar.setPlaceholderText(QCoreApplication.translate("MaintenanceDashboard", "Search..."))
+        self.filterBox.setItemText(0, QCoreApplication.translate("MaintenanceDashboard", "All"))
+        self.filterBox.setItemText(1, QCoreApplication.translate("MaintenanceDashboard", "Scheduled"))
+        self.filterBox.setItemText(2, QCoreApplication.translate("MaintenanceDashboard", "Completed"))
+        self.table.setHorizontalHeaderLabels([
+            QCoreApplication.translate("MaintenanceDashboard", "Apartment"),
+            QCoreApplication.translate("MaintenanceDashboard", "Issue"),
+            QCoreApplication.translate("MaintenanceDashboard", "Scheduled Date"),
+            QCoreApplication.translate("MaintenanceDashboard", "Status"),
+            QCoreApplication.translate("MaintenanceDashboard", "Update"),
+            QCoreApplication.translate("MaintenanceDashboard", "Complete"),
+        ])
 
-    def CreateDialogBox(self, startedDate: str, currentNotes: str, costRepair : str):
-        self.box =MaintenanceDialogBox(startedDate, currentNotes, costRepair)
-        self.box.show()
+    def load_worker_maintenance(self):
+        if not self.current_user:
+            return
+        self.requests = self.maintenance_service.get_maintenance_requests_by_worker(
+            self.current_user.id)
+        self.apply_filters()
+
+    def apply_filters(self):
+        query = self.searchBar.text().lower()
+        status_filter = self.filterBox.currentText()
+
+        self.filtered_requests = []
+
+        for req in self.requests:
+            matches_search = (
+                query in str(req.apartment_id).lower()
+                or query in str(req.description).lower()
+                or query in str(req.scheduled_date).lower()
+            )
+
+            matches_status = (
+                status_filter == "All"
+                or req.status.lower() == status_filter.lower()
+            )
+
+            if matches_search and matches_status:
+                self.filtered_requests.append(req)
+
+        self.populate_table()
+
+    def populate_table(self):
+        self.table.setRowCount(len(self.filtered_requests))
+
+        for row, req in enumerate(self.filtered_requests):
+            self.table.setItem(row, 0, QTableWidgetItem(str(req.apartment_id)))
+            self.table.setItem(row, 1, QTableWidgetItem(str(req.description)))
+            self.table.setItem(row, 2, QTableWidgetItem(str(req.scheduled_date)))
+            self.table.setItem(row, 3, QTableWidgetItem(str(req.status)))
+
+            update_btn = QPushButton("Update")
+            complete_btn = QPushButton("Complete")
+
+            update_btn.clicked.connect(lambda _, r=req: self.open_update_dialog(r))
+            complete_btn.clicked.connect(lambda _, r=req: self.complete_by_id(r.request_id))
+
+            # Disable if already completed
+            if req.status.lower() == "completed":
+                complete_btn.setEnabled(False)
+
+            self.table.setCellWidget(row, 4, update_btn)
+            self.table.setCellWidget(row, 5, complete_btn)
+
+    def open_update_dialog(self, request):
+
+        self.dialog = MaintenanceDialogBox(
+            request.scheduled_date,
+            request.maintenance_notes,
+            request.cost
+        )
+
+        self.dialog.addNotesBtn.clicked.connect(lambda: self.save_notes(request.id))
+        self.dialog.pushButton.clicked.connect(lambda: self.save_cost(request.id))
+        self.dialog.completeRequestBtn.clicked.connect(lambda: self.complete_and_close(request.id))
+
+        self.dialog.exec()
+
+    def save_notes(self, request_id):
+        notes = self.dialog.maintenanceNotesInput.toPlainText()
+        self.maintenance_service.update_notes(request_id, notes)
+
+    def save_cost(self, request_id):
+        cost = self.dialog.costInput.value()
+        self.maintenance_service.update_cost(request_id, cost)
+
+    def complete_by_id(self, request_id):
+        self.maintenance_service.complete_maintenance_request(request_id)
+        self.load_worker_maintenance()
+
+    def complete_and_close(self, request_id):
+        try:
+            self.complete_by_id(request_id)
+            self.dialog.accept()
+        except Exception as e:
+            QMessageBox.critical(self.dialog, "Error", f"Failed to complete request: {str(e)}")
+
+    def setUser(self, user):
+        super().setUser(user)
+        self.current_user = user
+        self.load_worker_maintenance()
 
 class MaintenanceDialogBox(QDialog):
-    def __init__(self, startedDate : str, currentMaintenanceNotes : str , costRepair : int):
+    def __init__(self, scheduledStart, currentNotes, costRepair):
         super().__init__()
         self.resize(400, 300)
-        self.startedDate = startedDate
-        self.currentMaintenanceNotes = currentMaintenanceNotes
-        self.currentCostRepair = costRepair
 
-        self.wizardFrame = QFrame(self)
-        self.wizardFrame.setObjectName(u"wizardFrame")
-        self.wizardFrame.setGeometry(QRect(0, 0, 450, 400))
-        self.wizardFrame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.wizardFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_3 = QVBoxLayout(self.wizardFrame)
-        self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.title = QLabel(self.wizardFrame)
-        self.title.setObjectName(u"title")
+        layout = QVBoxLayout(self)
 
-        self.verticalLayout_3.addWidget(self.title, 0, Qt.AlignmentFlag.AlignHCenter)
+        title = QLabel("Maintenance Wizard")
+        layout.addWidget(title, alignment=Qt.AlignmentFlag.AlignCenter)
 
-        self.frame = QFrame(self.wizardFrame)
-        self.frame.setObjectName(u"frame")
-        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout = QVBoxLayout(self.frame)
-        self.verticalLayout.setObjectName(u"verticalLayout")
-        self.maintenanceNotesInput = QTextEdit(self.frame)
-        self.maintenanceNotesInput.setObjectName(u"maintenanceNotesInput")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.maintenanceNotesInput.sizePolicy().hasHeightForWidth())
-        self.maintenanceNotesInput.setSizePolicy(sizePolicy)
+        # notes
+        self.maintenanceNotesInput = QTextEdit()
+        self.maintenanceNotesInput.setText(currentNotes)
+        self.maintenanceNotesInput.setPlaceholderText("Add maintenance notes...")
+        layout.addWidget(self.maintenanceNotesInput)
 
-        self.verticalLayout.addWidget(self.maintenanceNotesInput)
+        self.addNotesBtn = QPushButton("Save Notes")
+        layout.addWidget(self.addNotesBtn)
 
-        self.addNotesBtn = QPushButton(self.frame)
-        self.addNotesBtn.setObjectName(u"addNotesBtn")
+        # cost
+        self.costInput = QDoubleSpinBox()
+        self.costInput.setPrefix("£")
+        self.costInput.setMaximum(99999)
+        self.costInput.setValue(costRepair or 0.0)
+        layout.addWidget(self.costInput)
 
-        self.verticalLayout.addWidget(self.addNotesBtn)
+        self.pushButton = QPushButton("Save Cost")
+        layout.addWidget(self.pushButton)
 
-
-        self.verticalLayout_3.addWidget(self.frame)
-
-        self.frame_2 = QFrame(self.wizardFrame)
-        self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_2 = QVBoxLayout(self.frame_2)
-        self.verticalLayout_2.setObjectName(u"verticalLayout_2")
-        self.costPrompt = QLabel(self.frame_2)
-        self.costPrompt.setObjectName(u"costPrompt")
-
-        self.verticalLayout_2.addWidget(self.costPrompt, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.costInput = QDoubleSpinBox(self.frame_2)
-        self.costInput.setObjectName(u"costInput")
-        self.costInput.setMaximum(99999.000000000000000)
-        self.costInput.setMinimum(self.currentCostRepair)
-
-        self.verticalLayout_2.addWidget(self.costInput, 0, Qt.AlignmentFlag.AlignHCenter)
-
-        self.pushButton = QPushButton(self.frame_2)
-        self.pushButton.setObjectName(u"pushButton")
-
-        self.verticalLayout_2.addWidget(self.pushButton, 0, Qt.AlignmentFlag.AlignHCenter)
-
-
-        self.verticalLayout_3.addWidget(self.frame_2)
-
-        self.buttonsFrame = QFrame(self.wizardFrame)
-        self.buttonsFrame.setObjectName(u"buttonsFrame")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.buttonsFrame.sizePolicy().hasHeightForWidth())
-        self.buttonsFrame.setSizePolicy(sizePolicy1)
-        self.buttonsFrame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.buttonsFrame.setFrameShadow(QFrame.Shadow.Raised)
-        self.horizontalLayout = QHBoxLayout(self.buttonsFrame)
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.completeRequestBtn = QPushButton(self.buttonsFrame)
-        self.completeRequestBtn.setObjectName(u"completeRequestBtn")
-
-        self.horizontalLayout.addWidget(self.completeRequestBtn)
-
-
-        self.verticalLayout_3.addWidget(self.buttonsFrame)
-
+        self.completeRequestBtn = QPushButton("Complete Request")
+        layout.addWidget(self.completeRequestBtn)
 
         self.retranslateUi()
-    # setupUi
 
     def retranslateUi(self):
-        self.setWindowTitle(QCoreApplication.translate("Dialog", u"Dialog", None))
-        self.title.setText(QCoreApplication.translate("Dialog", u"Maintenance Wizard", None))
-        self.maintenanceNotesInput.setDocumentTitle(QCoreApplication.translate("Dialog", u"Maitenance Notes", None))
-        self.maintenanceNotesInput.setPlaceholderText(QCoreApplication.translate("Dialog", u"Please add maintenance notes", None))
-        if self.currentMaintenanceNotes != "":
-            self.maintenanceNotesInput.setText(self.currentMaintenanceNotes)
-        self.addNotesBtn.setText(QCoreApplication.translate("Dialog", u"Add Notes", None))
-        self.costPrompt.setText(QCoreApplication.translate("Dialog", u"Cost Of Request", None))
-        self.costInput.setPrefix(QCoreApplication.translate("Dialog", u"\u00a3", None))
-        self.pushButton.setText(QCoreApplication.translate("Dialog", u"Add Cost", None))
-        self.completeRequestBtn.setText(QCoreApplication.translate("Dialog", u"Complete Request", None))
-    # retranslateUi
-
-    def AddNotes(self):
-        if self.currentMaintenanceNotes != self.maintenanceNotesInput.toPlainText():
-            self.currentMaintenanceNotes == self.maintenanceNotesInput.toPlainText()
-            return self.currentMaintenanceNotes
-        
-    def AddCost(self):
-        if self.currentCostRepair > float(self.costInput.cleanText()): 
-            return float(self.costInput.cleanText())
-
-         
-
-        
-#endregion
+        self.setWindowTitle(QCoreApplication.translate("MaintenanceDialogBox", "Maintenance"))
+        self.findChild(QLabel).setText(QCoreApplication.translate("MaintenanceDialogBox", "Maintenance Wizard"))
+        self.maintenanceNotesInput.setPlaceholderText(QCoreApplication.translate("MaintenanceDialogBox", "Add maintenance notes..."))
+        self.addNotesBtn.setText(QCoreApplication.translate("MaintenanceDialogBox", "Save Notes"))
+        self.pushButton.setText(QCoreApplication.translate("MaintenanceDialogBox", "Save Cost"))
+        self.completeRequestBtn.setText(QCoreApplication.translate("MaintenanceDialogBox", "Complete Request"))
+        self.costInput.setPrefix(QCoreApplication.translate("MaintenanceDialogBox", "£"))
