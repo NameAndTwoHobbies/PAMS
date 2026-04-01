@@ -3,10 +3,10 @@ import random
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import * 
-from uiMainWindow import Ui_MainWindow
-from db import *
-from ErrorBoxes import *
-from MyWidgets import Table
+from components.uiMainWindow import Ui_MainWindow
+from database.db import *
+from components.ErrorBoxes import *
+from components.MyWidgets import Table
 
 
 # -*- coding: utf-8 -*-
