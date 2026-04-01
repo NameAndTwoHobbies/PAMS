@@ -27,7 +27,7 @@ class Table(QTableWidget):
                 self.setItem(x,y,QTableWidgetItem(str(record[y])))
     
     def search(self, string : str):
-        if string is not "":
+        if string != "":
             matches = self.findItems(string,Qt.MatchFlag.MatchContains)
             for rows in range(0,self.rowCount()):
                 self.hideRow(rows)
