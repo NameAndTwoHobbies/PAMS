@@ -1893,6 +1893,8 @@ class AdminDashboard(userPage):
         self.apartmentTable.UpdateTable(apartments, apartmentHeaders)
         self.apartmentTable.setParent(self.apartmentManage)
 
+    def setUser(self, user):
+        self.user = user
     #TODO Add Tenant table
     #TODO Make faster for db requests
     #TODO MAKE IT EASIER TOP MAKE REQUIRE TABLES AND NOT REUSE CODE
