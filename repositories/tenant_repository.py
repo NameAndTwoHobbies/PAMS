@@ -15,7 +15,7 @@ class TenantRepository(BaseRepository):
                 record["last_name"],
                 record["national_insurance"],
                 record["email"],
-                record["password"],
+                "Blocked",
                 record["phone_number"],
                 record["occupation"],
                 record["references"]
@@ -40,7 +40,7 @@ class TenantRepository(BaseRepository):
                 record["last_name"],
                 record["national_insurance"],
                 record["email"],
-                record["password"],
+                "Blocked",
                 record["phone_number"],
                 record["occupation"],
                 record["references"]
